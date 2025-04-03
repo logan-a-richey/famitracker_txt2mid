@@ -4,7 +4,7 @@ import re
 
 from macro import Macro
 from dpcm import DPCM
-# from groove import Groove
+from groove import Groove
 # from instrument import *
 # from track import Track
 
@@ -74,7 +74,7 @@ class Reader:
     def _handle_macro(self, line, chip="blank"):
         m_chip = chip
         m_type, m_index, m_loop, m_release, m_setting = map(int, line.split()[1:6])
-        m_seq = map(int, line.split(":")[1].strip().split())
+        m_seq = list(map(int, line.split(":")[1].strip().split()))
 
         m_macro = Macro(
             m_chip, m_type, m_index, m_loop, m_release, m_setting, m_seq
@@ -106,10 +106,13 @@ class Reader:
         self.project.dpcm[self.last_dpcm_index].m_data.extend(data)
 
     def _handle_groove(self, line):
-        pass
+        m_index, m_sizeof = map(int, line.split()[1:3])
+        m_seq = list(map(int, line.split(":")[1].split()))
+        m_groove = Groove(m_index, m_sizeof, m_seq)
+        self.project.grooves[m_index] = m_groove
 
     def _handle_usegroove(self, line):
-        pass
+        self.project.usegroove = list(map(int, line.split(":")[1].strip().split()))
 
     def _handle_inst2a03(self, line):
         pass
