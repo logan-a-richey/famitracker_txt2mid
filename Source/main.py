@@ -4,11 +4,24 @@ import sys
 # stop creation of __pycache__
 sys.dont_write_bytecode = True
 
+from project import Project
 
+def get_input_file():
+    try:
+        input_file = sys.argv[1]
+        return input_file
+    except Exception as e:
+        print(e)
+        exit(1)
 
 def main():
     print("Hello Famitracker world!")
+    input_file = get_input_file()
+
+    p = Project()
+    p.reader.exec(input_file)
+    p.parser.exec()
+    p.exporter.exec()
 
 if __name__ == "__main__":
     main()
-
