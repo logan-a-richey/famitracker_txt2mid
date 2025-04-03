@@ -11,16 +11,14 @@ class Project:
         self.exporter = Exporter(self)
 
         # containers
-        self.song_information = {}
-        self.global_settings = {}
-        self.macros = {}
-        
-        self.dpcm = {}
-        self.grooves = {}
-        self.usegroove = []
-        
-        self.instruments = {}
-        self.tracks = []
+        self.song_information = {}  # map<str, str>
+        self.global_settings = {}   # map<str, int>
+        self.macros = {}            # map<str, Macro>
+        self.dpcm = {}              # map<str, DPCM>
+        self.grooves = {}           # map<str, Groove>
+        self.usegroove = []         # vec<int>
+        self.instruments = {}       # map<str, BaseInstrument>
+        self.tracks = []            # vec<Track>
 
 
 
