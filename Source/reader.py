@@ -2,39 +2,51 @@
 
 import re
 
+from macro import Macro
+# from dpcm import DPCM
+# from groove import Groove
+# from instrument import *
+# from track import Track
+
 class Reader:
     def __init__(self, project):
         self.project = project
         self.dispatch_table = {
-            "TITLE": self._handle_title,
-            "AUTHOR": self._handle_author,
-            "COPYRIGHT": self._handle_copyright,
-            "COMMENT": self._handle_comment,
-            "MACHINE": self._handle_machine,
-            "FRAMERATE": self._handle_framerate,
-            "EXPANSION": self._handle_expansion,
-            "VIBRATO": self._handle_vibrato,
-            "SPLIT": self._handle_split,
-            "N163CHANNELS": self._handle_n163channels,
+            "TITLE": self._handle_song_information,
+            "AUTHOR": self._handle_song_information,
+            "COPYRIGHT": self._handle_song_information,
+            "COMMENT": self._handle_song_information,
+            
+            "MACHINE": self._handle_global_settings,
+            "FRAMERATE": self._handle_global_settings,
+            "EXPANSION": self._handle_global_settings,
+            "VIBRATO": self._handle_global_settings,
+            "SPLIT": self._handle_global_settings,
+            "N163CHANNELS": self._handle_global_settings,
+
             "MACRO": self._handle_macro,
             "MACROVRC6": self._handle_macrovrc6,
             "MACRON163": self._handle_macron163,
             "MACROS5B": self._handle_macros5b,
+            
             "DPCMDEF": self._handle_dpcmdef,
             "DPCM": self._handle_dpcm,
             "GROOVE": self._handle_groove,
             "USEGROOVE": self._handle_usegroove,
+            
             "INST2A03": self._handle_inst2a03,
             "INSTVRC6": self._handle_instvrc6,
             "INSTVRC7": self._handle_instvrc7,
             "INSTFDS": self._handle_instfds,
             "INSTN163": self._handle_instn163,
             "INSTS5B": self._handle_insts5b,
+            
             "KEYDPCM": self._handle_keydpcm,
             "FDSWAVE": self._handle_fdswave,
             "FDSMOD": self._handle_fdsmod,
             "FDSMACRO": self._handle_fdsmacro,
             "N163WAVE": self._handle_n163wave,
+            
             "TRACK": self._handle_track,
             "COLUMNS": self._handle_columns,
             "ORDER": self._handle_order,
@@ -42,50 +54,43 @@ class Reader:
             "ROW": self._handle_row
         }
 
+    def get_quote(self, s):
+        # return text between first and last double quote
+        return s[s.find("\"") + 1: s.rfind("\"")]
+
     def _nop(self, line):
         pass
 
-    def _handle_title(self, line):
-        pass
+    def _handle_song_information(self, line):
+        k = line.split()[0]
+        v = self.get_quote(line)
+        self.project.song_information[k] = v
 
-    def _handle_author(self, line):
-        pass
+    def _handle_global_settings(self, line):
+        k = line.split()[0]
+        v = int(line.split()[-1])
+        self.project.global_settings[k] = v
 
-    def _handle_copyright(self, line):
-        pass
+    def _handle_macro(self, line, chip="blank"):
+        m_chip = chip
+        m_type, m_index, m_loop, m_release, m_setting = map(int, line.split()[1:6])
+        m_seq = map(int, line.split(":")[1].strip().split())
 
-    def _handle_comment(self, line):
-        pass
+        m_macro = Macro(
+            m_chip, m_type, m_index, m_loop, m_release, m_setting, m_seq
+        )
+        m_key = "{}.{}.{}".format(m_chip, m_type, m_index)
 
-    def _handle_machine(self, line):
-        pass
-
-    def _handle_framerate(self, line):
-        pass
-
-    def _handle_expansion(self, line):
-        pass
-
-    def _handle_vibrato(self, line):
-        pass
-
-    def _handle_split(self, line):
-        pass
-
-    def _handle_n163channels(self, line):
-        pass
-
-    def _handle_macro(self, line):
-        pass
+        self.project.macros[m_key] = m_macro
 
     def _handle_macrovrc6(self, line):
-        pass
+        self._handle_macro(line, chip="vrc6")
 
     def _handle_macron163(self, line):
-        pass
+        self._handle_macro(line, chip="n163")
 
     def _handle_macros5b(self, line):
-        pass
+        self._handle_macro(line, chip="s5b")
 
     def _handle_dpcmdef(self, line):
         pass
