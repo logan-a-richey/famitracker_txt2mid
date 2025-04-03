@@ -3,7 +3,7 @@
 import re
 
 from macro import Macro
-# from dpcm import DPCM
+from dpcm import DPCM
 # from groove import Groove
 # from instrument import *
 # from track import Track
@@ -80,7 +80,6 @@ class Reader:
             m_chip, m_type, m_index, m_loop, m_release, m_setting, m_seq
         )
         m_key = "{}.{}.{}".format(m_chip, m_type, m_index)
-
         self.project.macros[m_key] = m_macro
 
     def _handle_macrovrc6(self, line):
@@ -98,8 +97,13 @@ class Reader:
         m_dpcm = DPCM(m_index, m_size, m_name)
         self.project.dpcm[m_index] = m_dpcm
 
+        self.last_dpcm_index = m_index
+
     def _handle_dpcm(self, line):
-        pass
+        # turn hex list into integer list
+        data = line.split(":")[1].strip().split()
+        data = list(map(lambda x: int(x, 16), line.split(":")[1].strip().split()))
+        self.project.dpcm[self.last_dpcm_index].m_data.extend(data)
 
     def _handle_groove(self, line):
         pass
