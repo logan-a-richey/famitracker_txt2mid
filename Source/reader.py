@@ -93,7 +93,10 @@ class Reader:
         self._handle_macro(line, chip="s5b")
 
     def _handle_dpcmdef(self, line):
-        pass
+        m_index, m_size = map(int, line.split()[1:3])
+        m_name = self.get_quote(line)
+        m_dpcm = DPCM(m_index, m_size, m_name)
+        self.project.dpcm[m_index] = m_dpcm
 
     def _handle_dpcm(self, line):
         pass
