@@ -6,7 +6,8 @@ from singleton import singleton
 from macro import Macro
 from dpcm import DPCM
 from groove import Groove
-# from instrument import *
+from instrument import Inst2a03, InstFds, InstVrc7, InstN163
+
 # from track import Track
 
 @singleton
@@ -116,11 +117,30 @@ class Reader:
     def _handle_usegroove(self, line):
         self.project.usegroove = list(map(int, line.split(":")[1].strip().split()))
 
-    def _handle_inst2a03(self, line):
-        pass
+    def _handle_inst2a03(self, line, chip="blank"):
+        # INST2A03 [index] [seq_vol] [seq_arp] [seq_pit] [seq_hpi] [seq_dut] [name]
+        index, vol, arp, pit, hpi, dut = list(map(int, line.split()[1:7]))
+        name = self.get_quote(line)
+        chip = chip
+
+        # create instrument object
+        m_inst = Inst2a03(index, name, chip, vol, arp, pit, hpi, dut)
+        
+        # add macros to instrument if they exist
+        params = [vol, arp, pit, hpi, dut]
+        macro_types = ["vol", "arp", "pit", "hpi", "dut"]
+        
+        for i in range(5):
+            macro_key = "{}.{}.{}".format(chip, i, params[i])
+            macro_obj = self.project.macros.get(macro_key, None)
+            if macro_obj:
+                m_inst.macros[macro_types[i]] = macro_obj
+        
+        # add instrument to project instruments dictionary
+        self.project.instruments[index] = m_inst
 
     def _handle_instvrc6(self, line):
-        pass
+        self._handle_inst2a03(chip="vrc6")
 
     def _handle_instvrc7(self, line):
         pass
@@ -132,7 +152,7 @@ class Reader:
         pass
 
     def _handle_insts5b(self, line):
-        pass
+        self._handle_inst2a03(chip="s5b")
 
     def _handle_keydpcm(self, line):
         pass
