@@ -65,16 +65,19 @@ class Reader:
         pass
 
     def _handle_song_information(self, line):
+        # [FIELD] [VALUE]
         k = line.split()[0]
         v = self.get_quote(line)
         self.project.song_information[k] = v
 
     def _handle_global_settings(self, line):
+        # [FIELD] [VALUE]
         k = line.split()[0]
         v = int(line.split()[-1])
         self.project.global_settings[k] = v
 
     def _handle_macro(self, line, chip="blank"):
+        # MACRO [type] [index] [loop] [release] [setting] : [macro]
         m_chip = chip
         m_type, m_index, m_loop, m_release, m_setting = map(int, line.split()[1:6])
         m_seq = list(map(int, line.split(":")[1].strip().split()))
@@ -86,15 +89,19 @@ class Reader:
         self.project.macros[m_key] = m_macro
 
     def _handle_macrovrc6(self, line):
+        # MACROVRC6 [type] [index] [loop] [release] [setting] : [macro]
         self._handle_macro(line, chip="vrc6")
 
     def _handle_macron163(self, line):
+        # MACRON163 [type] [index] [loop] [release] [setting] : [macro]
         self._handle_macro(line, chip="n163")
 
     def _handle_macros5b(self, line):
+        # MACROS5B [type] [index] [loop] [release] [setting] : [macro]
         self._handle_macro(line, chip="s5b")
 
     def _handle_dpcmdef(self, line):
+        # DPCMDEF [index] [size] [name]
         m_index, m_size = map(int, line.split()[1:3])
         m_name = self.get_quote(line)
         m_dpcm = DPCM(m_index, m_size, m_name)
@@ -103,18 +110,21 @@ class Reader:
         self.last_dpcm_index = m_index
 
     def _handle_dpcm(self, line):
+        # DPCM : [data]
+        
         # turn hex list into integer list
-        data = line.split(":")[1].strip().split()
         data = list(map(lambda x: int(x, 16), line.split(":")[1].strip().split()))
         self.project.dpcm[self.last_dpcm_index].m_data.extend(data)
 
     def _handle_groove(self, line):
+        # USEGROOVE : []
         m_index, m_sizeof = map(int, line.split()[1:3])
         m_seq = list(map(int, line.split(":")[1].split()))
         m_groove = Groove(m_index, m_sizeof, m_seq)
         self.project.grooves[m_index] = m_groove
 
     def _handle_usegroove(self, line):
+        # USEGROOVE : []
         self.project.usegroove = list(map(int, line.split(":")[1].strip().split()))
 
     def _handle_inst2a03(self, line, chip="blank"):
@@ -140,56 +150,80 @@ class Reader:
         self.project.instruments[index] = m_inst
 
     def _handle_instvrc6(self, line):
+        # INSTVRC6 [index] [seq_vol] [seq_arp] [seq_pit] [seq_hpi] [seq_wid] [name]
+        # note that width is the same as duty for 2a03.
         self._handle_inst2a03(chip="vrc6")
 
     def _handle_instvrc7(self, line):
+        # INSTVRC7 [index] [patch] [r0] [r1] [r2] [r3] [r4] [r5] [r6] [r7] [name]
         pass
 
     def _handle_instfds(self, line):
+        # INSTFDS [index] [mod_enable] [mod_speed] [mod_depth] [mod_delay] [name]
         pass
 
     def _handle_instn163(self, line):
+        # INSTN163 [index] [seq_vol] [seq_arp] [seq_pit] [seq_hpi] [seq_wav] [w_size] [w_pos] [w_count] [name]
+        # note that wave is the same as duty for 2a03. The wave data is defined later for the creation of custom waves.
         pass
 
     def _handle_insts5b(self, line):
+        # INSTS5B [index] [seq_vol] [seq_arp] [seq_pit] [seq_hpi] [seq_ton] [name]
+        # note that tone is the same as duty for 2a03.
         self._handle_inst2a03(chip="s5b")
 
     def _handle_keydpcm(self, line):
+        # KEYDPCM [inst] [octave] [note] [sample] [pitch] [loop] [loop_point] [delta]
         pass
 
     def _handle_fdswave(self, line):
+        # FDSWAVE [inst] : [data]
         pass
 
     def _handle_fdsmod(self, line):
+        # FDSMOD [inst] : [data]
         pass
 
     def _handle_fdsmacro(self, line):
+        # FDSMACRO [inst] [type] [loop] [release] [setting] : [macro]
         pass
 
     def _handle_n163wave(self, line):
+        # N163WAVE [inst] [wave] : [data]
         pass
 
     def _handle_track(self, line):
+        # TRACK [pattern] [speed] [tempo] [name]
         pass
 
     def _handle_columns(self, line):
+        # COLUMNS : [columns]
         pass
 
     def _handle_order(self, line):
+        # ORDER [frame] : [list]
         pass
 
     def _handle_pattern(self, line):
+        # PATTERN [pattern]
         pass
 
     def _handle_row(self, line):
+        # ROW [row] : [c0] : [c1] : [c2] ...
         pass
 
     def _process_line(self, line):
+        # Reads line from file.
+        # Extracts and loads important data into the Project class.
+
         first_word = line.split()[0]
         func = self.dispatch_table.get(first_word, self._nop)
         func(line)
 
     def exec(self, input_file):
+        # Reads Famitracker text export data line by line.
+        # Calls _process_line to extract and load data into the Project class.
+        
         with open(input_file, 'r') as file:
             for line in file:
                 line = line.strip()
@@ -198,5 +232,4 @@ class Reader:
                 if line.startswith("#"): 
                     continue
                 self._process_line(line)
-        pass
 
