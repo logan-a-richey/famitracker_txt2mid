@@ -1,8 +1,9 @@
 # groove.py
 
+from printable import Printable
 from typing import List
 
-class Groove:
+class Groove(Printable):
     def __init__(
         self,
         m_index: int,

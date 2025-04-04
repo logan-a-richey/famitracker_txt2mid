@@ -1,8 +1,9 @@
 # macro.py
 
+from printable import Printable
 from typing import List
 
-class Macro:
+class Macro(Printable):
     def __init__(
         self,
         m_chip: str,
@@ -21,8 +22,4 @@ class Macro:
         self.m_setting = m_setting
         self.m_seq= m_seq
     
-    def __repr__(self) -> str:
-        #return "<class {}>".format(self.__class__.__name__)
-        return f"{self.__class__.__name__}: {self.__dict__}"
-
 

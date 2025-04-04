@@ -1,6 +1,8 @@
 # dpcm.py
 
-class DPCM:
+from printable import Printable
+
+class DPCM(Printable):
     def __init__(
         self,
         m_index: int, 
@@ -12,6 +14,3 @@ class DPCM:
         self.m_name = m_name
 
         self.m_data = []
-
-    def __repr__(self) -> str:
-        return f"{self.__class__.__name__}: {self.__dict__}"
