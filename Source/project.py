@@ -1,9 +1,11 @@
 # project.py
 
+from singleton import singleton
 from reader import Reader
 from parser import Parser
 from exporter import Exporter
 
+@singleton
 class Project:
     def __init__(self):
         self.reader = Reader(self)

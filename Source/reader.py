@@ -2,12 +2,14 @@
 
 import re
 
+from singleton import singleton
 from macro import Macro
 from dpcm import DPCM
 from groove import Groove
 # from instrument import *
 # from track import Track
 
+@singleton
 class Reader:
     def __init__(self, project):
         self.project = project
