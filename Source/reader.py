@@ -82,9 +82,7 @@ class Reader:
         m_type, m_index, m_loop, m_release, m_setting = map(int, line.split()[1:6])
         m_seq = list(map(int, line.split(":")[1].strip().split()))
 
-        m_macro = Macro(
-            m_chip, m_type, m_index, m_loop, m_release, m_setting, m_seq
-        )
+        m_macro = Macro(m_chip, m_type, m_index, m_loop, m_release, m_setting, m_seq)
         m_key = "{}.{}.{}".format(m_chip, m_type, m_index)
         self.project.macros[m_key] = m_macro
 
@@ -152,66 +150,108 @@ class Reader:
     def _handle_instvrc6(self, line):
         # INSTVRC6 [index] [seq_vol] [seq_arp] [seq_pit] [seq_hpi] [seq_wid] [name]
         # note that width is the same as duty for 2a03.
-        self._handle_inst2a03(chip="vrc6")
+        self._handle_inst2a03(line, chip="vrc6")
 
     def _handle_instvrc7(self, line):
         # INSTVRC7 [index] [patch] [r0] [r1] [r2] [r3] [r4] [r5] [r6] [r7] [name]
-        pass
+        index, patch = map(int, line.split()[1:3])
+        registers = line.split()[3:11]
+        name = self.get_quote(line)
+        chip = "vrc7"
+
+        m_inst = InstVrc7(index, name, chip, patch, registers)
+        self.project.instruments[index] = m_inst
 
     def _handle_instfds(self, line):
         # INSTFDS [index] [mod_enable] [mod_speed] [mod_depth] [mod_delay] [name]
-        pass
+        index, mod_enable, mod_speed, mod_depth, mod_delay = map(int, line.split()[1:6])
+        name = self.get_quote(line)
+        chip = "fds"
+
+        m_inst = InstFds(index, name, chip, mod_enable, mod_speed, mod_depth, mod_delay)
+        self.project.instruments[index] = m_inst
 
     def _handle_instn163(self, line):
         # INSTN163 [index] [seq_vol] [seq_arp] [seq_pit] [seq_hpi] [seq_wav] [w_size] [w_pos] [w_count] [name]
         # note that wave is the same as duty for 2a03. The wave data is defined later for the creation of custom waves.
-        pass
+        
+        # TODO
+        index, vol, arp, pit, hpi, dut, w_size, w_pos, w_count = list(map(int, line.split()[1:10]))
+        name = self.get_quote(line)
+        chip = "n163"
+
+        # create instrument object
+        m_inst = InstN163(index, name, chip, vol, arp, pit, hpi, dut, w_size, w_pos, w_count)
+        
+        # add macros to instrument if they exist
+        params = [vol, arp, pit, hpi, dut]
+        macro_types = ["vol", "arp", "pit", "hpi", "dut"]
+        
+        for i in range(5):
+            macro_key = "{}.{}.{}".format(chip, i, params[i])
+            macro_obj = self.project.macros.get(macro_key, None)
+            if macro_obj:
+                m_inst.macros[macro_types[i]] = macro_obj
+        
+        # add instrument to project instruments dictionary
+        self.project.instruments[index] = m_inst
 
     def _handle_insts5b(self, line):
         # INSTS5B [index] [seq_vol] [seq_arp] [seq_pit] [seq_hpi] [seq_ton] [name]
         # note that tone is the same as duty for 2a03.
-        self._handle_inst2a03(chip="s5b")
+        self._handle_inst2a03(line, chip="s5b")
 
+    # TODO
     def _handle_keydpcm(self, line):
         # KEYDPCM [inst] [octave] [note] [sample] [pitch] [loop] [loop_point] [delta]
         pass
 
+    # TODO
     def _handle_fdswave(self, line):
         # FDSWAVE [inst] : [data]
         pass
 
+    # TODO
     def _handle_fdsmod(self, line):
         # FDSMOD [inst] : [data]
         pass
 
+    # TODO
     def _handle_fdsmacro(self, line):
         # FDSMACRO [inst] [type] [loop] [release] [setting] : [macro]
         pass
 
+    # TODO
     def _handle_n163wave(self, line):
         # N163WAVE [inst] [wave] : [data]
         pass
 
+    # TODO
     def _handle_track(self, line):
         # TRACK [pattern] [speed] [tempo] [name]
         pass
 
+    # TODO
     def _handle_columns(self, line):
         # COLUMNS : [columns]
         pass
 
+    # TODO
     def _handle_order(self, line):
         # ORDER [frame] : [list]
         pass
 
+    # TODO
     def _handle_pattern(self, line):
         # PATTERN [pattern]
         pass
 
+    # TODO
     def _handle_row(self, line):
         # ROW [row] : [c0] : [c1] : [c2] ...
         pass
 
+    # TODO
     def _process_line(self, line):
         # Reads line from file.
         # Extracts and loads important data into the Project class.
