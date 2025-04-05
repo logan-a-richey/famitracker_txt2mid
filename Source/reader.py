@@ -7,6 +7,7 @@ from macro import Macro
 from dpcm import DPCM
 from groove import Groove
 from instrument import Inst2a03, InstFds, InstVrc7, InstN163
+from keydpcm import KeyDpcm
 
 # from track import Track
 
@@ -175,7 +176,6 @@ class Reader:
         # INSTN163 [index] [seq_vol] [seq_arp] [seq_pit] [seq_hpi] [seq_wav] [w_size] [w_pos] [w_count] [name]
         # note that wave is the same as duty for 2a03. The wave data is defined later for the creation of custom waves.
         
-        # TODO
         index, vol, arp, pit, hpi, dut, w_size, w_pos, w_count = list(map(int, line.split()[1:10]))
         name = self.get_quote(line)
         chip = "n163"
@@ -201,10 +201,14 @@ class Reader:
         # note that tone is the same as duty for 2a03.
         self._handle_inst2a03(line, chip="s5b")
 
-    # TODO
     def _handle_keydpcm(self, line):
         # KEYDPCM [inst] [octave] [note] [sample] [pitch] [loop] [loop_point] [delta]
-        pass
+        inst, octave, note, sample, pitch, loop, loop_point, delta = map(int, line.split()[1:9])
+        m_keydpcm = KeyDpcm(inst, octave, note, sample, pitch, loop, loop_point, delta)
+        
+        midi_pitch = (octave * 12) + note
+        self.project.instruments[inst].dpcm_keys[midi_pitch] = m_keydpcm
+        #print("{} -> {}".format(midi_pitch, m_keydpcm))
 
     # TODO
     def _handle_fdswave(self, line):

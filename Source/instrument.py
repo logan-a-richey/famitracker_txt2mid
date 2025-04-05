@@ -31,6 +31,7 @@ class Inst2a03(BaseInst):
             "dut": None
         }
 
+        self.dpcm_keys = {}
 
 class InstVrc7(BaseInst):
     def __init__(self, 
