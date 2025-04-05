@@ -1,5 +1,7 @@
 # track.py
 
+from typing import List, Dict
+
 from printable import Printable
 
 class Track(Printable):
@@ -13,8 +15,8 @@ class Track(Printable):
         self.num_cols = 5
         self.eff_cols = [1 for _ in range(5)]
 
-        self.orders = {}
-        self.patterns = {}
+        self.orders: Dict[str, List[str]] = {}
+        self.patterns: Dict[str, Dict[int, List[str]]] = {}
 
-        self.resequenced_lines = []
+        self.resequenced_lines: List[str] = []
         

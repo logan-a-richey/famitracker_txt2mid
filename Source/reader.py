@@ -298,11 +298,16 @@ class Reader:
         # PATTERN [pattern]
         t = self.project.tracks[-1]
         self.target_pattern = line.split()[1]
+        t.patterns[self.target_pattern] = {}
 
-    # TODO
     def _handle_row(self, line):
         # ROW [row] : [c0] : [c1] : [c2] ...
-        pass
+        t = self.project.tracks[-1]
+        
+        row = int(line.split()[1], 16)
+        tokens = [token.strip() for token in line.split(":")[1:]]
+
+        t.patterns[self.target_pattern][row] = tokens  
 
     # TODO
     def _process_line(self, line):
