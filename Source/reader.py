@@ -57,6 +57,8 @@ class Reader:
             "ROW": self._handle_row
         }
 
+        self.target_pattern = "00"
+
     def get_quote(self, s):
         # return text between first and last double quote
         return s[s.find("\"") + 1: s.rfind("\"")]
@@ -292,10 +294,10 @@ class Reader:
         v = line.split(":")[1].strip().split()
         t.orders[k] = v
 
-    # TODO
     def _handle_pattern(self, line):
         # PATTERN [pattern]
-        pass
+        t = self.project.tracks[-1]
+        self.target_pattern = line.split()[1]
 
     # TODO
     def _handle_row(self, line):

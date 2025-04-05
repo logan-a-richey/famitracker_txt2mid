@@ -23,5 +23,12 @@ def main():
     p.parser.exec()
     p.exporter.exec()
 
+    # TODO
+    # debug
+    for track in p.tracks:
+        print("Track Orders:")
+        for k,v in track.orders.items():
+            print("{} -> {}".format(k,v))
+
 if __name__ == "__main__":
     main()
