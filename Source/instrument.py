@@ -53,6 +53,17 @@ class InstFds(BaseInst):
         self.mod_speed = mod_speed
         self.mod_depth = mod_depth
         self.mod_delay = mod_delay
+        
+        # data to be added after init
+        self.fds_wave_data: List[int] = []
+        self.fds_mod_data: List[int] = []
+        self.macros = {
+            "vol": None,
+            "arp": None,
+            "pit": None,
+            "hpi": None,
+            "dut": None
+        }
 
 
 class InstN163(Inst2a03):

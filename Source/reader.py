@@ -210,21 +210,52 @@ class Reader:
         self.project.instruments[inst].dpcm_keys[midi_pitch] = m_keydpcm
         #print("{} -> {}".format(midi_pitch, m_keydpcm))
 
-    # TODO
     def _handle_fdswave(self, line):
         # FDSWAVE [inst] : [data]
-        pass
+        inst = int(line.split()[1])
+        data = list(map(int, line.split(":")[1].strip().split()))
 
-    # TODO
+        lookup = self.project.instruments.get(inst, None)
+        if not lookup:
+            return
+
+        if isinstance(lookup, InstFds):
+            lookup.fds_wave_data = data
+
     def _handle_fdsmod(self, line):
         # FDSMOD [inst] : [data]
-        pass
+        inst = int(line.split()[1])
+        data = list(map(int, line.split(":")[1].strip().split()))
 
-    # TODO
+        lookup = self.project.instruments.get(inst, None)
+        if not lookup:
+            return
+            
+        if isinstance(lookup, InstFds):
+            lookup.fds_mod_data = data
+
     def _handle_fdsmacro(self, line):
         # FDSMACRO [inst] [type] [loop] [release] [setting] : [macro]
-        pass
+        m_inst, m_type, m_loop, m_release, m_setting = \
+            map(int, line.split()[1:6])
+        m_seq = list(map(int, line.split(":")[1].strip().split()))
 
+        m_macro = Macro(
+            "fds", 
+            m_type, 
+            0,
+            m_loop,
+            m_release, 
+            m_setting,
+            m_seq
+        )
+         
+        macro_types = ["vol", "arp", "pit", "hpi", "dut"]
+        try:
+            self.project.instruments[inst].macros[macro_types[m_type]] = m_macro
+        except Exception as e:
+            print("Failed to addd FDS Macro. Error: {}".format(e))
+        
     # TODO
     def _handle_n163wave(self, line):
         # N163WAVE [inst] [wave] : [data]
