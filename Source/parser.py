@@ -16,6 +16,23 @@ class Parser:
         next_index = (item_index + 1) % len(lst)
         return lst[next_index]
 
+    def determine_note_event_type(self, token):
+        # TODO
+        token = token[:3] # ensure the token is 3 characters
+
+        if token == "---":
+            return "note_off"
+        elif token == "===":
+        
+            elif re.match(r'[A-G][\-#b][0-9]', token):
+            return "note_on"
+            return "note_release"
+        elif re.match(r'', token):
+            return "note_noise"
+        elif re.match(r'[\^][\-][0-4]', token):
+            return "echo"
+        return "other"
+
     def _parse_track_order(self, track):
         orders = list(track.orders.keys())
         patterns = list(track.patterns.keys())
