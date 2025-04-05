@@ -25,22 +25,5 @@ def main():
     p.parser.exec()
     p.exporter.exec()
 
-    # TODO
-    # debug
-    '''
-    for track in p.tracks:
-        print("Track Orders:")
-        for k,v in track.orders.items():
-            print("{} -> {}".format(k,v))
-    '''
-    #print(json.dumps(p.tracks[0].patterns, indent=4))
-    '''
-    for track in p.tracks:
-        for pk,pv in track.patterns.items():
-            for ck, cv in pv.items():
-                print("PATTERN {} - ROW {} - DATA {}".format(pk, ck, cv))
-    '''
-    print(p)
-
 if __name__ == "__main__":
     main()
