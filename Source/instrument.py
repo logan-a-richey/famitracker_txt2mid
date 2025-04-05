@@ -1,6 +1,6 @@
 # instrument.py
 
-from typing import List
+from typing import List, Dict, Any
 from printable import Printable
 
 class BaseInst(Printable):
@@ -22,8 +22,8 @@ class Inst2a03(BaseInst):
         self.seq_hpi = seq_hpi
         self.seq_dut = seq_dut
         
-        # to be loaded later
-        self.macros = {
+        # data to be added after init
+        self.macros: Dict[str, Any] = {
             "vol": None,
             "arp": None,
             "pit": None,
@@ -57,7 +57,7 @@ class InstFds(BaseInst):
         # data to be added after init
         self.fds_wave_data: List[int] = []
         self.fds_mod_data: List[int] = []
-        self.macros = {
+        self.macros: Dict[str, Any] = {
             "vol": None,
             "arp": None,
             "pit": None,
@@ -77,4 +77,6 @@ class InstN163(Inst2a03):
         self.w_pos = w_pos
         self.w_count = w_count
 
+        # data to be added after init
+        self.waves: Dict[int, List[int]] = {}
 

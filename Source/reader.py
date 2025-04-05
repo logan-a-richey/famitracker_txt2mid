@@ -256,10 +256,17 @@ class Reader:
         except Exception as e:
             print("Failed to addd FDS Macro. Error: {}".format(e))
         
-    # TODO
     def _handle_n163wave(self, line):
         # N163WAVE [inst] [wave] : [data]
-        pass
+        inst, wave = map(int, line.split()[1:3])
+        data = list(map(int, line.split(":")[1].strip().split()))
+
+        lookup = self.project.instruments.get(inst, None)
+        if not lookup:
+            return
+        
+        if isinstance(lookup, InstN163):
+            lookup.waves[wave] = data            
 
     # TODO
     def _handle_track(self, line):
