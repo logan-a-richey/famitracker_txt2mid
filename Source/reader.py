@@ -237,20 +237,9 @@ class Reader:
 
     def _handle_fdsmacro(self, line):
         # FDSMACRO [inst] [type] [loop] [release] [setting] : [macro]
-        m_inst, m_type, m_loop, m_release, m_setting = \
-            map(int, line.split()[1:6])
+        m_inst, m_type, m_loop, m_release, m_setting = map(int, line.split()[1:6])
         m_seq = list(map(int, line.split(":")[1].strip().split()))
-
-        m_macro = Macro(
-            "fds", 
-            m_type, 
-            0,
-            m_loop,
-            m_release, 
-            m_setting,
-            m_seq
-        )
-         
+        m_macro = Macro("fds", m_type, 0, m_loop, m_release, m_setting, m_seq)
         macro_types = ["vol", "arp", "pit", "hpi", "dut"]
         try:
             self.project.instruments[inst].macros[macro_types[m_type]] = m_macro
@@ -309,7 +298,6 @@ class Reader:
 
         t.patterns[self.target_pattern][row] = tokens  
 
-    # TODO
     def _process_line(self, line):
         # Reads line from file.
         # Extracts and loads important data into the Project class.
