@@ -8,8 +8,7 @@ from dpcm import DPCM
 from groove import Groove
 from instrument import Inst2a03, InstFds, InstVrc7, InstN163
 from keydpcm import KeyDpcm
-
-# from track import Track
+from track import Track
 
 @singleton
 class Reader:
@@ -268,20 +267,30 @@ class Reader:
         if isinstance(lookup, InstN163):
             lookup.waves[wave] = data            
 
-    # TODO
     def _handle_track(self, line):
         # TRACK [pattern] [speed] [tempo] [name]
-        pass
+        num_rows, speed, tempo = map(int, line.split()[1:4])
+        name = self.get_quote(line)
 
-    # TODO
+        m_track = Track(num_rows, speed, tempo, name)
+        self.project.tracks.append(m_track)
+
     def _handle_columns(self, line):
         # COLUMNS : [columns]
-        pass
+        # get target track off of the top of the stack
+        t = self.project.tracks[-1]
+        
+        eff_cols = list(map(int, line.split(":")[1].strip().split()))
+        t.eff_cols = eff_cols
+        t.num_cols = len(eff_cols)
 
-    # TODO
     def _handle_order(self, line):
         # ORDER [frame] : [list]
-        pass
+        t = self.project.tracks[-1]
+        
+        k = line.split()[1]
+        v = line.split(":")[1].strip().split()
+        t.orders[k] = v
 
     # TODO
     def _handle_pattern(self, line):
