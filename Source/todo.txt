@@ -4,15 +4,21 @@
 Update macros for other chips
 Handle special event tags
 Handle track
+Handle Parser / resequence rows
 
 === TODO ===
-Handle Parser / resequence rows
+Set up Logger
+
 Handle OS Midi export file directory
+
 Midi export track
 - note start, note end, duration, volume
 - drum notes
 - design for addition of "famitracker ticks" per row
+
 Refactor: factory/strategy pattern for Reader
+
 Create GUI for settings and easier non-terminal usage of the program
+
 Update README.md
 
