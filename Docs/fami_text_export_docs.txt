@@ -11,9 +11,9 @@
 TITLE [title]
     - title: string - the document's title
 AUTHOR [author]
-    - title: string - the document's author
+    - author: string - the document's author
 COPYRIGHT [copyright]
-    - title: string - the document's copyright information
+    - copyright: string - the document's copyright information
 COMMENT [comment]
     - comment: string - line of text to add
 
@@ -33,7 +33,7 @@ N163CHANNELS [channels]
 
 # macro / sequences block
 MACRO [type] [index] [loop] [release] [setting] : [macro]
-    - Defines a macro sequence for a 2A03 instrument.
+    #- Defines a macro sequence for a 2A03 instrument.
     - type: int[0,4] - 0=volume, 1=arpeggio, 2=pitch, 3=hi-pitch, 4=duty
     - index: int[0,127] - index of the macro
     - loop: int[-1,253] - loop point, -1 for no loop
@@ -42,7 +42,7 @@ MACRO [type] [index] [loop] [release] [setting] : [macro]
     - macro: int_list[-128,127] - macro sequence
 
 MACROVRC6 [type] [index] [loop] [release] [setting] : [macro]
-    - Defines a macro sequence for a VRC6 instrument.
+    #- Defines a macro sequence for a VRC6 instrument.
     - type: int[0,4] - 0=volume, 1=arpeggio, 2=pitch, 3=hi-pitch, 4=pulse-width
     - index: int[0,127] - index of the macro
     - loop: int[-1,253] - loop point, -1 for no loop
@@ -51,7 +51,7 @@ MACROVRC6 [type] [index] [loop] [release] [setting] : [macro]
     - macro: int_list[-128,127] - macro sequence
 
 MACRON163 [type] [index] [loop] [release] [setting] : [macro]
-    - Defines a macro sequence for a Namco 163 instrument.
+    #- Defines a macro sequence for a Namco 163 instrument.
     - type: int[0,4] - 0=volume, 1=arpeggio, 2=pitch, 3=hi-pitch, 4=wave
     - index: int[0,127] - index of the macro
     - loop: int[-1,253] - loop point, -1 for no loop
@@ -60,7 +60,7 @@ MACRON163 [type] [index] [loop] [release] [setting] : [macro]
     - macro: int_list[-128,127] - macro sequence
 
 MACROS5B [type] [index] [loop] [release] [setting] : [macro]
-    - Defines a macro sequence for a Sunsoft 5B instrument.
+    #- Defines a macro sequence for a Sunsoft 5B instrument.
     - type: int[0,4] - 0=volume, 1=arpeggio, 2=pitch, 3=hi-pitch, 4=tone
     - index: int[0,127] - index of the macro
     - loop: int[-1,253] - loop point, -1 for no loop
@@ -70,15 +70,15 @@ MACROS5B [type] [index] [loop] [release] [setting] : [macro]
 
 # dpcm block
 DPCMDEF [index] [size] [name]
-    - Creates a DPCM sample of the specified size in bytes. Use the DPCM command to fill in the sample data.
+    #- Creates a DPCM sample of the specified size in bytes. Use the DPCM command to fill in the sample data.
     - index: int[0,63] - index of the sample
     - size: int[0,4081] - size in bytes to allocate for the sample
     - name: string - original filename of sample
 
 DPCM : [data]
-    - Fills in sample data for the sample defined by the last DPCMDEF command.
-    - The data list may be of any length as long as it does not exceed the allocated sample length.
-    - Multiple DPCM commands will resume filling the sample where the previous one left off.
+    #- Fills in sample data for the sample defined by the last DPCMDEF command.
+    #- The data list may be of any length as long as it does not exceed the allocated sample length.
+    #- Multiple DPCM commands will resume filling the sample where the previous one left off.
     - data: hex_list[00,FF] - contents of the sample
 
 # Grooves
@@ -94,8 +94,8 @@ USEGROOVE : []
 
 # instrument block
 INST2A03 [index] [seq_vol] [seq_arp] [seq_pit] [seq_hpi] [seq_dut] [name]
-    - Defines a 2A03 instrument. To add DPCM sample key mappings, use the KEYDPCM command.
-    - Use the MACRO command to define sequences for use with 2A03 instruments.
+    #- Defines a 2A03 instrument. To add DPCM sample key mappings, use the KEYDPCM command.
+    #- Use the MACRO command to define sequences for use with 2A03 instruments.
     - index: int[0,63] - index of the instrument
     - seq_vol: int[-1,127] - volume macro sequence, -1 for none
     - seq_arp: int[-1,127] - arpeggio macro sequence, -1 for none
@@ -105,7 +105,7 @@ INST2A03 [index] [seq_vol] [seq_arp] [seq_pit] [seq_hpi] [seq_dut] [name]
     - name: string - name of the instrument
 
 INSTVRC6 [index] [seq_vol] [seq_arp] [seq_pit] [seq_hpi] [seq_wid] [name]
-    - Defines a VRC6 instrument. Use the MACROVRC6 command to define sequences for use with VRC6 instruments.
+    #- Defines a VRC6 instrument. Use the MACROVRC6 command to define sequences for use with VRC6 instruments.
     - index: int[0,63] - index of the instrument
     - seq_vol: int[-1,127] - volume macro sequence, -1 for none
     - seq_arp: int[-1,127] - arpeggio macro sequence, -1 for none
@@ -115,15 +115,15 @@ INSTVRC6 [index] [seq_vol] [seq_arp] [seq_pit] [seq_hpi] [seq_wid] [name]
     - name: string - name of the instrument
 
 INSTVRC7 [index] [patch] [r0] [r1] [r2] [r3] [r4] [r5] [r6] [r7] [name]
-    - Defines a VRC7 instrument.
+    #- Defines a VRC7 instrument.
     - index: int[0,63] - index of the instrument
     - patch: int[0,15] - VRC7 patch used by the instrument
     - register: hex_list[00,FF] - custom patch register data
     - name: string - name of the instrument
 
 INSTFDS [index] [mod_enable] [mod_speed] [mod_depth] [mod_delay] [name]
-    - Defines an FDS instrument.
-    - Use the commands FDSWAVE, FDSMOD, and FDSMACRO to fill in the waveform, modulation table, and macro data for the FDS instrument.
+    #- Defines an FDS instrument.
+    #- Use the commands FDSWAVE, FDSMOD, and FDSMACRO to fill in the waveform, modulation table, and macro data for the FDS instrument.
     - index: int[0,63] - index of the instrument
     - mod_enable: int[0,1] - 0 for modulator disabled, 1 for enabled
     - mod_speed: int[0,4905] - modulator speed
@@ -132,7 +132,7 @@ INSTFDS [index] [mod_enable] [mod_speed] [mod_depth] [mod_delay] [name]
     - name: string - name of the instrument
 
 INSTN163 [index] [seq_vol] [seq_arp] [seq_pit] [seq_hpi] [seq_wav] [w_size] [w_pos] [w_count] [name]
-    - Defines a Namco 163 instrument. Use the MACRON163 command to define sequences for use with N163 instruments.
+    #- Defines a Namco 163 instrument. Use the MACRON163 command to define sequences for use with N163 instruments.
     - index: int[0,63] - index of the instrument
     - seq_vol: int[-1,127] - volume macro sequence, -1 for none
     - seq_arp: int[-1,127] - arpeggio macro sequence, -1 for none
@@ -145,8 +145,7 @@ INSTN163 [index] [seq_vol] [seq_arp] [seq_pit] [seq_hpi] [seq_wav] [w_size] [w_p
     - name: string - name of the instrument
 
 INSTS5B [index] [seq_vol] [seq_arp] [seq_pit] [seq_hpi] [seq_ton] [name]
-    - Defines a Sunsoft 5B instrument. Use the MACROS5B command to define sequences for use with S5B instruments.
-    - ***
+    #- Defines a Sunsoft 5B instrument. Use the MACROS5B command to define sequences for use with S5B instruments.
     - index: int[0,63] - index of the instrument
     - seq_vol: int[-1,127] - volume macro sequence, -1 for none
     - seq_arp: int[-1,127] - arpeggio macro sequence, -1 for none
@@ -156,8 +155,8 @@ INSTS5B [index] [seq_vol] [seq_arp] [seq_pit] [seq_hpi] [seq_ton] [name]
     - name: string - name of the instrument
 
 KEYDPCM [inst] [octave] [note] [sample] [pitch] [loop] [loop_point] [delta]
-    - Adds a DPCM sample mapping to a key in a 2A03 instrument.
-    - Use the INST2A03 command to define the instrument before attempting to add a key mapping.
+    #- Adds a DPCM sample mapping to a key in a 2A03 instrument.
+    #- Use the INST2A03 command to define the instrument before attempting to add a key mapping.
     - inst: int[0,63] - index of the instrument
     - octave: int[0,7] - octave of key
     - note: int[0,11] - scale note of key
@@ -168,21 +167,21 @@ KEYDPCM [inst] [octave] [note] [sample] [pitch] [loop] [loop_point] [delta]
     - delta: int[-1,127] - delta counter value, -1 for off
 
 FDSWAVE [inst] : [data]
-    - Defines a waveform for an FDS instrument.
-    - Use the INSTFDS command to define the instrument before attempting to define its waveform.
+    #- Defines a waveform for an FDS instrument.
+    #- Use the INSTFDS command to define the instrument before attempting to define its waveform.
     - inst: int[0,63] - index of the instrument
     - data: int_list[0,63] - contents of the waveform, must be 64 elements long
 
 FDSMOD [inst] : [data]
-    - Defines a modulator table for an FDS instrument.
-    - Use the INSTFDS command to define the instrument before attempting to define its mod table.
+    #- Defines a modulator table for an FDS instrument.
+    #- Use the INSTFDS command to define the instrument before attempting to define its mod table.
    
     - inst: int[0,63] - index of the instrument
     - data: int_list[0,7] - contents of the table, must be 32 elements long
 
 FDSMACRO [inst] [type] [loop] [release] [setting] : [macro]
-    - Defines a macro sequence for an FDS instrument.
-    - Use the INSTFDS command to define the instrument before attempting to define its macros.
+    #- Defines a macro sequence for an FDS instrument.
+    #- Use the INSTFDS command to define the instrument before attempting to define its macros.
     - inst: int[0,63] - index of the instrument
     - type: int[0,2] - 0=volume, 1=arpeggio, 2=pitch
     - loop: int[-1,253] - loop point, -1 for no loop
@@ -191,32 +190,32 @@ FDSMACRO [inst] [type] [loop] [release] [setting] : [macro]
     - macro: int_list[-128,127] - macro sequence
 
 N163WAVE [inst] [wave] : [data]
-    - Defines a waveform for a Namco 163 instrument.
-    - Use the INSTN163 command to define the instrument before attempting to define its waveforms.
+    #- Defines a waveform for a Namco 163 instrument.
+    #- Use the INSTN163 command to define the instrument before attempting to define its waveforms.
     - inst: int[0,63] - index of the instrument
     - wave: int[0,15] - index of the wave
     - data: int_list[0,15] - contents of the waveform, must be the same length as defined by the INSTN163 instrument
 
 TRACK [pattern] [speed] [tempo] [name]
-    - Begins a new track.
+    #- Begins a new track.
     - pattern: int[0,256] - length of patterns
     - speed: int[0,255] - track speed
     - tempo: int[0,255] - track tempo
     - name: string - name of the track
 
 COLUMNS : [columns]
-    - Sets the number of effect columns in each channel.
-    - This should be specified after a TRACK command, and before using ROW commands to fill in pattern data.
-    - If not specified, each channel will have the default number of effect columns (1).
+    #- Sets the number of effect columns in each channel.
+    #- This should be specified after a TRACK command, and before using ROW commands to fill in pattern data.
+    #- If not specified, each channel will have the default number of effect columns (1).
     - columns: int_list[1,64] - number of effect columns for each channel, where x is number of cols designated by EXPANSION.
 
 ORDER [frame] : [list]
-    - Sets the patterns to be played in each frame. Applies to current track.
+    #- Sets the patterns to be played in each frame. Applies to current track.
     - frame: hex[00,7F] - index of frame
     - list: hex_list[00,7F] - pattern to use for each channel, len of list must match number of cols
 
 PATTERN [pattern]
-    - Sets the current pattern to be filled by subsequent ROW commands.
+    #- Sets the current pattern to be filled by subsequent ROW commands.
     - pattern: hex[00,7F] - index of pattern
 
 #ROW [row] : [c0] : [c1] : [c2] ...
@@ -230,27 +229,27 @@ ROW [row] : [c0] : [c1] : [c2] ...
     - row: string - contains music data
 
 # ROW DATA:
-    row: hex[00,7F] - index of pattern
-
-    c0...: channel data for each channel. The channel data looks like: nnn ii v eee
-
-    nnn: note,
-    begins with a letter (C,D,E,F,G,A,B),
-    then a sharp (#,+) natural (-,.) or flat (b,f) character,
-    then an octave (0,1,2,3,4,5,6,7);
-
-    an empty note is ...,
-    a halt is ---,
-    a release is ===;
-
-    the notes for the noise channel c3 are special:
-    they begin with a hex[0,F] to specify noise pitch, followed by two characters "-#"
-
-    ii: hex[00,3F] - instrument index, .. for none.
-
-    v: hex[0,F] - volume, .. for none.
-
-    eee: effect, begins with a letter or number specifying the effect type,
-    then the last two characters are hex[00,FF] specifying the parameter value.
-    There must be as many eee fields as specified by the COLUMNS command.
-
+#   row: hex[00,7F] - index of pattern
+#
+#   c0...: channel data for each channel. The channel data looks like: nnn ii v eee
+#
+#   nnn: note,
+#   begins with a letter (C,D,E,F,G,A,B),
+#   then a sharp (#,+) natural (-,.) or flat (b,f) character,
+#   then an octave (0,1,2,3,4,5,6,7);
+#
+#   an empty note is ...,
+#   a halt is ---,
+#   a release is ===;
+#
+#   the notes for the noise channel c3 are special:
+#   they begin with a hex[0,F] to specify noise pitch, followed by two characters "-#"
+#
+#   ii: hex[00,3F] - instrument index, .. for none.
+#
+#   v: hex[0,F] - volume, .. for none.
+#
+#   eee: effect, begins with a letter or number specifying the effect type,
+#   then the last two characters are hex[00,FF] specifying the parameter value.
+#   There must be as many eee fields as specified by the COLUMNS command.
+ 
