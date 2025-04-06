@@ -115,10 +115,10 @@ class Parser:
             seen_orders.add(self.target_order)
             self._parse_order_block(track)
 
-        for line in track.data:
-            print(line)
+        #for line in track.data:
+        #    print(line)
 
-    def exec(self):
+    def run(self):
         for track in self.project.tracks:
             self._parse_track(track)
 

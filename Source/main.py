@@ -21,9 +21,9 @@ def main():
     input_file = get_input_file()
 
     p = Project()
-    p.reader.exec(input_file)
-    p.parser.exec()
-    p.exporter.exec()
+    p.reader.run(input_file)
+    p.parser.run()
+    p.exporter.run()
 
 if __name__ == "__main__":
     main()

@@ -306,7 +306,7 @@ class Reader:
         func = self.dispatch_table.get(first_word, self._nop)
         func(line)
 
-    def exec(self, input_file):
+    def run(self, input_file):
         # Reads Famitracker text export data line by line.
         # Calls _process_line to extract and load data into the Project class.
         

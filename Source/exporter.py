@@ -7,7 +7,7 @@ class Exporter:
     def __init__(self, project):
         self.project = project
 
-    # TODO
-    def exec(self):
-        pass
+    def run(self):
+        for line in track.data:
+            print(line)
 
