@@ -4,6 +4,8 @@ import re
 from singleton import singleton
 from echo_buffer import EchoBuffer
 
+# TODO regex compile
+
 @singleton
 class Parser:
     def __init__(self, project):
