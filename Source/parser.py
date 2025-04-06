@@ -11,6 +11,7 @@ class Parser:
 
         self.target_order = "00"
         self.target_row = 0
+        self.echo_buffers = []
 
     def get_next_item(self, lst, item):
         item_index = lst.index(item)
@@ -44,7 +45,7 @@ class Parser:
         #print("Scanning Order: {}".format(self.target_order))
         order_patterns = track.orders.get(self.target_order)
 
-        print("{} -> {}".format(self.target_order, order_patterns))
+        #print("{} -> {}".format(self.target_order, order_patterns))
         
         tokens = []
         for ri in range(self.target_row, track.num_rows):
@@ -63,7 +64,19 @@ class Parser:
                 token = lookup[ci]
                 
                 token_type = self.determine_note_event_type(token)
-                #print("{} -> {}".format(token.ljust(20), token_type))
+                
+                # Handle echo notes
+                if token_type == 'echo':
+                    echo_value = int(token[2])
+                    echo = self.echo_buffers[ci].peek(echo_value)
+                    if echo:
+                        token = "{}{}".format(echo, token[3:])
+                        self.echo_buffers[ci].push(token[3:])
+                    else:
+                        token = "...{}".format(token[3:])
+                
+                if token_type in ['note_on', 'note_off', 'noise_on']:
+                    self.echo_buffers[ci].push(token[0:3])
 
                 tokens.append(token)
             
@@ -111,16 +124,21 @@ class Parser:
     def _parse_track(self, track):
         print("Parsing TRACK {} \'{}\'".format( track.index, track.name))
         
+        track.data.clear()
         self.target_order = "00"
+        self.target_row = 0
+        
+        self.echo_buffers.clear()
+        self.echo_buffers = [EchoBuffer() for _ in range(track.num_cols)]
+
         seen_it = set()
+
         while (self.target_order not in seen_it):
             seen_it.add(self.target_order)
             self._parse_track_order(track)
-        
+
     def exec(self):
-        ''' 
-        Adds self.resequenced_rows to each track in preparation for the MIDI export.
-        '''
+        # Adds self.resequenced_rows to each track in preparation for the MIDI export.
         for track in self.project.tracks:
             self._parse_track(track)
         pass
