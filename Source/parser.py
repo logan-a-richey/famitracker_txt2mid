@@ -22,15 +22,19 @@ class Parser:
 
         if token == "---":
             return "note_off"
-        elif token == "===":
         
-            elif re.match(r'[A-G][\-#b][0-9]', token):
+        elif token == "===":
+            return "note_release" 
+        
+        elif re.match(r'[A-G][\-#b][0-9]', token):
             return "note_on"
-            return "note_release"
-        elif re.match(r'', token):
+        
+        elif re.match(r'[0-9A-G][\-][#]', token):
             return "note_noise"
+        
         elif re.match(r'[\^][\-][0-4]', token):
             return "echo"
+        
         return "other"
 
     def _parse_track_order(self, track):
@@ -56,9 +60,15 @@ class Parser:
                     continue
                 token = lookup[ci]
                 
+                token_type = self.determine_note_event_type(token)
+                print("{} -> {}".format(token.ljust(20), token_type))
+
                 tokens.append(token)
-            print(tokens) 
-            exit()
+            
+            data_line = "|".join(tokens)
+            track.data.append(data_line)
+
+            # TODO frame skipping effects
 
         self.target_order = self.get_next_item(orders, self.target_order)
         return

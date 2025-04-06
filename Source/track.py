@@ -25,6 +25,7 @@ class Track(Printable):
 
         self.orders: Dict[str, List[str]] = {}
         self.patterns: Dict[str, Dict[int, List[str]]] = {}
-
-        self.resequenced_lines: List[str] = []
+        
+        # resequenced rows
+        self.data: List[str] = []
         
