@@ -8,7 +8,6 @@ from echo_buffer import EchoBuffer
 class Parser:
     def __init__(self, project):
         self.project = project
-
         self.target_order = "00"
         self.target_row = 0
         self.echo_buffers = []
@@ -19,127 +18,105 @@ class Parser:
         return lst[next_index]
 
     def determine_note_event_type(self, token):
-        token = token[:3] # ensure the token is 3 characters
+        token = token[:3]
 
         if token == "---":
             return "note_off"
-        
-        elif token == "===":
-            return "note_release" 
-        
-        elif re.match(r'[A-G][\-#b][0-9]', token):
-            return "note_on"
-        
-        elif re.match(r'[0-9A-G][\-][#]', token):
-            return "note_noise"
-        
-        elif re.match(r'[\^][\-][0-4]', token):
-            return "echo"
-        
+        if token == "===":
+            return "note_release"
+
+        matchers = [
+            (r'^[A-G][\-#b][0-9]$', "note_on"),
+            (r'^[0-9A-G][\-][#]$', "note_noise"),
+            (r'^[\^][\-][0-4]$', "echo"),
+        ]
+
+        for pattern, event_type in matchers:
+            if re.match(pattern, token):
+                return event_type
+
         return "other"
 
-    def _parse_track_order(self, track):
-        orders = list(track.orders.keys())
-        patterns = list(track.patterns.keys())
+    def handle_echo_token(self, token, col_index):
+        echo_value = int(token[2])
+        echo = self.echo_buffers[col_index].peek(echo_value)
+        if echo:
+            self.echo_buffers[col_index].push(token[3:])
+            return "{}{}".format(echo, token[3:])
+        
+        return "...{}".format(token[3:])
 
-        #print("Scanning Order: {}".format(self.target_order))
+
+    def handle_control_flow(self, data_line, orders, track):
+        if re.findall(r'C[0-9A-F]{2}', data_line):
+            return 'cxx_effect'
+
+        b_matches = re.findall(r'B[0-9A-F]{2}', data_line)
+        if b_matches:
+            value = b_matches[-1][1:3]
+            self.target_order = value if value in orders else orders[-1]
+            self.target_row = 0
+            return 'bxx_effect'
+
+        d_matches = re.findall(r'D[0-9A-F]{2}', data_line)
+        if d_matches:
+            value = min(int(d_matches[-1][1:3], 16), track.num_rows - 1)
+            self.target_order = self.get_next_item(orders, self.target_order)
+            self.target_row = value
+            return 'dxx_effect'
+
+        return None
+
+    def _parse_order_block(self, track):
+        orders = list(track.orders.keys())
         order_patterns = track.orders.get(self.target_order)
 
-        #print("{} -> {}".format(self.target_order, order_patterns))
-        
-        tokens = []
         for ri in range(self.target_row, track.num_rows):
-            tokens.clear()
+            tokens = []
             for ci in range(track.num_cols):
-                # TODO
-                #for tick in range(self.num_ticks):
-                
-                null_token = "... .. .{}".format(" ..."*track.eff_cols[ci])
-                lookup = track.patterns.get(order_patterns[ci], {}).get(ri, None)
-                
-                if not lookup:
+                null_token = "... .. .{}".format(" ..." * track.eff_cols[ci])
+                pattern_data = track.patterns.get(order_patterns[ci], {}).get(ri, None)
+
+                if not pattern_data:
                     tokens.append(null_token)
                     continue
-                
-                token = lookup[ci]
-                
+
+                token = pattern_data[ci]
                 token_type = self.determine_note_event_type(token)
-                
-                # Handle echo notes
+
                 if token_type == 'echo':
-                    echo_value = int(token[2])
-                    echo = self.echo_buffers[ci].peek(echo_value)
-                    if echo:
-                        token = "{}{}".format(echo, token[3:])
-                        self.echo_buffers[ci].push(token[3:])
-                    else:
-                        token = "...{}".format(token[3:])
-                
-                if token_type in ['note_on', 'note_off', 'noise_on']:
-                    self.echo_buffers[ci].push(token[0:3])
+                    token = self.handle_echo_token(token, ci)
+                elif token_type in ['note_on', 'note_off', 'note_noise']:
+                    self.echo_buffers[ci].push(token[:3])
 
                 tokens.append(token)
-            
+
             data_line = "|".join(tokens)
             track.data.append(data_line)
 
-            # TODO
-            all_matches = re.findall(r'[BCD][0-9A-F]{2}', data_line)
-            if all_matches:
-                print(all_matches)
-
-            matches = re.findall(r'[C][0-9A-F]{2}', data_line)
-            if matches:
-                return # end the track. current order is in seenit
-
-            matches = re.findall(r'[B][0-9A-F]{2}', data_line)
-            if matches:
-                # get the value of the last match
-                value = matches[-1][1:3]
-                if value not in orders:
-                    self.target_order = orders[-1]
-                    self.target_row = 0
-                    return
-                
-                self.target_order = value
-                self.target_row = 0
+            control_result = self.handle_control_flow(data_line, orders, track)
+            if control_result:
                 return
 
-            matches = re.findall(r'[D][0-9A-F]{2}', data_line)
-            if matches:
-                # get the value of the last match and convert from int to hex
-                # then bounds check with (num_rows - 1)
-                value = min(int(matches[-1][1:3], 16), track.num_rows - 1)
-                
-                # get next order         
-                self.target_order = self.get_next_item(orders, self.target_order)
-                self.target_row = value
-                return
-
-        # get next order
         self.target_order = self.get_next_item(orders, self.target_order)
         self.target_row = 0
-        return
 
     def _parse_track(self, track):
-        print("Parsing TRACK {} \'{}\'".format( track.index, track.name))
-        
+        print("[I] Parsing Track {}: \'{}\'".format(track.index, track.name))
         track.data.clear()
         self.target_order = "00"
         self.target_row = 0
-        
-        self.echo_buffers.clear()
         self.echo_buffers = [EchoBuffer() for _ in range(track.num_cols)]
 
-        seen_it = set()
+        seen_orders = set()
+        while self.target_order not in seen_orders:
+            seen_orders.add(self.target_order)
+            self._parse_order_block(track)
 
-        while (self.target_order not in seen_it):
-            seen_it.add(self.target_order)
-            self._parse_track_order(track)
+        for line in track.data:
+            print(line)
 
     def exec(self):
-        # Adds self.resequenced_rows to each track in preparation for the MIDI export.
         for track in self.project.tracks:
             self._parse_track(track)
-        pass
 
