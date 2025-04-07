@@ -1,6 +1,8 @@
 # parser.py
 
 import re
+import os
+
 from singleton import singleton
 from echo_buffer import EchoBuffer
 
@@ -118,9 +120,6 @@ class Parser:
         while self.target_order not in seen_orders:
             seen_orders.add(self.target_order)
             self._parse_order_block(track)
-
-        #for line in track.data:
-        #    print(line)
 
     def run(self):
         for track in self.project.tracks:

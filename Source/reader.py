@@ -242,7 +242,7 @@ class Reader:
         m_macro = Macro("fds", m_type, 0, m_loop, m_release, m_setting, m_seq)
         macro_types = ["vol", "arp", "pit", "hpi", "dut"]
         try:
-            self.project.instruments[inst].macros[macro_types[m_type]] = m_macro
+            self.project.instruments[m_inst].macros[macro_types[m_type]] = m_macro
         except Exception as e:
             print("Failed to addd FDS Macro. Error: {}".format(e))
         
