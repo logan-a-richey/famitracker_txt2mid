@@ -1,18 +1,44 @@
 #!/usr/bin/env python3
 
+import os
 import sys
 import re
 import json
+import logging
+
+LOG_FILE_PATH = '/tmp/logs/create_json_check.log'
 
 class CreateJson:
-    def __init__(self):
+    def __init__(self, log_to_console=True):
         self.data = {}
         self.last_tag = ""
 
+        self.logger = logging.getLogger(__name__)
+        self.logger.setLevel(logging.INFO)
+
+        # Avoid duplicate handlers if __init__ is called more than once
+        if not self.logger.handlers:
+            # Shared formatter
+            formatter = logging.Formatter(
+                fmt='%(asctime)s - %(levelname)s - %(filename)s - %(message)s',
+                datefmt='%Y-%m-%d %H:%M:%S'
+            )
+
+            # File handler
+            file_handler = logging.FileHandler(LOG_FILE_PATH, mode='w')
+            file_handler.setFormatter(formatter)
+            self.logger.addHandler(file_handler)
+
+            # Optional console handler
+            if log_to_console:
+                console_handler = logging.StreamHandler(sys.stdout)
+                console_handler.setFormatter(formatter)
+                self.logger.addHandler(console_handler)
+        
     def print_debug_table_line(self, field_name, field_data_type, field_range_lower, field_range_upper):
-        print("TAG: {} DATA_TYPE: {} RANGE_LOWER: {} RANGE_UPPER: {}".format(
-            *["\'{}\'".format(item).ljust(20) for item in [field_name, field_data_type, field_range_lower, field_range_upper]]
-        ))
+        self.logger.info("TAG: {} DATA_TYPE: {} RANGE_LOWER: {} RANGE_UPPER: {}".format( \
+            *["\'{}\'".format(item).ljust(20) for item in [field_name, field_data_type, field_range_lower, field_range_upper]])
+        )    
 
     def _process_line(self, line):
         # tag line
@@ -47,6 +73,7 @@ class CreateJson:
                             field_range_lower = range_match[0]
                             field_range_upper = range_match[1]
                     
+                    # printed to log
                     self.print_debug_table_line(field_name, field_data_type, field_range_lower, field_range_upper)
 
             except Exception as e:          
@@ -66,28 +93,33 @@ class CreateJson:
         with open(ifile, "r") as file:
             for line in file:
                 line = line.strip()
-                if not line: continue
-                if line[0] == "#": continue
+                if not line:
+                    continue
+                if line[0] == "#":
+                    continue
                 self._process_line(line)
-
+    
     def write_file(self, ofile):
         with open(ofile, "w") as file:
             file.write(json.dumps(self.data, indent=2))
         print("File \'{}\' has been created.".format(ofile))
+    
 
-
-def get_input_file():
-    try:
-        return sys.argv[1]
-    except Exception as e:
-        print("Error {}".format(e))
-        exit(1)
+#def get_input_file():
+#    try:
+#        return sys.argv[1]
+#    except Exception as e:
+#        print("Error {}".format(e))
+#        exit(1)
 
 def main():
-    ifile = get_input_file()
+    #ifile = get_input_file()
+    ifile = os.path.abspath("../Docs/famitracker_export_data.txt")
+    ofile = os.path.abspath("../Docs/famitracker_export_data.json")
+
     cj = CreateJson()
     cj.read_file(ifile)
-    cj.write_file("famitracker_export_data.json") 
+    cj.write_file(ofile) 
 
 if __name__ == "__main__":
     main()
