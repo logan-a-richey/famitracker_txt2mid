@@ -36,8 +36,13 @@ class Exporter:
         self.current_tick = 0
         self.tick_subdivision = 480 / 8
         self.note_mapping = {'C': 0, 'D': 2, 'E': 4, 'F': 5, 'G': 7, 'A': 9, 'B': 11}
+        self.ticks_per_row = 6
         
     def note_str_to_int(self, token, transpose=0):
+        if not re.match(r'[A-G][\-b#][0-9]', token[0:3]):
+            print("[E] Bad note format: {}".format(token))
+            exit(1)
+
         note_int = self.note_mapping.get(token[0], 0)
         accidental = token[1]
         octave = int(token[2]) + 1
@@ -49,25 +54,101 @@ class Exporter:
         
         return midi_int
 
+    def _handle_fxx_effect(self, value):
+        pass
+
+    def _handle_oxx_effect(self, value):
+        pass
+
+    def _handle_speed_matches(self, line):
+        # look for speed effects
+        speed_matches = re.findall(r'[FO][0-9A-F]{2}', line)
+        if not speed_matches:
+            return
+
+        last_match = speed_matches[-1]
+        speed_type = last_match[0]
+        value = int(last_match[1:3], 16)
+
+        # speed setting
+        if speed_type == "F":
+            self._handle_fxx_effect(value)
+        # groove setting
+        elif speed_type == "O":
+            self.handle_oxx_effect(value)
+        else:
+            pass
+        
+        return
+
+    def determine_note_event_type(self, token):
+        # look at first 3 characters (note part)
+        token = token[:3]
+
+        if token == "---":
+            return "note_off"
+        if token == "===":
+            return "note_release"
+
+        matchers = [
+            (r'^[A-G][\-#b][0-9]$', "note_on"),
+            (r'^[0-9A-G][\-][#]$', "note_noise"),
+            #(r'^[\^][\-][0-4]$', "echo"),
+        ]
+
+        for pattern, event_type in matchers:
+            if re.match(pattern, token):
+                return event_type
+
+        return "other"
+    
+    def _process_note_on(self, col_index: int, token: str):
+        # transpose Triangle down an octave
+        
+        transpose = 12 if (col_index == 2) else 0
+        
+        midi_pitch = self.note_str_to_int(token, transpose)
+        self.midi.addNote(
+            track       = col_index, 
+            channel     = col_index % 2, 
+            start       = self.current_tick, 
+            duration    = self.tick_subdivision, 
+            pitch       = midi_pitch, 
+            velocity    = 120
+        )
+        return
+
+    def _process_note_off(self, token):
+        pass
+
+    def _process_note_release(self, token):
+        pass
+
+    def _process_note_noise(self, token):
+        pass
+
     def _process_line(self, line):
         tokens = line.split("|")
-        for i, token in enumerate(tokens):
-            # if not a note, skip for now
-            if not re.match(r'[A-G][\-#b][0-9]', token[0:3]):
-                continue
-           
-            # transpose Triangle down an octave
-            transpose = 12 if (i == 2) else 0
+        for col_index, token in enumerate(tokens):
+            self._handle_speed_matches(line)
+            
+            # capture the note part
+            #note_part, inst_part, vol_part = line.split()[0:3]
+            #effects = line.split()[3:]
+            
+            note_event_type = self.determine_note_event_type(token)
 
-            midi_pitch = self.note_str_to_int(token, transpose)
-            self.midi.addNote(
-                track       = i + 1, 
-                channel     = i % 2, 
-                start       = self.current_tick, 
-                duration    = self.tick_subdivision, 
-                pitch       = midi_pitch, 
-                velocity    = 120
-            )
+            if note_event_type == "note_on":
+                self._process_note_on(col_index, token)
+            elif note_event_type == "note_off":
+                self._process_note_off(token)
+            elif note_event_type == "note_release":
+                self._process_note_release(token)
+            elif note_event_type == "note_noise":
+                self._process_note_noise(token)
+            
+        return
+
 
     def clean_name(self, name):
         words = re.findall(r'\w+', name)
