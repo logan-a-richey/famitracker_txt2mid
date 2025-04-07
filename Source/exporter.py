@@ -34,9 +34,13 @@ class Exporter:
 
         self.midi = None
         self.current_tick = 0
-        self.tick_subdivision = 480 / 8
+        self.groove_mode = 0 
+
         self.note_mapping = {'C': 0, 'D': 2, 'E': 4, 'F': 5, 'G': 7, 'A': 9, 'B': 11}
-        self.ticks_per_row = 6
+        
+        # MIDI ticks per quarter note
+        self.TPQ: int = 480 
+        self.ticks_per_row: int = 6
         
     def note_str_to_int(self, token, transpose=0):
         if not re.match(r'[A-G][\-b#][0-9]', token[0:3]):
@@ -48,10 +52,7 @@ class Exporter:
         octave = int(token[2]) + 1
 
         midi_int = (octave * 12) + note_int + transpose
-        midi_int = (midi_int + 1) if (accidental == "#") \
-            else (midi_int - 1) if (accidental == "b") \
-            else midi_int
-        
+        midi_int = (midi_int + 1) if (accidental == "#") else (midi_int - 1) if (accidental == "b") else midi_int
         return midi_int
 
     def _handle_fxx_effect(self, value):
@@ -67,15 +68,15 @@ class Exporter:
             return
 
         last_match = speed_matches[-1]
-        speed_type = last_match[0]
-        value = int(last_match[1:3], 16)
+        match_type = last_match[0]
+        match_value = int(last_match[1:3], 16)
 
         # speed setting
-        if speed_type == "F":
-            self._handle_fxx_effect(value)
+        if match_type == "F":
+            self._handle_fxx_effect(match_value)
         # groove setting
-        elif speed_type == "O":
-            self.handle_oxx_effect(value)
+        elif match_type == "O":
+            self.handle_oxx_effect(match_value)
         else:
             pass
         
@@ -84,30 +85,23 @@ class Exporter:
     def determine_note_event_type(self, token):
         # look at first 3 characters (note part)
         token = token[:3]
-
         if token == "---":
             return "note_off"
-        if token == "===":
+        elif token == "===":
             return "note_release"
-
-        matchers = [
-            (r'^[A-G][\-#b][0-9]$', "note_on"),
-            (r'^[0-9A-G][\-][#]$', "note_noise"),
-            #(r'^[\^][\-][0-4]$', "echo"),
-        ]
-
-        for pattern, event_type in matchers:
-            if re.match(pattern, token):
-                return event_type
-
-        return "other"
+        elif re.match(r'^[A-G][\-#b][0-9]$', token):
+            return "note_on"
+        elif re.match(r'^[0-9A-G][\-][#]$', token):
+            return "note_noise"
+        else:
+            return "other"
     
     def _process_note_on(self, col_index: int, token: str):
         # transpose Triangle down an octave
-        
         transpose = 12 if (col_index == 2) else 0
         
         midi_pitch = self.note_str_to_int(token, transpose)
+        '''
         self.midi.addNote(
             track       = col_index, 
             channel     = col_index % 2, 
@@ -116,6 +110,7 @@ class Exporter:
             pitch       = midi_pitch, 
             velocity    = 120
         )
+        '''
         return
 
     def _process_note_off(self, token):
@@ -179,7 +174,7 @@ class Exporter:
 
                 for line in block:
                     self._process_line(line)
-                    self.current_tick += self.tick_subdivision # 120 ticks per 16th note
+                    self.current_tick += 120 # 120 ticks per 16th note
             
             filename = "PROJECT_{}_TRACK_{}_{}.mid".format(
                 self.clean_name(self.project.song_information.get("TITLE", "Default")),
