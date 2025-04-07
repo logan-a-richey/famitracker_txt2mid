@@ -14,6 +14,9 @@ class Exporter:
 
     def run(self):
         for track in self.project.tracks:
-            for line in track.data:
-                self._process_line(line)
+            for block in track.data:
+                print("NUMBER OF LINES = {}".format(len(block)))
+                for line in block:
+                    #self._process_line(line)
+                    pass
 

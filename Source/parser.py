@@ -72,6 +72,10 @@ class Parser:
     def _parse_order_block(self, track):
         orders = list(track.orders.keys())
         order_patterns = track.orders.get(self.target_order)
+        
+        # append a new order block
+        track.data.append([])
+        this_block = track.data[-1]
 
         for ri in range(self.target_row, track.num_rows):
             tokens = []
@@ -94,7 +98,7 @@ class Parser:
                 tokens.append(token)
 
             data_line = "|".join(tokens)
-            track.data.append(data_line)
+            this_block.append(data_line)
 
             control_result = self.handle_control_flow(data_line, orders, track)
             if control_result:
