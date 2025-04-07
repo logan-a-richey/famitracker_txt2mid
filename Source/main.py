@@ -2,10 +2,15 @@
 
 import json
 import sys
+sys.dont_write_bytecode = True # stop creation of __pycache__
+
+from pathlib import Path
+# Path to Submodules/lib_midi_writer_py, relative to this file
+midi_path = (Path(__file__).parent.parent / 'Submodules' / 'lib_midi_writer_py').resolve()
+if str(midi_path) not in sys.path:
+    sys.path.insert(0, str(midi_path))
 
 from project import Project
-
-sys.dont_write_bytecode = True # stop creation of __pycache__
 
 def get_input_file():
     try:
