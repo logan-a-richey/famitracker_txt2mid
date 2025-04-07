@@ -6,7 +6,11 @@ import re
 import json
 import logging
 
-LOG_FILE_PATH = '/tmp/logs/create_json_check.log'
+sys.dont_write_bytecode = True # stop creation of __pycache__
+
+LOG_DIR = '/tmp/logs'
+LOG_FILE_PATH = LOG_DIR + '/create_json_check.log'
+os.makedirs(LOG_DIR, exist_ok=True)
 
 class CreateJson:
     def __init__(self, log_to_console=True):
@@ -77,7 +81,7 @@ class CreateJson:
                     self.print_debug_table_line(field_name, field_data_type, field_range_lower, field_range_upper)
 
             except Exception as e:          
-                print("ERROR {} \nLINE \'{}\'".format(e, line))
+                self.logger.error("ERROR {} \nLINE \'{}\'".format(e, line))
                 exit(1)
             
             field_range = (field_range_lower, field_range_upper)
@@ -102,15 +106,10 @@ class CreateJson:
     def write_file(self, ofile):
         with open(ofile, "w") as file:
             file.write(json.dumps(self.data, indent=2))
-        print("File \'{}\' has been created.".format(ofile))
-    
+            #file.write(json.dumps(self.data))
+            
+        self.logger.info("File \'{}\' has been created.".format(ofile))
 
-#def get_input_file():
-#    try:
-#        return sys.argv[1]
-#    except Exception as e:
-#        print("Error {}".format(e))
-#        exit(1)
 
 def main():
     #ifile = get_input_file()

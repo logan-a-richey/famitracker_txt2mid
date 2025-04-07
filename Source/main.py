@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
 
-import sys
-# stop creation of __pycache__
-sys.dont_write_bytecode = True
-
 import json
+import sys
 
 from project import Project
+
+sys.dont_write_bytecode = True # stop creation of __pycache__
 
 def get_input_file():
     try:
