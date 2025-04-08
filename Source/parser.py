@@ -8,19 +8,18 @@ from typing import List, Dict, Any
 
 from singleton import singleton
 from echo_buffer import EchoBuffer
+from event_capture import NoteEvent, EventCapture
+
+from utils import note_str_to_int, get_next_item, int_to_hex
 
 TICKS_PER_ROW = 120
-
-def int_to_hex(value: int) -> str:
-    if not (0 <= value <= 255):
-        raise ValueError("Input must be an integer between 0 and 255.")
-    return f"0x{value:02X}"
 
 @singleton
 class Parser:
     def __init__(self, project):
         self.project = project
-        
+        self.event_capture = EventCapture()
+
         # running track of variables
         self.target_order: str = "00"
         self.target_row: int = 0
@@ -34,34 +33,29 @@ class Parser:
         self.head_patterns: int = 10
 
         self.regex_patterns = {
-            "note_on"      : re.compile(r'^[A-G][\-#b][0-9]$'),
-            "note_noise"   : re.compile(r'^[0-9A-G][\-][#]$'),
-            "note_echo"    : re.compile(r'^[\^][\-][0-4]$'),
-            "note_off"     : re.compile(r'^[\-]{3}$'),
-            "note_release" : re.compile(r'^[\=]{3}$'),
+            "note_on"       : re.compile(r'^[A-G][\-#b][0-9]$'),
+            "note_noise"    : re.compile(r'^[0-9A-G][\-][#]$'),
+            "note_echo"     : re.compile(r'^[\^][\-][0-4]$'),
+            "note_off"      : re.compile(r'^[\-]{3}$'),
+            "note_release"  : re.compile(r'^[\=]{3}$'),
 
-            "bxx_effect"   : re.compile(r'[B][0-9A-F]{2}'), # skip: go to order xx
-            "cxx_effect"   : re.compile(r'[C][0-9A-F]{2}'), # skip: end song
-            "dxx_effect"   : re.compile(r'[D][0-9A-F]{2}'), # skip: next order at row xx
+            "note_inst"     : re.compile(r'^[0-9A-F]{2}$'),
+            "note_vol"      : re.compile(r'^[0-9A-F]$'),
+            "bxx_effect"    : re.compile(r'[B][0-9A-F]{2}'), # skip: go to order xx
+            "cxx_effect"    : re.compile(r'[C][0-9A-F]{2}'), # skip: end song
+            "dxx_effect"    : re.compile(r'[D][0-9A-F]{2}'), # skip: next order @ row xx
+            "fxx_effect"    : re.compile(r'[F][0-9A-F]{2}'), # speed effect
+            "oxx_effect"    : re.compile(r'[O][0-9A-F]{2}'), # groove effect
             
-            "fxx_effect"   : re.compile(r'[F][0-9A-F]{2}'), # speed effect
-            "oxx_effect"   : re.compile(r'[O][0-9A-F]{2}'), # groove effect
-            
-            "rxx_effect"   : re.compile(r'[R][0-9A-F]{2}'), # note pitch down effect
-            "qxx_effect"   : re.compile(r'[Q][0-9A-F]{2}'), # note pitch up effect
-            "0xx_effect"   : re.compile(r'[0][0-9A-F]{2}'), # arpeggio effect
-            "gxx_effect"   : re.compile(r'[G][0-9A-F]{2}'), # note start delay effect
-            "sxx_effect"   : re.compile(r'[S][0-9A-F]{2}')  # note cut delay effect
+            "rxx_effect"    : re.compile(r'[R][0-9A-F]{2}'), # note pitch down effect
+            "qxx_effect"    : re.compile(r'[Q][0-9A-F]{2}'), # note pitch up effect
+            "0xx_effect"    : re.compile(r'[0][0-9A-F]{2}'), # arpeggio effect
+            "gxx_effect"    : re.compile(r'[G][0-9A-F]{2}'), # note start delay effect
+            "sxx_effect"    : re.compile(r'[S][0-9A-F]{2}')  # note cut delay effect
         }
 
         self.note_mapping = {'C': 0, 'D': 2, 'E': 4, 'F': 5, 'G': 7, 'A': 9, 'B': 11}
     
-    def get_next_item(self, lst: List[Any], item: Any):
-        # returns next item of a list
-        item_index = lst.index(item)
-        next_index = (item_index + 1) % len(lst)
-        return lst[next_index]
-
     def determine_note_event_type(self, token):
         token = token[:3]
         note_types = ["note_on", "note_off", "note_release", "note_noise", "note_echo"]
@@ -80,21 +74,6 @@ class Parser:
         
         return "...{}".format(token[3:])
     
-    def note_str_to_int(self, token, transpose=0):
-        if not self.regex_patterns["note_on"].match(token[0:3]):
-            print("[E] Bad note format: {}".format(token))
-            #return None
-
-        note_int = self.note_mapping.get(token[0], 0)
-        accidental = token[1]
-        octave = int(token[2]) + 1
-
-        midi_int = (octave * 12) + note_int + transpose
-        midi_int = (midi_int + 1) if (accidental == "#") \
-            else (midi_int - 1) if (accidental == "b") \
-            else midi_int
-        
-        return midi_int
 
     def handle_control_flow(self, data_line, orders, track):
         if self.regex_patterns["cxx_effect"].findall(data_line):
@@ -110,7 +89,7 @@ class Parser:
         d_matches = self.regex_patterns["dxx_effect"].findall(data_line)
         if d_matches:
             value = min(int(d_matches[-1][1:3], 16), track.num_rows - 1)
-            self.target_order = self.get_next_item(orders, self.target_order)
+            self.target_order = get_next_item(orders, self.target_order)
             self.target_row = value
             return 'dxx_effect'
 
@@ -157,7 +136,7 @@ class Parser:
             part_note, part_inst, part_vol = token.split()[0:3]
             # note part
             if self.regex_patterns["note_on"].match(part_note):
-                temp.append(str(self.note_str_to_int(part_note)))
+                temp.append(str(note_str_to_int(part_note)))
             else:
                 temp.append("NULL")
             # inst part
@@ -170,7 +149,6 @@ class Parser:
                 temp.append(str(int(part_vol, 16)))
             else:
                 temp.append("NULL")
-            #print("TOKEN = {} | PARTS = {}".format(token.ljust(20), temp))
             midi_tokens.append(temp)
         return midi_tokens
     
@@ -204,10 +182,14 @@ class Parser:
                 tokens.append(token)
             
             data_line = " : ".join(tokens)
-            self._handle_speed_matches(data_line)
+            print(data_line)
             
-            midi_tokens: List[List[str]] = self.get_midi_tokens(tokens)
+            self._handle_speed_matches(data_line)
 
+            #midi_tokens: List[List[str]] = self.get_midi_tokens(tokens)
+            
+            # TODO handle midi ticks
+            '''
             # midi data row 
             mdr = []
             mdr.append("{}".format(str(self.midi_tick).rjust(10)))
@@ -224,20 +206,17 @@ class Parser:
 
             print(" : ".join(mdr))
 
-            # TODO
-            #exit()
-
             self.midi_tick += TICKS_PER_ROW
+            '''
 
             control_result = self.handle_control_flow(data_line, orders, track)
             if control_result:
                 return
-
-        self.target_order = self.get_next_item(orders, self.target_order)
+        
+        # end of order, go to next order
+        self.target_order = get_next_item(orders, self.target_order)
         self.target_row = 0
-
-        # TODO debug exit
-        #exit()
+        return
 
     def _parse_track(self, track):
         
@@ -260,7 +239,5 @@ class Parser:
         for track in self.project.tracks:
             self._parse_track(track)
         
-        # TODO debug exit
-        exit(0)
 
 
