@@ -27,5 +27,6 @@ class Track(Printable):
         self.patterns: Dict[str, Dict[int, List[str]]] = {}
         
         # resequenced rows
-        self.data: List[List[str]] = []
+        #self.data: List[List[str]] = []
+        self.data: List[str] = []
 
