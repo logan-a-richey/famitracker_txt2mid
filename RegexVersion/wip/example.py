@@ -2,6 +2,9 @@
 
 import re
 
+# from stages.reader_handlers.SongInformationHandler import SongInformationHandler
+# from stages.reader_handles.GlobalSettingsHandler import GlobalSettingsHandler
+
 # --- Project class to store results ---
 class Project:
     def __init__(self):
@@ -19,8 +22,12 @@ class BaseLineHandler:
 # --- Song Information Handler ---
 class SongInformationHandler(BaseLineHandler):
     def __init__(self):
-        super().__init__(tags=["TITLE", "AUTHOR", "COPYRIGHT", "COMMENT"])
-        self.pattern = re.compile(r'^\s*(TITLE|AUTHOR|COPYRIGHT|COMMENT)\s+"(.*?)"\s*$')
+        super().__init__(tags=[
+            "TITLE", "AUTHOR", "COPYRIGHT", "COMMENT"
+        ])
+        self.pattern = re.compile(
+            r'^\s*(TITLE|AUTHOR|COPYRIGHT|COMMENT)\s+"(.*?)"\s*$'
+        )
 
     def try_handle(self, line: str, project) -> bool:
         match = self.pattern.match(line)
@@ -34,8 +41,13 @@ class SongInformationHandler(BaseLineHandler):
 # --- Global Settings Handler ---
 class GlobalSettingsHandler(BaseLineHandler):
     def __init__(self):
-        super().__init__(tags=["MACHINE", "FRAMERATE", "EXPANSION", "VIBRATO", "SPLIT", "N163CHANNELS"])
-        self.pattern = re.compile(r'^\s*(MACHINE|FRAMERATE|EXPANSION|VIBRATO|SPLIT|N163CHANNELS)\s+(\d+)\s*$')
+        super().__init__(tags=[
+            "MACHINE", "FRAMERATE", "EXPANSION", 
+            "VIBRATO", "SPLIT", "N163CHANNELS"
+        ])
+        self.pattern = re.compile(
+            r'^\s*(MACHINE|FRAMERATE|EXPANSION|VIBRATO|SPLIT|N163CHANNELS)\s+(\d+)\s*$'
+        )
 
     def try_handle(self, line: str, project) -> bool:
         match = self.pattern.match(line)
@@ -78,19 +90,20 @@ def main():
     handler = LineHandler(project)
 
     lines = [
-        'TITLE "Awesome Track"',
-        'AUTHOR "Jane Developer"',
-        'COPYRIGHT "2025 (c)"',
-        'MACHINE 0',
-        'FRAMERATE 60',
-        'SPLIT 1',
-        'UNKNOWN "no one handles this"',
+        "TITLE \"Awesome Track\"",
+        "AUTHOR \"Logan Richey\"",
+        "COPYRIGHT \"2025 (c)\"",
+        "MACHINE 0",
+        "FRAMERATE 60",
+        "SPLIT 1",
+        "UNKNOWN \"no one handles this\"",
     ]
 
     for line in lines:
         handler.handle_line(line)
-
-    print("\nParsed Data:")
+    
+    print()
+    print("Parsed Data:")
     print("Song Info:", project.song_information)
     print("Global Settings:", project.global_settings)
 
