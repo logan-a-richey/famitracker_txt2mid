@@ -1,78 +1,38 @@
 # reader.py
 
-import re
+class HandlerRegistry:
+    def __init__(self):
+        self._handlers = {}
 
-from containers.macro import Macro
-#from containers.instrument import Instrument
-#from containers.track import Track
+    def register(self, key, handler_cls):
+        self._handlers[key.upper()] = handler_cls()
 
-# TODO handle regex not matching error
+    def get_handler(self, key):
+        return self._handlers.get(key.upper())
 
 class Reader:
     def __init__(self, project):
         self.project = project
-        
-        self.matchers = [
-            (
-                re.compile(r'^\s*(TITLE|AUTHOR|COPYRIGHT|COMMENT)\s+\"(.*?)"$'),
-                self.handle_song_information
-            ),
-            (
-                re.compile(r'^\s*(MACHINE|FRAMERATE|EXPANSION|VIBRATO|SPLIT|N163CHANNELS)\s+(\d+)\s*$'),
-                self.handle_global_settings
-            ),
-            (
-                re.compile(r'^\s*(MACRO\w*)\s+(-?\d+)\s+(-?\d+)\s+(-?\d+)\s+(-?\d+)\s+(-?\d+)\s*:\s*((?:-?\d+\s*)+)$'),
-                self.handle_macros
-            )
-            # TODO INSTRUMENT
-            # TODO GROOVE
-            # TODO DPCM
-            # TODO DPCMKEY
-            # TODO SPECIAL MAcros and instrument settings
-            # TODO TRACK
-            # TODO COLUMN
-            # TODO ORDER 
-            # TODO PATTERN 
-            # TODO ROW
-        ]
-    
-    def handle_song_information(self, regex_match_object) -> None:
-        # TITLE "title"
-        self.project.song_information[regex_match_object.group(1)] = regex_match_object.group(2)
-        return
+        self.registry = HandlerRegistry()
+        self._register_handlers()
 
-    def handle_global_settings(self, regex_match_object) -> None:
-        # MACHINE 0
-        self.project.global_settings[regex_match_object.group(1)] = int(regex_match_object.group(2))
-        return
+    def _register_handlers(self):
+        from .handlers import MacroHandler  # assuming you move handlers to a module
+        self.registry.register("MACRO", MacroHandler)
 
-    def handle_macros(self, regex_match_object) -> None:
-        # MACRO 0 0 -1 -1 0 : 1 2 3 4
-        macro_tag = regex_match_object.group(1)
-        macro_type, macro_index, macro_loop, macro_release, macro_setting = list(map(int, regex_match_object.group(2, 3, 4, 5, 6)))
-        macro_sequence = list(map(int, re.findall(r'-?\d+', regex_match_object.group(7))))
-        macro_key = "{}.{}.{}".format(macro_tag, macro_type, macro_index)
-        macro_object = Macro(macro_tag, macro_type, macro_index, macro_loop, macro_release, macro_setting, macro_sequence)
-        self.project.macros[macro_key] = macro_object
-        print(macro_object)
-        return
+    def process_line(self, line):
+        if not line.strip() or line.startswith("#"):
+            return
 
-    def process_line(self, line: str) -> None:
-        for regex_pattern, function in self.matchers:
-            if x := regex_pattern.match(line):
-                function(x)
-                return
-        print("???: {}".format(line))
-        return
+        command = line.split()[0].upper()
+        handler = self.registry.get_handler(command)
 
-    def read(self, input_file) -> None:
-        with open(input_file, 'r') as file:
-            for line in file:
-                line = line.strip()
-                if not line:
-                    continue
-                if line[0] == '#':
-                    continue
-                self.process_line(line)
+        if handler:
+            match = handler.match(line)
+            if match:
+                handler.handle(match, self)
+            else:
+                print("[Warning] Pattern did not match for line: {}".format(line))
+        else:
+            print("[Warning] Unknown command type: {}".format(command))
 
