@@ -37,26 +37,18 @@ class Reader:
             # TODO ROW
         ]
     
-    def handle_song_information(self, regex_match_object):
+    def handle_song_information(self, regex_match_object) -> None:
+        # TITLE "title"
         self.project.song_information[regex_match_object.group(1)] = regex_match_object.group(2)
+        return
 
-    def handle_global_settings(self, regex_match_object):
+    def handle_global_settings(self, regex_match_object) -> None:
+        # MACHINE 0
         self.project.global_settings[regex_match_object.group(1)] = int(regex_match_object.group(2))
+        return
 
-    def handle_macros(self, regex_match_object):
-        # re.match(r'''
-        # ^\s*               # Optional starting whitespace
-        # (MACRO\w*)         # Group 1: MACRO tag (e.g., MACRO, MACRO_A)
-        # \s+
-        # (-?\d+)\s+         # Group 2: type
-        # (-?\d+)\s+         # Group 3: index
-        # (-?\d+)\s+         # Group 4: loop
-        # (-?\d+)\s+         # Group 5: release
-        # (-?\d+)\s*         # Group 6: setting
-        # :\s*
-        # ((?:-?\d+\s*)+)    # Group 7: macro sequence
-        # $
-        
+    def handle_macros(self, regex_match_object) -> None:
+        # MACRO 0 0 -1 -1 0 : 1 2 3 4
         macro_tag = regex_match_object.group(1)
         macro_type, macro_index, macro_loop, macro_release, macro_setting = list(map(int, regex_match_object.group(2, 3, 4, 5, 6)))
         macro_sequence = list(map(int, re.findall(r'-?\d+', regex_match_object.group(7))))
@@ -64,17 +56,16 @@ class Reader:
         macro_object = Macro(macro_tag, macro_type, macro_index, macro_loop, macro_release, macro_setting, macro_sequence)
         self.project.macros[macro_key] = macro_object
         print(macro_object)
-        # TODO debug exit
-        exit(0)
+        return
 
     def process_line(self, line: str) -> None:
         for regex_pattern, function in self.matchers:
             if x := regex_pattern.match(line):
                 function(x)
-            else:
-                print("Unknown line: {}".format(line))
+                return
+        print("???: {}".format(line))
         return
-    
+
     def read(self, input_file) -> None:
         with open(input_file, 'r') as file:
             for line in file:
