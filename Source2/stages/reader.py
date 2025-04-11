@@ -19,8 +19,8 @@ class Reader:
         first_word = line.split()[0]
         handler = self.dispatch.get(first_word, None)
         if handler:
-            print("Found!", line)
-        
+            #print("Found!", line)
+            handler.handle(line) 
 
     def read(self, input_file: str) -> None:
         with open(input_file, 'r') as file:
