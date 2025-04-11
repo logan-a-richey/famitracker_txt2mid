@@ -7,13 +7,14 @@ from stages.reader_handlers.base_handler import BaseHandler
 class HandleGlobalSettings(BaseHandler):
     def __init__(self, project):
         super().__init__(project)
-        self.pattern = re.compile(r'^\s*(\w+)\s+(\d+).*$')
+        self.pattern = re.compile(r'^\s*(?P<field>\w+)\s+(?P<value>\d+).*$')
 
     def handle(self, line: str):
         if x := self.pattern.match(line):
-            k = x.group(1) 
-            v = int(x.group(2))
+            k = x.group('field') 
+            v = int(x.group('value'))
             self.project.global_settings[k] = v
         else:
             print("[WARN] Did not match! \'{}\'".format(line))
-        return
+
+

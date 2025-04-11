@@ -26,22 +26,27 @@ class HandleInstVRC7(BaseHandler):
 
     def handle(self, line: str):
         if x := self.pattern.match(line):
-            inst_tag = x.group('tag')
+            # base instrument info
+            tag = x.group('tag')
             inst_index = x.group('index')
+            inst_name = x.group('name')
+
+            # special info
             patch = int(x.group('patch'))
             registers = list(map(
                 lambda x: int(x, 16), 
-                x.group('r0', 'r1','r2','r3','r4','r5','r6','r7')
+                x.group('r0','r1','r2','r3','r4','r5','r6','r7')
             ))
-            inst_name = x.group('name')
-            
+
+            # create instrument object
             inst_object = InstVRC7(
-                inst_index, 
-                inst_name, 
-                patch, 
-                registers
+                index, inst_name, 
+                patch, registers
             )
-            self.project.instruments[inst_index] = inst_object
+
+            # add it to project
+            self.project.instruments[index] = inst_object
+
         else:
             print("[WARN] Could not handle line! {}".format(line))
 

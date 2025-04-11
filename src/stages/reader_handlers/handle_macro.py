@@ -8,37 +8,55 @@ from containers.macro import Macro
 class HandleMacro(BaseHandler):
     def __init__(self, project):
         super().__init__(project)
-        # ^\s*(\w+)\s+([0-4])\s+(\d+)\s+(\-?\d+)\s+(\-?\d+)\s+(\d+)\s*\:\s*(\d+(?:\s+\-?\d+)*)$
         self.pattern = re.compile(r'''
-            ^\s*                # start of string (optional leading space)
-            (\w+)\s+            # macro tag
-            ([0-4])\s+          # macro type
-            (\d+)\s+            # macro index
-            (\-?\d+)\s+         # macro loop
-            (\-?\d+)\s+         # macro release
-            (\d+)\s*\:\s*       # macro setting
-            (\d+(?:\s+\-?\d+)*) # macro sequence
-            $                   # end of string
-            ''', re.VERBOSE)
+            ^\s*                            # start of string
+            (?P<tag>\w+)\s+                 # macro tag
+            (?P<type>[0-4])\s+              # macro type
+            (?P<index>\d+)\s+               # macro index
+            (?P<loop>\-?\d+)\s+             # macro loop
+            (?P<release>\-?\d+)\s+          # macro release
+            (?P<setting>\d+)\s*\:\s*        # macro setting
+            (?P<sequence>\d+(?:\s+\-?\d+)*) # macro sequence
+            $                               # end of string
+            ''', re.VERBOSE
+        )
 
     def handle(self, line: str):
         if x := self.pattern.match(line):
-            macro_tag = x.group(1)
-            macro_type, macro_index, macro_loop, macro_release, macro_setting = list(map(int, x.group(2, 3, 4, 5, 6)))
-            macro_sequence = list(map(int, re.findall(r'(\-?\d+)', x.group(7))))
-            macro_object = Macro(
-                macro_tag,
-                macro_type,
-                macro_index,
-                macro_loop,
-                macro_release,
-                macro_setting, 
-                macro_sequence
+            # get macro tag (first word)
+            m_tag = x.group('tag')
+            
+            # get space separated integers
+            m_type, m_index, m_loop, m_release, m_setting = map(
+                int, 
+                x.group('type', 'index', 'loop', 'release', 'setting')
             )
-            macro_key = "{}.{}.{}".format(macro_tag, macro_type, macro_index)
-            self.project.macros[macro_key] = macro_object
+            
+            # get space separeted integer list after :
+            m_sequence = list(map(
+                int, 
+                re.findall(r'(\-?\d+)', x.group(7))
+            ))
+
+            # create macro object
+            m_object = Macro(
+                m_tag,
+                m_type,
+                m_index,
+                m_loop,
+                m_release,
+                m_setting, 
+                m_sequence
+            )
+
+            # create macro key for lookup later
+            # format: 'tag.type.index' (e.g. 'MACRO2A03.1.1')
+            m_key = "{}.{}.{}".format(m_tag, m_type, m_index)
+
+            # add it to project 
+            self.project.macros[m_key] = m_object
+        
         else:
             print("[WARN] Did not match! \'{}\'".format(line))
-        return
 
 

@@ -20,11 +20,11 @@ class Project:
         text += "--- Global Settings ---\n{}\n\n".format(self.global_settings)
         text += "--- Macros ---\n"
         for macro_key, macro_object in self.macros.items():
-            text += "\'{}\' -> {}\n".format(macro_key, macro_object)
+            text += "\'{}\' => {}\n".format(macro_key, macro_object)
         text += "\n"
         
         for inst_index, inst_object in self.instruments.items():
-            text += "{} -> {}\n".format(inst_index, inst_object)
+            text += "{} => {}\n".format(inst_index, inst_object)
         text += "\n"
         
         return text
