@@ -28,29 +28,30 @@ class HandleInstN163(BaseHandler):
     def handle(self, line: str) -> bool:
         if x := self.pattern.match(line):
             # base instrument info
-            tag = x.group('tag')
-            index = int(x.group('index'))
-            name = x.group('name')
+            inst_tag = x.group('tag')
+            inst_index = int(x.group('index'))
+            inst_name = x.group('name')
 
-            # macro indexes
-            vol, arp, pit, hpi, dut = map(
-                int, 
-                x.group('vol', 'arp', 'pit', 'hpi', 'dut')
-            )
-            
+            # macros
+            macro_types = ['vol', 'arp', 'pit', 'hpi', 'dut']
+            macro_values = list(map(int, x.group(*macro_types)))
+
             # special info
-            w_size, w_pos, w_count = map(int, x.group('w_size', 'w_pos', 'w_count'))
+            namco_fields = ['w_size', 'w_pos', 'w_count']
+            namco_values = list(map(int, x.group(*namco_fields)))
             
             # create instrument object
-            inst_object = InstN163(
-                index, name, 
-                vol, arp, pit, hpi, dut,
-                w_size, w_pos, w_count
-            )
-            
+            inst_object = InstN163(inst_index, inst_name, *macro_values, *namco_values)
+
+            # assign macros to instrument
+            for i, macro_type in enumerate(macro_types):
+                macro_value = getattr(inst_object, macro_type)
+                key = "{}.{}.{}".format(inst_tag.replace("INST", "MACRO"), i, macro_value)
+                if (macro_object := self.project.macros.get(key, None)):
+                    inst_object.macros[macro_type] = macro_object
 
             # add it to project
-            self.project.instruments[index] = inst_object
+            self.project.instruments[inst_index] = inst_object
             return True
 
         else:

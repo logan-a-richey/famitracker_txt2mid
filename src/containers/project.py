@@ -23,6 +23,7 @@ class Project:
             text += "\'{}\' => {}\n".format(macro_key, macro_object)
         text += "\n"
         
+        text += "--- Instruments ---\n"
         for inst_index, inst_object in self.instruments.items():
             text += "{} => {}\n".format(inst_index, inst_object)
         text += "\n"

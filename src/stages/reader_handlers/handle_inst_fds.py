@@ -28,21 +28,11 @@ class HandleInstFDS(BaseHandler):
             inst_name = x.group('name')
 
             # special info
-            mod_enable, mod_speed, mod_depth, mod_delay = \
-                list(map(
-                    int,
-                    x.group('mod_enable', 'mod_speed', 'mod_depth', 'mod_delay')
-                ))
+            fds_fields = ['mod_enable', 'mod_speed', 'mod_depth', 'mod_delay']
+            fds_values = list(map(int, x.group(*fds_fields)))
 
             # create inst object
-            inst_object = InstFDS(
-                inst_index,
-                inst_name,
-                mod_enable,
-                mod_speed,
-                mod_depth,
-                mod_delay
-            )
+            inst_object = InstFDS(inst_index, inst_name, *fds_value)
            
             # add it to project
             self.project.instruments[inst_index] = inst_object

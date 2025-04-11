@@ -27,23 +27,17 @@ class HandleInstVRC7(BaseHandler):
 
     def handle(self, line: str) -> bool:
         if x := self.pattern.match(line):
-            # base instrument info
+            # basic info
             tag = x.group('tag')
             index = x.group('index')
             name = x.group('name')
 
             # special info
-            patch = int(x.group('patch'))
-            registers = list(map(
-                lambda x: int(x, 16), 
-                x.group('r0','r1','r2','r3','r4','r5','r6','r7')
-            ))
+            register_fields = ['r0','r1','r2','r3','r4','r5','r6','r7']
+            register_values = list(map(lambda x: int(x, 16), x.group(*register)))
 
             # create instrument object
-            inst_object = InstVRC7(
-                index, name, 
-                patch, registers
-            )
+            inst_object = InstVRC7(index, name, patch, *register_values)
 
             # add it to project
             self.project.instruments[index] = inst_object

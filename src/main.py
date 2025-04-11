@@ -25,9 +25,9 @@ def main():
     
     #parser = Parser(project)
     #exporter = Exporter(project)
-
-    # print(project)
-    return
+    
+    # TODO - debug
+    print(project)
 
 if __name__ == "__main__":
     main()
