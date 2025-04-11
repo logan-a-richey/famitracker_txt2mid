@@ -3,7 +3,7 @@
 import re
 
 from stages.reader_handlers.base_handler import BaseHandler
-from containers.instrument import InstFDS 
+from containers.inst_fds import InstFDS 
 
 class HandleInstFDS(BaseHandler):
     def __init__(self, project):

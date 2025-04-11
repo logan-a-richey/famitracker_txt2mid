@@ -4,7 +4,7 @@
 import re
 
 from stages.reader_handlers.base_handler import BaseHandler
-from containers.instrument import InstN163
+from containers.inst_n163 import InstN163
 
 class HandleInstN163(BaseHandler):
     def __init__(self, project):

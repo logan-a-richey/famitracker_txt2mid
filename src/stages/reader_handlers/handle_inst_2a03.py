@@ -3,7 +3,7 @@
 import re
 
 from stages.reader_handlers.base_handler import BaseHandler
-from containers.instrument import Inst2A03
+from containers.inst_2a03 import Inst2A03
 
 class HandleInst2A03(BaseHandler):
     def __init__(self, project):

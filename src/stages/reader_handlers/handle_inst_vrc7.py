@@ -3,7 +3,7 @@
 import re
 
 from stages.reader_handlers.base_handler import BaseHandler
-from containers.instrument import InstVRC7
+from containers.inst_vrc7 import InstVRC7
 
 class HandleInstVRC7(BaseHandler):
     def __init__(self, project):
