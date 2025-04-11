@@ -21,7 +21,7 @@ class HandleMacro(BaseHandler):
             ''', re.VERBOSE
         )
 
-    def handle(self, line: str):
+    def handle(self, line: str) -> bool:
         if x := self.pattern.match(line):
             # get macro tag (first word)
             m_tag = x.group('tag')
@@ -55,8 +55,9 @@ class HandleMacro(BaseHandler):
 
             # add it to project 
             self.project.macros[m_key] = m_object
-        
-        else:
-            print("[WARN] Did not match! \'{}\'".format(line))
+            return True
 
+        else:
+            print("[WARN] Regex failed. \'{}\'".format(line))
+            return False
 

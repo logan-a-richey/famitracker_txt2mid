@@ -1,0 +1,51 @@
+# comment line
+
+TITLE \"my title\" # True
+TITLE \"my \"inner quote\" title\" asdfasdfasdf # True
+TITLE \"\" # True
+TITLE nan # False
+
+AUTHOR \"my author\" # True
+AUTHOR \"my \"inner quote\" author\" # True
+AUTHOR \"\"
+AUTHOR nan # False
+
+COPYRIGHT \"2025 (c)\" # True
+COPYRIGHT \"2025 \"inner quote\" (c)\" # True
+COPYRIGHT \"\" # True
+COPYRIGHT NAN # False
+
+COMMENT \"some comment\" # True
+COMMENT \"some \"inner quote\" comment\" # True
+COMMENT \"\" # True
+COMMENT NAN # False
+
+BREAK
+
+MACHINE 0
+MACHINE 1
+MACHINE -1
+MACHINE NAN
+
+FRAMERATE 0
+FRAMERATE 800
+FRAMERATE -1
+FRAMERATE NAN
+
+VIBRATO 0
+VIBRATO 1 
+VIBRATO -1
+VIBRATO NAN
+
+SPLIT 0
+SPLIT 32
+SPLIT 255
+SPLIT -1
+SPLIT NAN
+
+N163CHANNELS 1
+N163CHANNELS 8
+N163CHANNELS 0
+N163CHANNELS -1
+N163CHANNELS NAN
+

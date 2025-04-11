@@ -24,7 +24,7 @@ class HandleInstVRC7(BaseHandler):
             (?P<name>.*?)\".*$''', re.VERBOSE
         )
 
-    def handle(self, line: str):
+    def handle(self, line: str) -> bool:
         if x := self.pattern.match(line):
             # base instrument info
             tag = x.group('tag')
@@ -46,8 +46,9 @@ class HandleInstVRC7(BaseHandler):
 
             # add it to project
             self.project.instruments[index] = inst_object
+            return True
 
         else:
-            print("[WARN] Could not handle line! {}".format(line))
-
+            print("[WARN] Regex failed. \'{}\'".format(line))
+            return False
 

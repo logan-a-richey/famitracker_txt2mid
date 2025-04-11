@@ -9,12 +9,12 @@ class HandleGlobalSettings(BaseHandler):
         super().__init__(project)
         self.pattern = re.compile(r'^\s*(?P<field>\w+)\s+(?P<value>\d+).*$')
 
-    def handle(self, line: str):
+    def handle(self, line: str) -> bool:
         if x := self.pattern.match(line):
             k = x.group('field') 
             v = int(x.group('value'))
             self.project.global_settings[k] = v
+            return True
         else:
-            print("[WARN] Did not match! \'{}\'".format(line))
-
-
+            print("[WARN] Regex failed. \'{}\'".format(line))
+            return False

@@ -20,7 +20,7 @@ class HandleInst2A03(BaseHandler):
             (?P<name>.*?)\".*$''', re.VERBOSE
         )
 
-    def handle(self, line: str):
+    def handle(self, line: str) -> bool:
         if x := self.pattern.match(line):
             inst_tag = x.group('tag') 
             inst_index, seq_vol, seq_arp, seq_pit, seq_hpi, seq_dut = \
@@ -41,9 +41,10 @@ class HandleInst2A03(BaseHandler):
                 seq_dut
             )
             self.project.instruments[inst_index] = inst_object
-        
+            return True
         else:
-            print("[WARN] Could not handle line! {}".format(line))
+            print("[WARN] Regex failed. \'{}\'".format(line))
+            return False
 
 
 

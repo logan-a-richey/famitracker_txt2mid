@@ -25,7 +25,7 @@ class HandleInstN163(BaseHandler):
             (?P<name>)\s+\".*$''', re.VERBOSE
         )
 
-    def handle(self, line: str):
+    def handle(self, line: str) -> bool:
         if x := self.pattern.match(line):
             # base instrument info
             tag = x.group('tag')
@@ -56,8 +56,10 @@ class HandleInstN163(BaseHandler):
 
             # add it to project
             self.project.instruments[index] = inst_object
-        
+            return True
+
         else:
-            print("[WARN] Could not handle line! {}".format(line))
+            print("[WARN] Regex failed. \'{}\'".format(line))
+            return False
 
 

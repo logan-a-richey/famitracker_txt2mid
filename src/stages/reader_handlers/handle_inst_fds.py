@@ -19,19 +19,21 @@ class HandleInstFDS(BaseHandler):
             (?P<name>.*?)\".*$''', re.VERBOSE
         )
 
-    def handle(self, line: str):
+    def handle(self, line: str) -> bool:
         if x := self.pattern.match(line):
+            # base info
             inst_tag = x.group('tag')
-            inst_index, mod_enable, mod_speed, mod_depth, mod_delay = \
-                list(map(
-                    int, 
-                    x.group(
-                        'index', 'mod_enable', 'mod_speed', 
-                        'mod_depth', 'mod_delay'
-                    )
-                ))
+            inst_index = x.group('index')
             inst_name = x.group('name')
 
+            # special info
+            mod_enable, mod_speed, mod_depth, mod_delay = \
+                list(map(
+                    int,
+                    x.group('mod_enable', 'mod_speed', 'mod_depth', 'mod_delay')
+                ))
+
+            # create inst object
             inst_object = InstFDS(
                 inst_index,
                 inst_name,
@@ -40,9 +42,12 @@ class HandleInstFDS(BaseHandler):
                 mod_depth,
                 mod_delay
             )
-            
+           
+            # add it to project
             self.project.instruments[inst_index] = inst_object
-        
+            return True
+
         else:
-            print("[WARN] Could not handle line! {}".format(line))
+            print("[WARN] Regex failed. \'{}\'".format(line))
+            return False
 
