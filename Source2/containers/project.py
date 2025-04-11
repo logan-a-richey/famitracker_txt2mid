@@ -6,6 +6,13 @@ class Project:
         self.song_information = {}
         self.global_settings = {}
         self.macros = {}
+        self.instruments = {}
+        
+        self.dpcm = {}
+        self.grooves = {}
+        self.usegroove = []
+
+        self.tracks = []
 
     def __str__(self):
         text = ""
@@ -15,7 +22,11 @@ class Project:
         for macro_key, macro_object in self.macros.items():
             text += "\'{}\' -> {}\n".format(macro_key, macro_object)
         text += "\n"
-
+        
+        for inst_index, inst_object in self.instruments.items():
+            text += "{} -> {}\n".format(inst_index, inst_object)
+        text += "\n"
+        
         return text
 
     def __repr__(self):

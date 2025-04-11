@@ -40,3 +40,5 @@ class HandleMacro(BaseHandler):
         else:
             print("[WARN] Did not match! \'{}\'".format(line))
         return
+
+
