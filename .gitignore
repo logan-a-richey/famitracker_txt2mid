@@ -1,7 +1,7 @@
+__pycache__
 venv
 cutting_room_floor
-__pycache__
-Tests
-Exports
+tests
+exports
 *.mid
 
