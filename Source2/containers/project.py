@@ -8,14 +8,15 @@ class Project:
         self.macros = {}
 
     def __str__(self):
-        d = ""
-        d += "--- Song Information ---\n{}\n".format(self.song_information)
-        d += "--- Global Settings ---\n{}\n".format(self.global_settings)
-        d += "--- Macros ---\n"
+        text = ""
+        text += "--- Song Information ---\n{}\n\n".format(self.song_information)
+        text += "--- Global Settings ---\n{}\n\n".format(self.global_settings)
+        text += "--- Macros ---\n"
         for macro_key, macro_object in self.macros.items():
-            d += "\'{}\' -> {}\n".format(macro_key, macro_object)
-        
-        return d
+            text += "\'{}\' -> {}\n".format(macro_key, macro_object)
+        text += "\n"
+
+        return text
 
     def __repr__(self):
         return self.__str__()
