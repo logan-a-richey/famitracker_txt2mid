@@ -48,8 +48,6 @@ class HandleInstN163(BaseHandler):
                 w_size, w_pos, w_count
             )
             
-            # add macros # TODO
-            # inst_object.macros[] = 
 
             # add it to project
             self.project.instruments[index] = inst_object

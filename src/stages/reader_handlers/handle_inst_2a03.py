@@ -30,39 +30,18 @@ class HandleInst2A03(BaseHandler):
             inst_name = x.group('name')
             
             # macros
-            vol, arp, pit, hpi, dut = map(int, x.group('vol', 'arp', 'pit', 'hpi', 'dut'))
-            
+            macro_types = ['vol', 'arp', 'pit', 'hpi', 'dut']
+            macro_values = map(int, x.group(*macro_types))
+
             # create instrument object
-            inst_object = Inst2A03(inst_index, inst_name, vol, arp, pit, hpi, dut)
+            inst_object = Inst2A03(inst_index, inst_name, *macro_values)
 
-            # load macros
-            #print(" ".join(list(self.project.macros.keys())))
-            #print(inst_tag)
-            key0 = "{}.{}.{}".format(inst_tag.replace("INST","MACRO"), 0, vol)
-            key1 = "{}.{}.{}".format(inst_tag.replace("INST","MACRO"), 1, arp)
-            key2 = "{}.{}.{}".format(inst_tag.replace("INST","MACRO"), 2, pit)
-            key3 = "{}.{}.{}".format(inst_tag.replace("INST","MACRO"), 3, hpi)
-            key4 = "{}.{}.{}".format(inst_tag.replace("INST","MACRO"), 4, dut)
-            
-            macro_vol = self.project.macros.get(key0, None)
-            macro_arp = self.project.macros.get(key1, None)
-            macro_pit = self.project.macros.get(key2, None)
-            macro_hpi = self.project.macros.get(key3, None)
-            macro_dut = self.project.macros.get(key4, None)
-           
-            if macro_vol:
-                inst_object.macros['vol'] = macro_vol
-            if macro_arp:
-                inst_object.macros['arp'] = macro_arp
-            if macro_pit:
-                inst_object.macros['pit'] = macro_pit
-            if macro_hpi:
-                inst_object.macros['hpi'] = macro_hpi
-            if macro_dut:
-                inst_object.macros['dut'] = macro_dut
-
-            #if inst_object.macros:
-            #    print("Macros were added! {}".format(inst_object.macros))
+            # assign macros to instrument
+            for i, macro_type in enumerate(macro_types):
+                macro_value = getattr(inst_object, macro_type)
+                key = "{}.{}.{}".format(inst_tag.replace("INST", "MACRO"), i, macro_value)
+                if macro_object := self.project.macros.get(key, None)
+                    inst_object.macros[macro_type] = macro_object
 
             # add it to project
             self.project.instruments[inst_index] = inst_object
