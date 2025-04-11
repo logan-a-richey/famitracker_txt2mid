@@ -54,7 +54,9 @@ class Reader:
 
         handler = self.dispatch.get(first_word, None)
         if handler:
-            handler.handle(line) 
+            res = handler.handle(line) 
+            if not res:
+                print("[WARN] Regex failed. Line: \'{}\'".format(line))
 
     def read(self, input_file: str) -> None:
         with open(input_file, 'r') as file:

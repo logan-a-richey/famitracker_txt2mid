@@ -15,8 +15,9 @@ class HandleInstFDS(BaseHandler):
             (?P<mod_enable>\d+)\s+
             (?P<mod_speed>\d+)\s+
             (?P<mod_depth>\d+)\s+
-            (?P<mod_delay>\d+)\s+\"
-            (?P<name>.*?)\".*$''', re.VERBOSE
+            (?P<mod_delay>\d+)\s+
+            \"(?P<name>.*?)\"
+            .*$''', re.VERBOSE
         )
 
     def handle(self, line: str) -> bool:
@@ -48,6 +49,5 @@ class HandleInstFDS(BaseHandler):
             return True
 
         else:
-            print("[WARN] Regex failed. \'{}\'".format(line))
             return False
 

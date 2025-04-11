@@ -5,6 +5,6 @@ class BaseHandler:
         self.project = project
 
     def handle(self, line: str) -> bool:
-        print("Not implemented yet!")
+        raise NotImplementedError
         return False
 

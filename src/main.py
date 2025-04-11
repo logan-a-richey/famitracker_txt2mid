@@ -19,12 +19,14 @@ def get_input_file() -> str:
 def main():
     input_file = get_input_file()
     project = Project()
+    
     reader = Reader(project)
+    reader.read(input_file)
+    
     #parser = Parser(project)
     #exporter = Exporter(project)
 
-    reader.read(input_file)
-    print(project)
+    # print(project)
     return
 
 if __name__ == "__main__":

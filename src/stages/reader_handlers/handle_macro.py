@@ -9,15 +9,15 @@ class HandleMacro(BaseHandler):
     def __init__(self, project):
         super().__init__(project)
         self.pattern = re.compile(r'''
-            ^\s*                            # start of string
-            (?P<tag>\w+)\s+                 # macro tag
-            (?P<type>[0-4])\s+              # macro type
-            (?P<index>\d+)\s+               # macro index
-            (?P<loop>\-?\d+)\s+             # macro loop
-            (?P<release>\-?\d+)\s+          # macro release
-            (?P<setting>\d+)\s*\:\s*        # macro setting
-            (?P<sequence>\d+(?:\s+\-?\d+)*) # macro sequence
-            $                               # end of string
+            ^\s*                                # start of string
+            (?P<tag>\w+)\s+                     # macro tag
+            (?P<type>[0-4])\s+                  # macro type
+            (?P<index>\d+)\s+                   # macro index
+            (?P<loop>\-?\d+)\s+                 # macro loop
+            (?P<release>\-?\d+)\s+              # macro release
+            (?P<setting>\-?\d+)\s*\:\s*         # macro setting
+            (?P<sequence>\-?\d+(?:\s+\-?\d+)*)  # macro sequence
+            .*$                                 # end of string
             ''', re.VERBOSE
         )
 
@@ -26,6 +26,10 @@ class HandleMacro(BaseHandler):
             # get macro tag (first word)
             m_tag = x.group('tag')
             
+            # give MACRO a full name [MACRO][TYPE] - this will make Instrument parsing easier.
+            if m_tag == "MACRO":
+                m_tag = "MACRO2A03"
+
             # get space separated integers
             m_type, m_index, m_loop, m_release, m_setting = map(
                 int, 
@@ -58,6 +62,5 @@ class HandleMacro(BaseHandler):
             return True
 
         else:
-            print("[WARN] Regex failed. \'{}\'".format(line))
             return False
 

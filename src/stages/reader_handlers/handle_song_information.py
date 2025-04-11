@@ -7,10 +7,14 @@ from stages.reader_handlers.base_handler import BaseHandler
 class HandleSongInformation(BaseHandler):
     def __init__(self, project):
         super().__init__(project)
-        self.pattern = re.compile(r'^\s*(?P<field>\w+)\s+\"(?P<value>.*)\".*$')
+        self.pattern = re.compile(r'''
+            ^\s*
+            (?P<field>\w+)\s+
+            \"(?P<value>.*)\"
+            .*$''', re.VERBOSE
+        )
     
     def handle(self, line: str) -> bool:
-        print("Handle")
         if x := self.pattern.match(line):
             # get key and value
             k = x.group('field')
@@ -21,5 +25,4 @@ class HandleSongInformation(BaseHandler):
             return True
 
         else:
-            print("[WARN] Regex failed. \'{}\'".format(line))
             return False

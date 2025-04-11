@@ -9,7 +9,6 @@ from containers.inst_n163 import InstN163
 class HandleInstN163(BaseHandler):
     def __init__(self, project):
         super().__init__(project)
-        # TODO ? bad regex?
         self.pattern = re.compile(r'''
             ^\s*
             (?P<tag>\w+)\s+
@@ -21,8 +20,9 @@ class HandleInstN163(BaseHandler):
             (?P<dut>\-?\d+)\s+
             (?P<w_size>\d+)\s+
             (?P<w_pos>\d+)\s+
-            (?P<w_count>\d+)\s+\"
-            (?P<name>)\s+\".*$''', re.VERBOSE
+            (?P<w_count>\d+)\s+
+            \"(?P<name>.*)\"
+            .*$''', re.VERBOSE
         )
 
     def handle(self, line: str) -> bool:
@@ -38,11 +38,8 @@ class HandleInstN163(BaseHandler):
                 x.group('vol', 'arp', 'pit', 'hpi', 'dut')
             )
             
-            # speical info
-            w_size, w_pos, w_count = map(
-                int, 
-                x.group('w_size', 'w_pos', 'w_count')
-            )
+            # special info
+            w_size, w_pos, w_count = map(int, x.group('w_size', 'w_pos', 'w_count'))
             
             # create instrument object
             inst_object = InstN163(
@@ -59,7 +56,6 @@ class HandleInstN163(BaseHandler):
             return True
 
         else:
-            print("[WARN] Regex failed. \'{}\'".format(line))
             return False
 
 

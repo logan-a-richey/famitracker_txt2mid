@@ -20,16 +20,17 @@ class HandleInstVRC7(BaseHandler):
             (?P<r4>[0-9a-fA-F]{2})\s+
             (?P<r5>[0-9a-fA-F]{2})\s+
             (?P<r6>[0-9a-fA-F]{2})\s+
-            (?P<r7>[0-9a-fA-F]{2})\s+\"
-            (?P<name>.*?)\".*$''', re.VERBOSE
+            (?P<r7>[0-9a-fA-F]{2})\s+
+            \"(?P<name>.*?)\"
+            .*$''', re.VERBOSE
         )
 
     def handle(self, line: str) -> bool:
         if x := self.pattern.match(line):
             # base instrument info
             tag = x.group('tag')
-            inst_index = x.group('index')
-            inst_name = x.group('name')
+            index = x.group('index')
+            name = x.group('name')
 
             # special info
             patch = int(x.group('patch'))
@@ -40,7 +41,7 @@ class HandleInstVRC7(BaseHandler):
 
             # create instrument object
             inst_object = InstVRC7(
-                index, inst_name, 
+                index, name, 
                 patch, registers
             )
 
@@ -49,6 +50,5 @@ class HandleInstVRC7(BaseHandler):
             return True
 
         else:
-            print("[WARN] Regex failed. \'{}\'".format(line))
             return False
 
