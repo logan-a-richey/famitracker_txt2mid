@@ -1,6 +1,6 @@
 # stages/reader.py
 
-from stages.reader_handlers.HandleSongInformation import HandleSongInformation
+from stages.reader_handlers.handle_song_information import HandleSongInformation
 
 # TODO
 class Reader:
