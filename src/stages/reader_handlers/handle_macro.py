@@ -24,41 +24,28 @@ class HandleMacro(BaseHandler):
     def handle(self, line: str) -> bool:
         if x := self.pattern.match(line):
             # get macro tag (first word)
-            m_tag = x.group('tag')
+            macro_tag = x.group('tag')
             
             # give MACRO a full name [MACRO][TYPE] - this will make Instrument parsing easier.
-            if m_tag == "MACRO":
-                m_tag = "MACRO2A03"
+            if macro_tag == "MACRO":
+                macro_tag = "MACRO2A03"
 
             # get space separated integers
-            m_type, m_index, m_loop, m_release, m_setting = map(
-                int, 
-                x.group('type', 'index', 'loop', 'release', 'setting')
-            )
+            macro_fields = ['type', 'index', 'loop', 'release', 'setting']
+            macro_values = list(map(int, x.group(*macro_fields)))
             
             # get space separeted integer list after :
-            m_sequence = list(map(
-                int, 
-                re.findall(r'(\-?\d+)', x.group(7))
-            ))
+            macro_sequence = list(map(int, re.findall(r'(\-?\d+)', x.group('sequence'))))
 
             # create macro object
-            m_object = Macro(
-                m_tag,
-                m_type,
-                m_index,
-                m_loop,
-                m_release,
-                m_setting, 
-                m_sequence
-            )
+            macro_object = Macro(macro_tag, *macro_values, macro_sequence)
 
             # create macro key for lookup later
             # format: 'tag.type.index' (e.g. 'MACRO2A03.1.1')
-            m_key = "{}.{}.{}".format(m_tag, m_type, m_index)
+            macro_key = "{}.{}.{}".format(macro_tag, macro_values[0], macro_values[1])
 
             # add it to project 
-            self.project.macros[m_key] = m_object
+            self.project.macros[macro_key] = macro_object
             return True
 
         else:
