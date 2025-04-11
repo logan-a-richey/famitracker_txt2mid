@@ -2,14 +2,12 @@
 
 import re
 
-# from utils.singleton import Singleton
 from stages.reader_handlers.base_handler import BaseHandler
 
 class HandleSongInformation(BaseHandler):
     def __init__(self, project):
         super().__init__(project)
         self.pattern = re.compile(r'^\s*(\w+)\s+\"(.*?)\"$')
-        #super(Singleton).__init__()
     
     def handle(self, line: str):
         # TITLE "asdf"
@@ -17,9 +15,8 @@ class HandleSongInformation(BaseHandler):
             k = x.group(1)
             v = x.group(2)
             self.project.song_information[k] = v
-            print("{} -> {}".format(k, v))
         else:
-            print("did not match! {}".format(line))
+            print("[WARN] Did not match! \'{}\'".format(line))
         return
 
 # TODO singleton test

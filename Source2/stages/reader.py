@@ -1,18 +1,41 @@
 # stages/reader.py
 
 from stages.reader_handlers.handle_song_information import HandleSongInformation
+from stages.reader_handlers.handle_global_settings import HandleGlobalSettings
+from stages.reader_handlers.handle_macro import HandleMacro
 
-# TODO
 class Reader:
     def __init__(self, project):
         self.project = project
-        self.dispatch = {
-            "TITLE":        HandleSongInformation(self.project),
-            "AUTHOR":       HandleSongInformation(self.project),
-            "COPYRIGHT":    HandleSongInformation(self.project),
-            "COMMENT":      HandleSongInformation(self.project)
-        }
 
+        self.dispatch = {}
+        for tag in ["TITLE", "AUTHOR", "COPYRIGHT", "COMMENT"]:
+            self.dispatch[tag] = HandleSongInformation(self.project)
+        for tag in ["MACHINE", "FRAMERATE", "EXPANSION", "VIBRATO", "SPLIT", "N163CHANNELS"]:
+            self.dispatch[tag] = HandleGlobalSettings(self.project)
+        for tag in [ "MACRO", "MACROVRC6", "MACRON163", "MACROS5B"]:
+            self.dispatch[tag] = HandleMacro(self.project)
+# TODO            
+#"DPCMDEF"
+#"DPCM"
+#"GROOVE"
+#"USEGROOVE"
+#"INST2A03"
+#"INSTVRC6"
+#"INSTVRC7"
+#"INSTFDS"
+#"INSTN163"
+#"INSTS5B"
+#"KEYDPCM"
+#"FDSWAVE"
+#"FDSMOD"
+#"FDSMACRO"
+#"N163WAVE"
+#"TRACK"
+#"COLUMNS"
+#"ORDER"
+#"PATTERN"
+#"ROW"
         pass
 
     def _process_line(self, line: str) -> None:
