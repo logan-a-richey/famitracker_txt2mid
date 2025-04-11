@@ -7,10 +7,10 @@ class Reader:
     def __init__(self, project):
         self.project = project
         self.dispatch = {
-            "TITLE":        HandleSongInformation(),
-            "AUTHOR":       HandleSongInformation(),
-            "COPYRIGHT":    HandleSongInformation(),
-            "COMMENT":      HandleSongInformation()
+            "TITLE":        HandleSongInformation(self.project),
+            "AUTHOR":       HandleSongInformation(self.project),
+            "COPYRIGHT":    HandleSongInformation(self.project),
+            "COMMENT":      HandleSongInformation(self.project)
         }
 
         pass

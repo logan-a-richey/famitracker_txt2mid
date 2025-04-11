@@ -1,10 +1,19 @@
 # stages/reader_handlers/HandleSongInformation.py
 
 class BaseHandler:
-    pass
+    def __init__(self, project):
+        self.project = project
 
-class HandleSongInformation:
-    def __init__(self):
-        pass
+    def handle(self, line: str):
+        print("Not implemented yet!")
 
-         
+
+class HandleSongInformation(BaseHandler):
+    def __init__(self, project):
+        super().__init__(project)
+    
+    def handle(self, line: str):
+        print("handled!")
+
+
+

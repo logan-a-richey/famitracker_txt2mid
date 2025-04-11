@@ -2,6 +2,7 @@
 # main.py
 
 import sys
+sys.dont_write_bytecode = True
 
 from containers.project import Project
 from stages.reader import Reader
