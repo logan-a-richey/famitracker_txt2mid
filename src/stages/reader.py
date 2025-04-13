@@ -13,6 +13,9 @@ from stages.reader_handlers.handle_inst_fds import HandleInstFDS
 from stages.reader_handlers.handle_dpcm_def import HandleDpcmDef
 from stages.reader_handlers.handle_dpcm_data import HandleDpcmData
 
+from stages.reader_handlers.handle_groove import HandleGroove
+from stages.reader_handlers.handle_use_groove import HandleUseGroove
+
 class Reader:
     def __init__(self, project):
         self.project = project
@@ -32,8 +35,9 @@ class Reader:
             "DPCMDEF": HandleDpcmDef(self.project),
             "DPCM": HandleDpcmData(self.project),
             
-            # TODO groove
-            # TODO usegroove
+            # groove info
+            "GROOVE": HandleGroove(self.project),
+            "USEGROOVE": HandleUseGroove(self.project),
             
             # instrument info
             **{tag: HandleInst2A03(self.project) for tag in [

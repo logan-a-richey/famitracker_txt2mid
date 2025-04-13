@@ -32,7 +32,7 @@ class HandleInstFDS(BaseHandler):
             fds_values = list(map(int, x.group(*fds_fields)))
 
             # create inst object
-            inst_object = InstFDS(inst_index, inst_name, *fds_value)
+            inst_object = InstFDS(inst_index, inst_name, *fds_values)
            
             # add it to project
             self.project.instruments[inst_index] = inst_object

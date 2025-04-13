@@ -28,7 +28,7 @@ def main():
     
     # TODO - debug
     #print(project)
-    for k,v in project.dpcm.items():
+    for k,v in project.grooves.items():
         print("{} => {}".format(k,v))
 
 
