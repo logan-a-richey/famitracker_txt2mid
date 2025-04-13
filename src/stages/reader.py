@@ -18,6 +18,19 @@ from stages.reader_handlers.handle_use_groove import HandleUseGroove
 
 from stages.reader_handlers.handle_key_dpcm import HandleKeyDpcm
 
+# TODO
+# from stages.reader_handlers.handle_fds_wave import HandleFdsWave
+# from stages.reader_handlers.handle_fds_mod import HandleFdsMod
+# from stages.reader_handlers.handle_fds_macro import HandleFdsMacro
+# from stages.reader_handlers.handle_n163_wave import HandleN163Wave
+
+# TODO
+# from stages.reader_handlers.handle_track import HandleTrack
+# from stages.reader_handlers.handle_track_columnss import HandleTrackColumns
+# from stages.reader_handlers.handle_track_order import HandleTrackOrder
+# from stages.reader_handlers.handle_track_pattern import HandleTrackPattern
+# from stages.reader_handlers.handle_track_row import HandleTrackRow
+
 class Reader:
     def __init__(self, project):
         self.project = project
@@ -50,17 +63,17 @@ class Reader:
 
             # TODO special settings
             "KEYDPCM": HandleKeyDpcm(self.project),
-            # "FDSWAVE":
-            # "FDSMOD":
-            # "FDSMACRO":
-            # "N163WAVE"
+            "FDSWAVE": HandleFdsWave(self.project),
+            # "FDSMOD": HandleFdsMod(self.project),
+            # "FDSMACRO": HandleFdsMacro(self.project),
+            # "N163WAVE": HandleN163Wave(self.project),
             
             # TODO track data:
-            # "TRACK":
-            # "COLUMNS":
-            # "ORDER":
-            # "PATTERN":
-            # "ROW":
+            # "TRACK": HandleTrack(self.project),
+            # "COLUMNS": HandleTrackColumns(self.project),
+            # "ORDER": HandleTrackOrder(self.project);\,
+            # "PATTERN": HandleTrackPattern(self.project),
+            # "ROW": HandleTrackRow(self.project)
         }
 
     def _process_line(self, line: str) -> None:
