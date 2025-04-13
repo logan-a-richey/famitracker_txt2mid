@@ -16,3 +16,5 @@ class Inst2A03(BaseInst):
         self.dut = dut
         
         self.macros = {}
+        self.key_dpcm = {}
+

@@ -16,6 +16,8 @@ from stages.reader_handlers.handle_dpcm_data import HandleDpcmData
 from stages.reader_handlers.handle_groove import HandleGroove
 from stages.reader_handlers.handle_use_groove import HandleUseGroove
 
+from stages.reader_handlers.handle_key_dpcm import HandleKeyDpcm
+
 class Reader:
     def __init__(self, project):
         self.project = project
@@ -47,7 +49,7 @@ class Reader:
             "INSTN163": HandleInstN163(self.project),
 
             # TODO special settings
-            # "KEYDPCM": 
+            "KEYDPCM": HandleKeyDpcm(self.project),
             # "FDSWAVE":
             # "FDSMOD":
             # "FDSMACRO":

@@ -26,11 +26,12 @@ def main():
     #parser = Parser(project)
     #exporter = Exporter(project)
     
-    # TODO - debug
-    #print(project)
-    for k,v in project.grooves.items():
-        print("{} => {}".format(k,v))
-
+    for inst_key, inst_obj in project.instruments.items():
+        if hasattr(inst_obj, "key_dpcm"):
+            if (inst_obj.key_dpcm):
+                print("---\nInstrument {}: \'{}\'".format(inst_key, inst_obj.name))
+                for note_key, note_obj in inst_obj.key_dpcm.items():
+                    print("{} -> {}".format(note_key, note_obj))
 
 if __name__ == "__main__":
     main()
