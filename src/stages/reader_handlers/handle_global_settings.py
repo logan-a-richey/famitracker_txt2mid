@@ -1,4 +1,4 @@
-# stages/reader/handle_global_settings.py
+# stages/reader_handlers/handle_global_settings.py
 
 import re
 

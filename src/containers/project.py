@@ -9,6 +9,8 @@ class Project:
         self.instruments = {}
         
         self.dpcm = {}
+        self.target_dpcm_index = 0 
+
         self.grooves = {}
         self.usegroove = []
 
