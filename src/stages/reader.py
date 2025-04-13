@@ -11,6 +11,7 @@ from stages.reader_handlers.handle_inst_n163 import HandleInstN163
 from stages.reader_handlers.handle_inst_fds import HandleInstFDS
 
 from stages.reader_handlers.handle_dpcm_def import HandleDpcmDef
+from stages.reader_handlers.handle_dpcm_data import HandleDpcmData
 
 class Reader:
     def __init__(self, project):

@@ -22,11 +22,13 @@ class HandleDpcmDef(BaseHandler):
 
     def handle(self, line: str) -> bool:
         if x := self.pattern.match(line):
-            fields = ['index', 'size']
-            dpcm_object = Dpcm(list(map(int, x.group(*fields))), x.group('name'))
+            index, size = list(map(int, x.group('index', 'size')))
+            name = x.group('name')
+            dpcm_object = Dpcm(index, size, name)
             
             self.project.dpcm[index] = dpcm_object
             self.project.target_dpcm_index = index
+            return True
 
         else:
             return False

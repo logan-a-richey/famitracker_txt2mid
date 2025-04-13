@@ -27,7 +27,10 @@ def main():
     #exporter = Exporter(project)
     
     # TODO - debug
-    print(project)
+    #print(project)
+    for k,v in project.dpcm.items():
+        print("{} => {}".format(k,v))
+
 
 if __name__ == "__main__":
     main()

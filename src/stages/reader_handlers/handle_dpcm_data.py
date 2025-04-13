@@ -18,8 +18,9 @@ class HandleDpcmData(BaseHandler):
 
     def handle(self, line: str) -> bool:
         if x := self.pattern.match(line):
-            data = list(map(lambda x: int(x, 16), re.findall(r'[0-9a-fA-F]{2}', x.group('data')))
+            data = list(map(lambda x: int(x, 16), re.findall(r'[0-9a-fA-F]{2}', x.group('data'))))
             self.project.dpcm[self.project.target_dpcm_index].data.extend(data)
+            return True
 
         else:
             return False
