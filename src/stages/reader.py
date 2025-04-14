@@ -71,7 +71,7 @@ class Reader:
             "COLUMNS": HandleTrackColumns(self.project),
             "ORDER": HandleTrackOrder(self.project),
             "PATTERN": HandleTrackPattern(self.project),
-            # "ROW": HandleTrackRow(self.project)
+            "ROW": HandleTrackRow(self.project)
         }
 
     def _process_line(self, line: str) -> None:

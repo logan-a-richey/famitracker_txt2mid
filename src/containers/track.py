@@ -2,9 +2,7 @@
 
 from typing import List, Dict
 
-from utils.printable import Printable
-
-class Track(Printable):
+class Track:
     '''Store track data'''
     # static variable to assign track indexes upon init
     count = 0 
@@ -30,8 +28,15 @@ class Track(Printable):
         self.orders: Dict[str, List[str]] = {}
         self.patterns: List[str] = []
 
+        self.tokens: Dict[str, str] = {}
+
         # "private" attributes
         # used for loading pattern rows / tokens
         self._target_pattern: str = "00"
 
-
+    def __str__(self):
+        return "<class {}>, index: {}, name: {}".format(
+            self.__class__.__name__, 
+            self.index, 
+            self.name
+        )
