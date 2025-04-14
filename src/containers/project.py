@@ -64,8 +64,8 @@ class Project:
 
         text += "--- Tracks ---\n"
         for k, v in self.tracks.items():
-            text += "{}: <class {}> {}".format(k, type(v).__name__, v.name)
-        text += "\n"
+            #text += "{}: <class {}> {}".format(k, type(v).__name__, v.name)
+            text += "{}\n".format(v)
         
         return text
 

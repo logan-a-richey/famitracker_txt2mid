@@ -68,7 +68,7 @@ class Reader:
             "N163WAVE": HandleN163Wave(self.project),
             
             "TRACK": HandleTrack(self.project),
-            # "COLUMNS": HandleTrackColumns(self.project),
+            "COLUMNS": HandleTrackColumns(self.project),
             # "ORDER": HandleTrackOrder(self.project);\,
             # "PATTERN": HandleTrackPattern(self.project),
             # "ROW": HandleTrackRow(self.project)
