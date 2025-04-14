@@ -70,7 +70,7 @@ class Reader:
             "TRACK": HandleTrack(self.project),
             "COLUMNS": HandleTrackColumns(self.project),
             "ORDER": HandleTrackOrder(self.project),
-            # "PATTERN": HandleTrackPattern(self.project),
+            "PATTERN": HandleTrackPattern(self.project),
             # "ROW": HandleTrackRow(self.project)
         }
 
