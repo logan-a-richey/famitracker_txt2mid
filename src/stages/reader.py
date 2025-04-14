@@ -25,12 +25,11 @@ from stages.reader_handlers.handle_fds_mod import HandleFdsMod
 from stages.reader_handlers.handle_fds_macro import HandleFdsMacro
 from stages.reader_handlers.handle_n163_wave import HandleN163Wave
 
-# TODO
-# from stages.reader_handlers.handle_track import HandleTrack
-# from stages.reader_handlers.handle_track_columnss import HandleTrackColumns
-# from stages.reader_handlers.handle_track_order import HandleTrackOrder
-# from stages.reader_handlers.handle_track_pattern import HandleTrackPattern
-# from stages.reader_handlers.handle_track_row import HandleTrackRow
+from stages.reader_handlers.handle_track import HandleTrack
+from stages.reader_handlers.handle_track_columns import HandleTrackColumns
+from stages.reader_handlers.handle_track_order import HandleTrackOrder
+from stages.reader_handlers.handle_track_pattern import HandleTrackPattern
+from stages.reader_handlers.handle_track_row import HandleTrackRow
 
 class Reader:
     def __init__(self, project):
@@ -62,7 +61,6 @@ class Reader:
             "INSTFDS": HandleInstFDS(self.project),
             "INSTN163": HandleInstN163(self.project),
 
-            # TODO special settings
             "KEYDPCM": HandleKeyDpcm(self.project),
             "FDSWAVE": HandleFdsWave(self.project),
             "FDSMOD": HandleFdsMod(self.project),
