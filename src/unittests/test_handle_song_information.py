@@ -8,68 +8,65 @@
 # if all goes well, all tests will pass!
 
 import unittest
-import sys
-sys.dont_write_bytecode = True
-
-from dummy_project import DummyProject
-from stages.reader_handlers.handle_song_information import HandleSongInformation
+from mock_handler import MockHandler
+from utils.regex_patterns import RegexPatterns
 
 class TestHandleSongInformation(unittest.TestCase):
     def setUp(self):
-        self.project = DummyProject()
-        self.handler = HandleSongInformation(self.project)
+        self.handler = MockHandler()
+        self.handler.pattern = RegexPatterns.patterns['song_information']
 
     # ---- Test Title Regex ---
     def test_title_1(self):
-        self.assertTrue(self.handler.handle("TITLE \"my title\""))
+        self.assertEqual(self.handler.handle("TITLE \"my title\""), 0)
     
     def test_title_2(self):
-        self.assertTrue(self.handler.handle("TITLE \"my \"inner quote\" title\" # COMMENT"))
+        self.assertEqual(self.handler.handle("TITLE \"my \"inner quote\" title\" # COMMENT"), 0)
     
     def test_title_3(self):
-        self.assertTrue(self.handler.handle("TITLE \"\""))
+        self.assertEqual(self.handler.handle("TITLE \"\""), 0)
     
     def test_title_4(self):
-        self.assertFalse(self.handler.handle("TITLE NAN"))
+        self.assertNotEqual(self.handler.handle("TITLE NAN"), 0)
 
     # ---- Test Author Regex ---
     def test_author_1(self):
-        self.assertTrue(self.handler.handle("AUTHOR \"my author\""))
+        self.assertEqual(self.handler.handle("AUTHOR \"my author\""), 0)
 
     def test_author_2(self):
-        self.assertTrue(self.handler.handle("AUTHOR \"my \"inner quote\" author\""))
+        self.assertEqual(self.handler.handle("AUTHOR \"my \"inner quote\" author\""), 0)
 
     def test_author_3(self):
-        self.assertTrue(self.handler.handle("AUTHOR \"\""))
+        self.assertEqual(self.handler.handle("AUTHOR \"\""), 0)
 
     def test_author_4(self):
-        self.assertFalse(self.handler.handle("AUTHOR NAN"))
+        self.assertNotEqual(self.handler.handle("AUTHOR NAN"), 0)
 
     # ---- Test Copyright Regex ---
     def test_copyright_1(self):
-        self.assertTrue(self.handler.handle("COPYRIGHT \"2025 (c)\""))
+        self.assertEqual(self.handler.handle("COPYRIGHT \"2025 (c)\""), 0)
 
     def test_copyright_2(self):
-        self.assertTrue(self.handler.handle("COPYRIGHT \"2025 \"inner quote\" (c)\""))
+        self.assertEqual(self.handler.handle("COPYRIGHT \"2025 \"inner quote\" (c)\""), 0)
 
     def test_copyright_3(self):
-        self.assertTrue(self.handler.handle("COPYRIGHT \"\""))
+        self.assertEqual(self.handler.handle("COPYRIGHT \"\""), 0)
 
     def test_copyright_4(self):
-        self.assertFalse(self.handler.handle("COPYRIGHT NAN"))
+        self.assertNotEqual(self.handler.handle("COPYRIGHT NAN"), 0)
         
     # ---- Test Comment Regex ---
     def test_comment_1(self):
-        self.assertTrue(self.handler.handle("COMMENT \"some comment\""))
+        self.assertEqual(self.handler.handle("COMMENT \"some comment\""), 0)
 
     def test_comment_2(self):
-        self.assertTrue(self.handler.handle("COMMENT \"some \"inner quote\" comment\""))
+        self.assertEqual(self.handler.handle("COMMENT \"some \"inner quote\" comment\""), 0)
 
     def test_comment_3(self):
-        self.assertTrue(self.handler.handle("COMMENT \"\""))
+        self.assertEqual(self.handler.handle("COMMENT \"\""), 0)
 
     def test_comment_4(self):
-        self.assertFalse(self.handler.handle("COMMENT NAN"))
+        self.assertNotEqual(self.handler.handle("COMMENT NAN"), 0)
 
 
 def main():
