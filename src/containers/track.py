@@ -9,16 +9,21 @@ class Track(Printable):
     # static variable to assign track indexes upon init
     count = 0 
 
-    def __init__(self):
+    def __init__(self,
+        num_rows: int = 64,
+        speed: int = 6,
+        tempo: int = 150,
+        name: str = "Default"
+    ):
         Track.count += 1
         self.index = Track.count
 
         # "public" attributes
-        self.name: str = "Default"
-        self.speed: int = 6
-        self.tempo: int = 150
+        self.name: str = name
+        self.speed: int = speed
+        self.tempo: int = tempo
 
-        self.num_rows: int = 64
+        self.num_rows: int = num_rows
         self.num_cols: int = 5
         self.eff_cols: List[int] = [1 for _ in range(self.num_cols)]
 

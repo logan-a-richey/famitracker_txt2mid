@@ -23,6 +23,7 @@ class Project:
         self.usegroove: List[int] = []
 
         self.tracks: Dict[int, Track] = {}
+        self.target_track = 0
 
     def __str__(self):
         text = ""

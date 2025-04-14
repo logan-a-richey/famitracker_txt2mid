@@ -67,8 +67,7 @@ class Reader:
             "FDSMACRO": HandleFdsMacro(self.project),
             "N163WAVE": HandleN163Wave(self.project),
             
-            # TODO track data:
-            # "TRACK": HandleTrack(self.project),
+            "TRACK": HandleTrack(self.project),
             # "COLUMNS": HandleTrackColumns(self.project),
             # "ORDER": HandleTrackOrder(self.project);\,
             # "PATTERN": HandleTrackPattern(self.project),
@@ -79,14 +78,14 @@ class Reader:
         first_word = line.split()[0]
 
         if first_word == "BREAK":
-            exit(0)
+            sys.exit(0)
 
         handler = self.dispatch.get(first_word, None)
         if handler:
             res = handler.handle(line) 
             if res != 0:
                 print("[ERROR] Error inside of {}. Scanning Line: \'{}\'".format(
-                    handler.__name__,
+                    type(handler).__name__,
                     line)
                 )
                 sys.exit(1)
