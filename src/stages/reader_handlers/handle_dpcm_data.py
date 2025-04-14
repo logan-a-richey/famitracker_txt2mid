@@ -1,20 +1,13 @@
 # stages/reader_handlers/handle_dpcm_data.py
 
 import re
+from utils.regex_patterns import RegexPatterns
 from stages.reader_handlers.base_handler import BaseHandler
 
 class HandleDpcmData(BaseHandler):
     def __init__(self, project):
         super().__init__(project)
-        
-        # DPCM : [data]
-        self.pattern = re.compile(r'''
-            ^\s*            # optional leading whitespace
-            (?P<tag>\w+)    # grab the first word
-            \s*\:\s*        # div
-            (?P<data>.*)    # grab the data
-            $               # end of string
-            ''', re.VERBOSE)
+        self.pattern = RegexPatterns.patterns['dpcm']
 
     def handle(self, line: str) -> int:
         x = self.pattern.match(line)

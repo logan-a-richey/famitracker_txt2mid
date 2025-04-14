@@ -1,24 +1,13 @@
 # handle_track_order.py
 
 import re
-
+from utils.regex_patterns import RegexPatterns
 from stages.reader_handlers.base_handler import BaseHandler
 
 class HandleTrackOrder(BaseHandler):
     def __init__(self, project):
         super().__init__(project)
-        
-        # ORDER [frame] : [list]   
-        self.pattern = re.compile(r'''
-            ^\s*
-            (?P<tag>\w+)
-            \s+
-            (?P<frame>[0-9a-fA-F]{2})
-            \s*\:\s*
-            (?P<list>.*)
-            $
-            ''', re.VERBOSE
-        )
+        self.pattern = RegexPatterns.patterns['order']
 
     def handle(self, line: str) -> int:
         x = self.pattern.match(line)

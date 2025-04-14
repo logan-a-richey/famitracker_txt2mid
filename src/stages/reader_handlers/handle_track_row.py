@@ -1,25 +1,13 @@
 # handle_track_row.py
 
-import re
-
+from utils.regex_patterns import RegexPatterns
 from stages.reader_handlers.base_handler import BaseHandler
 
 class HandleTrackRow(BaseHandler):
     def __init__(self, project):
         super().__init__(project)
-        
         # #ROW [row] : [c0] : [c1] : [c2] ...
-        self.pattern = re.compile(r'''
-            \s*
-            (?P<tag>\w+)
-            \s+
-            (?P<row>[0-9A-F]{2})
-            \s*\:\s*
-            (?P<list>
-                (?:.{3}\s+.{2}\s+.{1}(?:\s+.{3})+)+
-            ).*$''', re.VERBOSE)
-        
-        # ^\s+(?P<tag>\w+)\w+(?P<row>[0-9A-F]{2})\s*\:\s*(?P<list>.*)$
+        self.pattern = RegexPatterns.patterns['row']
 
     def handle(self, line: str) -> int:
         # ROW 00 : D#4 00 F V00 : D#3 00 F V00 P7E : D#3 00 . ... : 0-# 01 . ... ...

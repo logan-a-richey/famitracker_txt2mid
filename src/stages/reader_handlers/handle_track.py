@@ -1,28 +1,13 @@
 # handle_track.py
 
-import re
-
+from utils.regex_patterns import RegexPatterns
 from stages.reader_handlers.base_handler import BaseHandler
 from containers.track import Track
 
 class HandleTrack(BaseHandler):
     def __init__(self, project):
         super().__init__(project)
-
-        # line = \"TRACK 120   3 160 "New song"\"
-        self.pattern = re.compile(r'''
-            ^\s*
-            (?P<tag>\w+)
-            \s+
-            (?P<pattern>\d+)
-            \s+
-            (?P<speed>\d+)
-            \s+
-            (?P<tempo>\d+)
-            \s*
-            \"(?P<name>.*)\".*$
-            ''', re.VERBOSE
-        )
+        self.pattern = RegexPatterns.patterns['track']
 
     def handle(self, line: str) -> int:
         x = self.pattern.match(line)

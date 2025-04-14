@@ -1,20 +1,13 @@
 # handle_track_columns.py
 
 import re
-
+from utils.regex_patterns import RegexPatterns
 from stages.reader_handlers.base_handler import BaseHandler
 
 class HandleTrackColumns(BaseHandler):
     def __init__(self, project):
         super().__init__(project)
-        self.pattern = re.compile(r'''
-            ^\s*
-            (?P<tag>COLUMNS)
-            \s*\:\s*
-            (?P<data>.*)
-            $
-            ''', re.VERBOSE
-        )
+        self.pattern = RegexPatterns.patterns['columns']
 
     def handle(self, line: str) -> int:
         x = self.pattern.match(line)

@@ -1,6 +1,6 @@
 # stages/reader_handlers/handle_inst_vrc7.py
 
-import re
+from utils.regex_patterns import RegexPatterns
 from typing import List
 
 from stages.reader_handlers.base_handler import BaseHandler
@@ -9,22 +9,7 @@ from containers.inst_vrc7 import InstVRC7
 class HandleInstVRC7(BaseHandler):
     def __init__(self, project):
         super().__init__(project)
-        self.pattern = re.compile(r'''
-            ^\s*
-            (?P<tag>\w+)\s+
-            (?P<index>\d+)\s+
-            (?P<patch>\d+)\s+
-            (?P<r0>[0-9a-fA-F]{2})\s+
-            (?P<r1>[0-9a-fA-F]{2})\s+
-            (?P<r2>[0-9a-fA-F]{2})\s+
-            (?P<r3>[0-9a-fA-F]{2})\s+
-            (?P<r4>[0-9a-fA-F]{2})\s+
-            (?P<r5>[0-9a-fA-F]{2})\s+
-            (?P<r6>[0-9a-fA-F]{2})\s+
-            (?P<r7>[0-9a-fA-F]{2})\s+
-            \"(?P<name>.*?)\"
-            .*$''', re.VERBOSE
-        )
+        self.pattern = RegexPatterns.patterns['inst_vrc7']
 
     def handle(self, line: str) -> int:
         x = self.pattern.match(line)

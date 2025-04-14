@@ -1,18 +1,12 @@
 # stages/reader_handlers/HandleSongInformation.py
 
-import re
-
+from utils.regex_patterns import RegexPatterns
 from stages.reader_handlers.base_handler import BaseHandler
 
 class HandleSongInformation(BaseHandler):
     def __init__(self, project):
         super().__init__(project)
-        self.pattern = re.compile(r'''
-            ^\s*
-            (?P<field>\w+)\s+
-            \"(?P<value>.*)\"
-            .*$''', re.VERBOSE
-        )
+        self.pattern = RegexPatterns.patterns['song_information']
     
     def handle(self, line: str) -> int:
         x = self.pattern.match(line)

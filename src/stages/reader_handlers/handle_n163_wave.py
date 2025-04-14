@@ -1,31 +1,18 @@
 # stages/reader_handlers/handle_n163_wave.py 
 
 import re
+from utils.regex_patterns import RegexPatterns
 from stages.reader_handlers.base_handler import BaseHandler
 from containers.inst_n163 import InstN163
 
 class HandleN163Wave(BaseHandler):
     def __init__(self, project):
         super().__init__(project)
-
-        # FDSWAVE [inst] : [data]
-        self.pattern = re.compile(r'''
-            ^\s*
-            (?P<tag>\w+)
-            \s+
-            (?P<inst>\d+)
-            \s+
-            (?P<wave>\d+)
-            \s*\:\s*
-            (?P<data>.*)
-            $
-            ''', re.VERBOSE
-        )
+        self.pattern = RegexPatterns.patterns['n163_wave']
 
     def handle(self, line: str) -> int:
         x = self.pattern.match(line)
         if not x:
-            # did not get a regex match
             print("[WARN] Could not add N163Wave. Regex did not match")
             return 1
         

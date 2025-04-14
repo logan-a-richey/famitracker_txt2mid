@@ -1,7 +1,7 @@
 # stages/reader_handlers/handle_fds_macro.py
 
 import re
-
+from utils.regex_patterns import RegexPatterns
 from stages.reader_handlers.base_handler import BaseHandler
 from containers.macro import Macro
 from containers.inst_fds import InstFDS
@@ -9,23 +9,7 @@ from containers.inst_fds import InstFDS
 class HandleFdsMacro(BaseHandler):
     def __init__(self, project):
         super().__init__(project)
-
-        self.pattern = re.compile(r'''
-            ^\s*
-            (?P<tag>\w+)       # tag
-            \s+
-            (?P<inst>\d+)       # inst
-            \s+
-            (?P<type>\d+)       # type
-            \s+
-            (?P<loop>\-?\d+)    # loop
-            \s+
-            (?P<release>\-?\d+)    # release
-            \s+
-            (?P<setting>\d+)       # setting
-            \s*\:\s*
-            (?P<data>.*)$       # data
-        ''', re.VERBOSE)
+        self.pattern = RegexPatterns.patterns['fds_macro']
 
     def handle(self, line: str) -> int:
         x = self.pattern.match(line)

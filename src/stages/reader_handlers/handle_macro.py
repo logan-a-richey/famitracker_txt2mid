@@ -1,25 +1,14 @@
 # stages/reader/handle_macro.py
 
 import re
-
+from utils.regex_patterns import RegexPatterns
 from stages.reader_handlers.base_handler import BaseHandler
 from containers.macro import Macro
 
 class HandleMacro(BaseHandler):
     def __init__(self, project):
         super().__init__(project)
-        self.pattern = re.compile(r'''
-            ^\s*                                # start of string
-            (?P<tag>\w+)\s+                     # macro tag
-            (?P<type>[0-4])\s+                  # macro type
-            (?P<index>\d+)\s+                   # macro index
-            (?P<loop>\-?\d+)\s+                 # macro loop
-            (?P<release>\-?\d+)\s+              # macro release
-            (?P<setting>\-?\d+)\s*\:\s*         # macro setting
-            (?P<sequence>\-?\d+(?:\s+\-?\d+)*)  # macro sequence
-            .*$                                 # end of string
-            ''', re.VERBOSE
-        )
+        self.pattern = RegexPatterns.patterns['macro']
 
     def handle(self, line: str) -> int:
         x = self.pattern.match(line)
