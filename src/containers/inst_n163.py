@@ -21,4 +21,4 @@ class InstN163(BaseInst):
         self.w_count = w_count
 
         self.macros = {}
-        
+        self.n163_waves = {} 

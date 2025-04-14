@@ -26,12 +26,20 @@ def main():
     #parser = Parser(project)
     #exporter = Exporter(project)
     
-    for inst_key, inst_obj in project.instruments.items():
-        if hasattr(inst_obj, "key_dpcm"):
-            if (inst_obj.key_dpcm):
-                print("---\nInstrument {}: \'{}\'".format(inst_key, inst_obj.name))
-                for note_key, note_obj in inst_obj.key_dpcm.items():
-                    print("{} -> {}".format(note_key, note_obj))
+    # KeyDpcm
+    #for inst_key, inst_obj in project.instruments.items():
+    #    if hasattr(inst_obj, "key_dpcm"):
+    #        if (inst_obj.key_dpcm):
+    #            print("---\nInstrument {}: \'{}\'".format(inst_key, inst_obj.name))
+    #            for note_key, note_obj in inst_obj.key_dpcm.items():
+    #                print("{} -> {}".format(note_key, note_obj))
+
+    for ik,iv in project.instruments.items():
+        if hasattr(iv, "n163_waves"):
+            print("Instrument {} \'{}\'".format(ik, iv.name))
+            for wi, wv in iv.n163_waves.items():
+               print("{} -> {}".format(wi, wv))
+
 
 if __name__ == "__main__":
     main()

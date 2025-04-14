@@ -1,5 +1,6 @@
 # containers/inst_fds.py
 
+from typing import List
 from containers.base_inst import BaseInst
 
 class InstFDS(BaseInst):
@@ -15,5 +16,8 @@ class InstFDS(BaseInst):
         self.mod_delay = mod_delay
         
         self.macros = {}
+        
+        self.fds_wave: List[int] = []
+        self.fds_mod: List[int] = []
 
 

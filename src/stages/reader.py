@@ -18,11 +18,10 @@ from stages.reader_handlers.handle_use_groove import HandleUseGroove
 
 from stages.reader_handlers.handle_key_dpcm import HandleKeyDpcm
 
-# TODO
-# from stages.reader_handlers.handle_fds_wave import HandleFdsWave
-# from stages.reader_handlers.handle_fds_mod import HandleFdsMod
-# from stages.reader_handlers.handle_fds_macro import HandleFdsMacro
-# from stages.reader_handlers.handle_n163_wave import HandleN163Wave
+from stages.reader_handlers.handle_fds_wave import HandleFdsWave
+from stages.reader_handlers.handle_fds_mod import HandleFdsMod
+from stages.reader_handlers.handle_fds_macro import HandleFdsMacro
+from stages.reader_handlers.handle_n163_wave import HandleN163Wave
 
 # TODO
 # from stages.reader_handlers.handle_track import HandleTrack
@@ -64,9 +63,9 @@ class Reader:
             # TODO special settings
             "KEYDPCM": HandleKeyDpcm(self.project),
             "FDSWAVE": HandleFdsWave(self.project),
-            # "FDSMOD": HandleFdsMod(self.project),
-            # "FDSMACRO": HandleFdsMacro(self.project),
-            # "N163WAVE": HandleN163Wave(self.project),
+            "FDSMOD": HandleFdsMod(self.project),
+            "FDSMACRO": HandleFdsMacro(self.project),
+            "N163WAVE": HandleN163Wave(self.project),
             
             # TODO track data:
             # "TRACK": HandleTrack(self.project),

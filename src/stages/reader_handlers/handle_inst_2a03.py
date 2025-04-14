@@ -1,7 +1,6 @@
 # stages/reader_handlers/handle_inst_2a03.py
 
 import re
-import sys
 
 from stages.reader_handlers.base_handler import BaseHandler
 from containers.inst_2a03 import Inst2A03

@@ -1,0 +1,84 @@
+[WARN] Could not add FDS_WAVE. Instrument index KeyError.
+[WARN] Regex failed. Line: 'FDSWAVE    1 :  0  2  4  6  8 10 12 14 16 18 20 22 24 26 24 22 20 18 16 14 12 10  8  6  4  2 52 54 56 58 60 62 62 60 58 56 54 52 26 24 22 20 18 16 14 12 10  8  6  4  2  0  2  4  6  8 10 12 14 16 18 20 22 24'
+[WARN] Could not add FDS_MOD. Instrument index KeyError.
+[WARN] Regex failed. Line: 'FDSMOD     1 :  7  7  7  7  7  7  7  0  0  0  1  1  1  1  1  1  1  1  1  1  1  1  1  0  0  0  7  7  7  7  7  7'
+[WARN] Could not add FDS_WAVE. Instrument index KeyError.
+[WARN] Regex failed. Line: 'FDSWAVE    2 :  0  2  4  6  8 10 12 14 16 18 20 22 24 26 24 22 20 18 16 14 12 10  8  6  4  2 52 54 56 58 60 62 62 60 58 56 54 52 26 24 22 20 18 16 14 12 10  8  6  4  2  0  2  4  6  8 10 12 14 16 18 20 22 24'
+[WARN] Could not add FDS_MOD. Instrument index KeyError.
+[WARN] Regex failed. Line: 'FDSMOD     2 :  7  7  7  7  7  7  7  0  0  0  1  1  1  1  1  1  1  1  1  1  1  1  1  0  0  0  7  7  7  7  7  7'
+[WARN] Could not add FDS_WAVE. Instrument index KeyError.
+[WARN] Regex failed. Line: 'FDSWAVE    3 :  0  2  4  6  8 10 12 14 16 18 20 22 24 26 24 22 20 18 16 14 12 10  8  6  4  2 52 54 56 58 60 62 62 60 58 56 54 52 26 24 22 20 18 16 14 12 10  8  6  4  2  0  2  4  6  8 10 12 14 16 18 20 22 24'
+[WARN] Could not add FDS_MOD. Instrument index KeyError.
+[WARN] Regex failed. Line: 'FDSMOD     3 :  7  7  7  7  7  7  7  0  0  0  1  1  1  1  1  1  1  1  1  1  1  1  1  0  0  0  7  7  7  7  7  7'
+[WARN] Could not add FDS_WAVE. Instrument index KeyError.
+[WARN] Regex failed. Line: 'FDSWAVE    4 :  0  2  4  6  8 10 12 14 16 18 20 22 24 26 24 22 20 18 16 14 12 10  8  6  4  2 52 54 56 58 60 62 62 60 58 56 54 52 26 24 22 20 18 16 14 12 10  8  6  4  2  0  2  4  6  8 10 12 14 16 18 20 22 24'
+[WARN] Could not add FDS_MOD. Instrument index KeyError.
+[WARN] Regex failed. Line: 'FDSMOD     4 :  7  7  7  7  7  7  7  0  0  0  1  1  1  1  1  1  1  1  1  1  1  1  1  0  0  0  7  7  7  7  7  7'
+[WARN] Could not add FDS_WAVE. Instrument index KeyError.
+[WARN] Regex failed. Line: 'FDSWAVE    5 :  0  2  4  6  8 10 12 14 16 18 20 22 24 26 24 22 20 18 16 14 12 10  8  6  4  2 52 54 56 58 60 62 62 60 58 56 54 52 26 24 22 20 18 16 14 12 10  8  6  4  2  0  2  4  6  8 10 12 14 16 18 20 22 24'
+[WARN] Could not add FDS_MOD. Instrument index KeyError.
+[WARN] Regex failed. Line: 'FDSMOD     5 :  7  7  7  7  7  7  7  0  0  0  1  1  1  1  1  1  1  1  1  1  1  1  1  0  0  0  7  7  7  7  7  7'
+[WARN] Could not add FDS_WAVE. Instrument index KeyError.
+[WARN] Regex failed. Line: 'FDSWAVE    6 :  0  2  4  6  8 10 12 14 16 18 20 22 24 26 24 22 20 18 16 14 12 10  8  6  4  2 52 54 56 58 60 62 62 60 58 56 54 52 26 24 22 20 18 16 14 12 10  8  6  4  2  0  2  4  6  8 10 12 14 16 18 20 22 24'
+[WARN] Could not add FDS_MOD. Instrument index KeyError.
+[WARN] Regex failed. Line: 'FDSMOD     6 :  7  7  7  7  7  7  7  0  0  0  1  1  1  1  1  1  1  1  1  1  1  1  1  0  0  0  7  7  7  7  7  7'
+[WARN] Could not add FDS_WAVE. Instrument index KeyError.
+[WARN] Regex failed. Line: 'FDSWAVE    7 :  0  2  4  6  8 10 12 14 16 18 20 22 24 26 24 22 20 18 16 14 12 10  8  6  4  2 52 54 56 58 60 62 62 60 58 56 54 52 26 24 22 20 18 16 14 12 10  8  6  4  2  0  2  4  6  8 10 12 14 16 18 20 22 24'
+[WARN] Could not add FDS_MOD. Instrument index KeyError.
+[WARN] Regex failed. Line: 'FDSMOD     7 :  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0'
+[WARN] Could not add FDS_WAVE. Instrument index KeyError.
+[WARN] Regex failed. Line: 'FDSWAVE    8 :  0  2  4  6  8 10 12 14 16 18 20 22 24 26 24 22 20 18 16 14 12 10  8  6  4  2 52 54 56 58 60 62 62 60 58 56 54 52 26 24 22 20 18 16 14 12 10  8  6  4  2  0  2  4  6  8 10 12 14 16 18 20 22 24'
+[WARN] Could not add FDS_MOD. Instrument index KeyError.
+[WARN] Regex failed. Line: 'FDSMOD     8 :  7  7  7  7  7  7  7  0  0  0  1  1  1  1  1  1  1  1  1  1  1  1  1  0  0  0  7  7  7  7  7  7'
+[WARN] Could not add FDS_WAVE. Instrument index KeyError.
+[WARN] Regex failed. Line: 'FDSWAVE   10 :  0  2  4  6  8 10 12 14 16 18 20 22 24 26 24 22 20 18 16 14 12 10  8  6  4  2 52 54 56 58 60 62 62 60 58 56 54 52 26 24 22 20 18 16 14 12 10  8  6  4  2  0  2  4  6  8 10 12 14 16 18 20 22 24'
+[WARN] Could not add FDS_MOD. Instrument index KeyError.
+[WARN] Regex failed. Line: 'FDSMOD    10 :  7  7  7  7  7  7  7  0  0  0  1  1  1  1  1  1  1  1  1  1  1  1  1  0  0  0  7  7  7  7  7  7'
+[WARN] Could not add FDS_WAVE. Instrument index KeyError.
+[WARN] Regex failed. Line: 'FDSWAVE   11 :  0  2  4  6  8 10 12 14 16 18 20 22 24 26 24 22 20 18 16 14 12 10  8  6  4  2 52 54 56 58 60 62 62 60 58 56 54 52 26 24 22 20 18 16 14 12 10  8  6  4  2  0  2  4  6  8 10 12 14 16 18 20 22 24'
+[WARN] Could not add FDS_MOD. Instrument index KeyError.
+[WARN] Regex failed. Line: 'FDSMOD    11 :  7  7  7  7  7  7  7  0  0  0  1  1  1  1  1  1  1  1  1  1  1  1  1  0  0  0  7  7  7  7  7  7'
+[WARN] Could not add FDS_WAVE. Instrument index KeyError.
+[WARN] Regex failed. Line: 'FDSWAVE   12 :  0  2  4  6  8 10 12 14 16 18 20 22 24 26 24 22 20 18 16 14 12 10  8  6  4  2 52 54 56 58 60 62 62 60 58 56 54 52 26 24 22 20 18 16 14 12 10  8  6  4  2  0  2  4  6  8 10 12 14 16 18 20 22 24'
+[WARN] Could not add FDS_MOD. Instrument index KeyError.
+[WARN] Regex failed. Line: 'FDSMOD    12 :  7  7  7  7  7  7  7  0  0  0  1  1  1  1  1  1  1  1  1  1  1  1  1  0  0  0  7  7  7  7  7  7'
+[WARN] Could not add FDS_WAVE. Instrument index KeyError.
+[WARN] Regex failed. Line: 'FDSWAVE   13 :  0  2  4  6  8 10 12 14 16 18 20 22 24 26 24 22 20 18 16 14 12 10  8  6  4  2 52 54 56 58 60 62 62 60 58 56 54 52 26 24 22 20 18 16 14 12 10  8  6  4  2  0  2  4  6  8 10 12 14 16 18 20 22 24'
+[WARN] Could not add FDS_MOD. Instrument index KeyError.
+[WARN] Regex failed. Line: 'FDSMOD    13 :  7  7  7  7  7  7  7  0  0  0  1  1  1  1  1  1  1  1  1  1  1  1  1  0  0  0  7  7  7  7  7  7'
+[WARN] Could not add FDS_WAVE. Instrument index KeyError.
+[WARN] Regex failed. Line: 'FDSWAVE   14 :  0  2  4  6  8 10 12 14 16 18 20 22 24 26 24 22 20 18 16 14 12 10  8  6  4  2 52 54 56 58 60 62 62 60 58 56 54 52 26 24 22 20 18 16 14 12 10  8  6  4  2  0  2  4  6  8 10 12 14 16 18 20 22 24'
+[WARN] Could not add FDS_MOD. Instrument index KeyError.
+[WARN] Regex failed. Line: 'FDSMOD    14 :  7  7  7  7  7  7  7  0  0  0  1  1  1  1  1  1  1  1  1  1  1  1  1  0  0  0  7  7  7  7  7  7'
+[WARN] Could not add FDS_WAVE. Instrument index KeyError.
+[WARN] Regex failed. Line: 'FDSWAVE   15 :  0  2  4  6  8 10 12 14 16 18 20 22 24 26 24 22 20 18 16 14 12 10  8  6  4  2 52 54 56 58 60 62 62 60 58 56 54 52 26 24 22 20 18 16 14 12 10  8  6  4  2  0  2  4  6  8 10 12 14 16 18 20 22 24'
+[WARN] Could not add FDS_MOD. Instrument index KeyError.
+[WARN] Regex failed. Line: 'FDSMOD    15 :  7  7  7  7  7  7  7  0  0  0  1  1  1  1  1  1  1  1  1  1  1  1  1  0  0  0  7  7  7  7  7  7'
+[WARN] Could not add FDS_WAVE. Instrument index KeyError.
+[WARN] Regex failed. Line: 'FDSWAVE   23 :  0  2  4  6  8 10 12 14 16 18 20 22 24 26 24 22 20 18 16 14 12 10  8  6  4  2 52 54 56 58 60 62 62 60 58 56 54 52 26 24 22 20 18 16 14 12 10  8  6  4  2  0  2  4  6  8 10 12 14 16 18 20 22 24'
+[WARN] Could not add FDS_MOD. Instrument index KeyError.
+[WARN] Regex failed. Line: 'FDSMOD    23 :  7  7  7  7  7  7  7  0  0  0  1  1  1  1  1  1  1  1  1  1  1  1  1  0  0  0  7  7  7  7  7  7'
+[WARN] Could not add FDS_WAVE. Instrument index KeyError.
+[WARN] Regex failed. Line: 'FDSWAVE   24 :  0  2  4  6  8 10 12 14 16 18 20 22 24 26 24 22 20 18 16 14 12 10  8  6  4  2 52 54 56 58 60 62 62 60 58 56 54 52 26 24 22 20 18 16 14 12 10  8  6  4  2  0  2  4  6  8 10 12 14 16 18 20 22 24'
+[WARN] Could not add FDS_MOD. Instrument index KeyError.
+[WARN] Regex failed. Line: 'FDSMOD    24 :  7  7  7  7  7  7  7  0  0  0  1  1  1  1  1  1  1  1  1  1  1  1  1  0  0  0  7  7  7  7  7  7'
+[WARN] Could not add FDS_WAVE. Instrument index KeyError.
+[WARN] Regex failed. Line: 'FDSWAVE   29 :  0  2  4  6  8 10 12 14 16 18 20 22 24 26 24 22 20 18 16 14 12 10  8  6  4  2 52 54 56 58 60 62 62 60 58 56 54 52 26 24 22 20 18 16 14 12 10  8  6  4  2  0  2  4  6  8 10 12 14 16 18 20 22 24'
+[WARN] Could not add FDS_MOD. Instrument index KeyError.
+[WARN] Regex failed. Line: 'FDSMOD    29 :  7  7  7  7  7  7  7  0  0  0  1  1  1  1  1  1  1  1  1  1  1  1  1  0  0  0  7  7  7  7  7  7'
+[WARN] Could not add FDS_WAVE. Instrument index KeyError.
+[WARN] Regex failed. Line: 'FDSWAVE   30 :  0  2  4  6  8 10 12 14 16 18 20 22 24 26 24 22 20 18 16 14 12 10  8  6  4  2 52 54 56 58 60 62 62 60 58 56 54 52 26 24 22 20 18 16 14 12 10  8  6  4  2  0  2  4  6  8 10 12 14 16 18 20 22 24'
+[WARN] Could not add FDS_MOD. Instrument index KeyError.
+[WARN] Regex failed. Line: 'FDSMOD    30 :  7  7  7  7  7  7  7  0  0  0  1  1  1  1  1  1  1  1  1  1  1  1  1  0  0  0  7  7  7  7  7  7'
+[WARN] Could not add FDS_WAVE. Instrument index KeyError.
+[WARN] Regex failed. Line: 'FDSWAVE   32 :  0  2  4  6  8 10 12 14 16 18 20 22 24 26 24 22 20 18 16 14 12 10  8  6  4  2 52 54 56 58 60 62 62 60 58 56 54 52 26 24 22 20 18 16 14 12 10  8  6  4  2  0  2  4  6  8 10 12 14 16 18 20 22 24'
+[WARN] Could not add FDS_MOD. Instrument index KeyError.
+[WARN] Regex failed. Line: 'FDSMOD    32 :  7  7  7  7  7  7  7  0  0  0  1  1  1  1  1  1  1  1  1  1  1  1  1  0  0  0  7  7  7  7  7  7'
+[WARN] Could not add FDS_WAVE. Instrument index KeyError.
+[WARN] Regex failed. Line: 'FDSWAVE   33 :  0  2  4  6  8 10 12 14 16 18 20 22 24 26 24 22 20 18 16 14 12 10  8  6  4  2 52 54 56 58 60 62 62 60 58 56 54 52 26 24 22 20 18 16 14 12 10  8  6  4  2  0  2  4  6  8 10 12 14 16 18 20 22 24'
+[WARN] Could not add FDS_MOD. Instrument index KeyError.
+[WARN] Regex failed. Line: 'FDSMOD    33 :  7  7  7  7  7  7  7  0  0  0  1  1  1  1  1  1  1  1  1  1  1  1  1  0  0  0  7  7  7  7  7  7'
+[WARN] Could not add FDS_WAVE. Instrument index KeyError.
+[WARN] Regex failed. Line: 'FDSWAVE   36 : 60 58 56 53 51 49 47 45 43 42 40 38 36 34 32 31 30 30 29 28 28 26 26 27 27 30 33 36 38 41 44 46 49 52 52 44 40 35 33 30 27 24 22 19 17 15 14 12 11  9  7  6  4  3  2  1  0  0  0  0  0  0  0  0'
+[WARN] Could not add FDS_MOD. Instrument index KeyError.
+[WARN] Regex failed. Line: 'FDSMOD    36 :  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0'
