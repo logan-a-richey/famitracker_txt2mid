@@ -15,11 +15,13 @@ class HandleGlobalSettings(BaseHandler):
         )
 
     def handle(self, line: str) -> bool:
-        if x := self.pattern.match(line):
-            k = x.group('field') 
-            v = int(x.group('value'))
-            self.project.global_settings[k] = v
-            return True
+        x = self.pattern.match(line)
+        if not x:
+            print("Regex does not match.")
+            return 1
+
+        k = x.group('field') 
+        v = int(x.group('value'))
+        self.project.global_settings[k] = v
+        return 0 
         
-        else:
-            return False

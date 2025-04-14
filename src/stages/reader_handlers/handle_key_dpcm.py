@@ -32,29 +32,33 @@ class HandleKeyDpcm(BaseHandler):
         ''', re.VERBOSE)
 
     def handle(self, line: str) -> bool:
-        if x := self.pattern.match(line):
-            #k = x.group('field') 
-            #v = int(x.group('value'))
-            #self.project.global_settings[k] = v
-            fields = ['inst', 'octave', 'note', 'sample', 'pitch', 'loop', 'loop_point', 'delta']
-            values = list(map(int, x.group(*fields)))
-            key_obj = KeyDpcm(*values)
+        x = self.pattern.match(line)
+        if not x:
+            print("Regex does not match.")
+            return 1
 
-            inst = self.project.instruments.get(values[0], None)
-            if inst:
-                if hasattr(inst, "key_dpcm"):
-                    midi_int = values[1] * 12 + values[2]
-                    inst.key_dpcm[midi_int] = key_obj
-                    return True
-                else:
-                    print("[WARN] Tried to add KeyDpcm to a non-2A03 instrument")
-                    return False
-            else:
-                print("[WARN] Tried to add KeyDpcm to Instrument not in Project.instruments / KeyError.")
-                return False
-            return True
-        
-        else:
-            return False
+        # parse regex
+        fields = ['inst', 'octave', 'note', 'sample', 'pitch', 'loop', 'loop_point', 'delta']
+        values = list(map(int, x.group(*fields)))
+        key_obj = KeyDpcm(*values)
 
+        inst = self.project.instruments.get(values[0], None)
+        if not inst:
+            print("KeyError.")
+            return 1
+
+        if not isinstance(inst, Inst2A03):
+            print("Not Inst2A03")
+            return 1
+
+        if not hasattr(inst, "key_dpcm"):
+            print("AttributeError: does not have \'key_dpcm\'.")
+            return 1
+
+        # calculate integer famitracker note
+        midi_int = values[1] * 12 + values[2]
+
+        # add <class KeyDpcm> to 2A03 instrument map.
+        inst.key_dpcm[midi_int] = key_obj
+        return 0
 

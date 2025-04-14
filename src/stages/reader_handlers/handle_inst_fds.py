@@ -24,7 +24,7 @@ class HandleInstFDS(BaseHandler):
         x = self.pattern.match(line)
         if not x:
             print("Regex does not match")
-            return False
+            return 1
 
         # base info
         inst_tag = x.group('tag')
@@ -40,6 +40,6 @@ class HandleInstFDS(BaseHandler):
        
         # add it to project
         self.project.instruments[inst_index] = inst_object
-        return True
+        return 0
 
 

@@ -17,10 +17,12 @@ class HandleUseGroove(BaseHandler):
             $''', re.VERBOSE)
 
     def handle(self, line: str) -> bool:
-        if x := self.pattern.match(line):
-            data = list(map(int, re.findall(r'\d+', x.group('data'))))
-            self.project.use_groove = data
-            return True
+        x = self.pattern.match(line)
+        if not x:
+            print("Regex does not match.")
+            return 1
 
-        else:
-            return False
+        data = list(map(int, re.findall(r'\d+', x.group('data'))))
+        self.project.use_groove = data
+        return 0
+

@@ -21,15 +21,16 @@ class HandleDpcmDef(BaseHandler):
         )
 
     def handle(self, line: str) -> bool:
-        if x := self.pattern.match(line):
-            index, size = list(map(int, x.group('index', 'size')))
-            name = x.group('name')
-            dpcm_object = Dpcm(index, size, name)
-            
-            self.project.dpcm[index] = dpcm_object
-            self.project.target_dpcm_index = index
-            return True
+        x = self.pattern.match(line)
+        if not x:
+            print("Regex does not match")
+            return 1
 
-        else:
-            return False
+        index, size = list(map(int, x.group('index', 'size')))
+        name = x.group('name')
+        dpcm_object = Dpcm(index, size, name)
+        
+        self.project.dpcm[index] = dpcm_object
+        self.project.target_dpcm_index = index
+        return 0
 

@@ -19,23 +19,23 @@ class HandleFdsMod(BaseHandler):
         )
 
     def handle(self, line: str) -> bool:
-        if x := self.pattern.match(line):
-            inst_index = int(x.group('inst_index'))
-            data = list(map(int, re.findall(r'\d+', x.group('data'))))
+        x = self.pattern.match(line)
+        if not x:
+            print("Regex does not match")
+            return 1
 
-            inst_object = self.project.instruments.get(inst_index, None)
-            if inst_object:
-                if hasattr(inst_object, "fds_mod"):
-                    inst_object.fds_mod = data
-                    return True
-                else:
-                    print("[WARN] Could not add FDS_MOD. Attribute error: \'fds_mod\'")
-                    return False
-            else:
-                print("[WARN] Could not add FDS_MOD. Instrument index KeyError.")
-        
-        else:
-            return False
-                
+        inst_index = int(x.group('inst_index'))
+        data = list(map(int, re.findall(r'\d+', x.group('data'))))
 
+        inst_object = self.project.instruments.get(inst_index, None)
+        if not inst_object:
+            print("[WARN] Could not add FDS_MOD. Instrument not of type InstFDS")
+            return 1
+
+        if not hasattr(inst_object, "fds_mod"):
+            print("[WARN] Could not add FDS_Mod. Attribute error.")
+            return 1
+
+        inst_object.fds_mod = data
+        return 0        
 

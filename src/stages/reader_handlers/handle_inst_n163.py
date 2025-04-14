@@ -26,35 +26,35 @@ class HandleInstN163(BaseHandler):
         )
 
     def handle(self, line: str) -> bool:
-        if x := self.pattern.match(line):
-            # base instrument info
-            inst_tag = x.group('tag')
-            inst_index = int(x.group('index'))
-            inst_name = x.group('name')
+        x = self.pattern.match(line)
+        if not x:
+            print("Regex does not match.")
+            return 1
 
-            # macros
-            macro_types = ['vol', 'arp', 'pit', 'hpi', 'dut']
-            macro_values = list(map(int, x.group(*macro_types)))
+        # base instrument info
+        inst_tag = x.group('tag')
+        inst_index = int(x.group('index'))
+        inst_name = x.group('name')
 
-            # special info
-            namco_fields = ['w_size', 'w_pos', 'w_count']
-            namco_values = list(map(int, x.group(*namco_fields)))
-            
-            # create instrument object
-            inst_object = InstN163(inst_index, inst_name, *macro_values, *namco_values)
+        # macros
+        macro_types = ['vol', 'arp', 'pit', 'hpi', 'dut']
+        macro_values = list(map(int, x.group(*macro_types)))
 
-            # assign macros to instrument
-            for i, macro_type in enumerate(macro_types):
-                macro_value = getattr(inst_object, macro_type)
-                key = "{}.{}.{}".format(inst_tag.replace("INST", "MACRO"), i, macro_value)
-                if (macro_object := self.project.macros.get(key, None)):
-                    inst_object.macros[macro_type] = macro_object
+        # special info
+        namco_fields = ['w_size', 'w_pos', 'w_count']
+        namco_values = list(map(int, x.group(*namco_fields)))
+        
+        # create instrument object
+        inst_object = InstN163(inst_index, inst_name, *macro_values, *namco_values)
 
-            # add it to project
-            self.project.instruments[inst_index] = inst_object
-            return True
+        # assign macros to instrument
+        for i, macro_type in enumerate(macro_types):
+            macro_value = getattr(inst_object, macro_type)
+            key = "{}.{}.{}".format(inst_tag.replace("INST", "MACRO"), i, macro_value)
+            macro_object = self.project.macros.get(key, None)
+            if macro_object:
+                inst_object.macros[macro_type] = macro_object
 
-        else:
-            return False
-
-
+        # add it to project
+        self.project.instruments[inst_index] = inst_object
+        return 0

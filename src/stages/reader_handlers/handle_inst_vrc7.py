@@ -26,23 +26,23 @@ class HandleInstVRC7(BaseHandler):
         )
 
     def handle(self, line: str) -> bool:
-        if x := self.pattern.match(line):
-            # basic info
-            tag = x.group('tag')
-            index = x.group('index')
-            name = x.group('name')
+        x = self.pattern.match(line)
+        if not x:
+            print("Regex does not match.")
+            return 1
 
-            # special info
-            register_fields = ['r0','r1','r2','r3','r4','r5','r6','r7']
-            register_values = list(map(lambda x: int(x, 16), x.group(*register)))
+        # basic info
+        tag = x.group('tag')
+        index = x.group('index')
+        name = x.group('name')
 
-            # create instrument object
-            inst_object = InstVRC7(index, name, patch, *register_values)
+        # special info
+        register_fields = ['r0','r1','r2','r3','r4','r5','r6','r7']
+        register_values = list(map(lambda x: int(x, 16), x.group(*register)))
 
-            # add it to project
-            self.project.instruments[index] = inst_object
-            return True
+        # create instrument object
+        inst_object = InstVRC7(index, name, patch, *register_values)
 
-        else:
-            return False
-
+        # add it to project
+        self.project.instruments[index] = inst_object
+        return 0

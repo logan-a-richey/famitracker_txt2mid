@@ -84,7 +84,7 @@ class Reader:
         handler = self.dispatch.get(first_word, None)
         if handler:
             res = handler.handle(line) 
-            if not res:
+            res != 0:
                 print("[CRITICAL EPIC FAILURE] Regex failed. Line: \'{}\'".format(line))
                 exit(1)
 

@@ -22,32 +22,34 @@ class HandleInst2A03(BaseHandler):
         )
 
     def handle(self, line: str) -> bool:
-        if x := self.pattern.match(line):
-            # basic info
-            inst_tag = x.group('tag') 
-            inst_index = int(x.group('index'))
-            inst_name = x.group('name')
-            
-            # macros
-            macro_types = ['vol', 'arp', 'pit', 'hpi', 'dut']
-            macro_values = list(map(int, x.group(*macro_types)))
+        x = self.pattern.match(line)
+        if not x:
+            print("Regex does not match")
+            return 1
 
-            # create instrument object
-            inst_object = Inst2A03(inst_index, inst_name, *macro_values)
-
-            # assign macros to instrument
-            for i, macro_type in enumerate(macro_types):
-                macro_value = getattr(inst_object, macro_type)
-                key = "{}.{}.{}".format(inst_tag.replace("INST", "MACRO"), i, macro_value)
-                if (macro_object := self.project.macros.get(key, None)):
-                    inst_object.macros[macro_type] = macro_object
-
-            # add it to project
-            self.project.instruments[inst_index] = inst_object
-            return True
+        # basic info
+        inst_tag = x.group('tag') 
+        inst_index = int(x.group('index'))
+        inst_name = x.group('name')
         
-        else:
-            return False
+        # macros
+        macro_types = ['vol', 'arp', 'pit', 'hpi', 'dut']
+        macro_values = list(map(int, x.group(*macro_types)))
+
+        # create instrument object
+        inst_object = Inst2A03(inst_index, inst_name, *macro_values)
+
+        # assign macros to instrument
+        for i, macro_type in enumerate(macro_types):
+            macro_value = getattr(inst_object, macro_type)
+            key = "{}.{}.{}".format(inst_tag.replace("INST", "MACRO"), i, macro_value)
+            macro_object = self.project.macros.get(key, None)
+            if macro_object:
+                inst_object.macros[macro_type] = macro_object
+
+        # add it to project
+        self.project.instruments[inst_index] = inst_object
+        return 0
 
 
 

@@ -22,32 +22,37 @@ class HandleMacro(BaseHandler):
         )
 
     def handle(self, line: str) -> bool:
-        if x := self.pattern.match(line):
-            # get macro tag (first word)
-            macro_tag = x.group('tag')
-            
-            # give MACRO a full name [MACRO][TYPE] - this will make Instrument parsing easier.
-            if macro_tag == "MACRO":
-                macro_tag = "MACRO2A03"
+        x = self.pattern.match(line)
+        if not x:
+            print("Regex does not match.")
+            reutrn 1
 
-            # get space separated integers
-            macro_fields = ['type', 'index', 'loop', 'release', 'setting']
-            macro_values = list(map(int, x.group(*macro_fields)))
-            
-            # get space separeted integer list after :
-            macro_sequence = list(map(int, re.findall(r'(\-?\d+)', x.group('sequence'))))
+        # get macro tag (first word)
+        macro_tag = x.group('tag')
+        
+        # give MACRO a full name [MACRO][TYPE] - this will make Instrument parsing easier.
+        if macro_tag == "MACRO":
+            macro_tag = "MACRO2A03"
 
-            # create macro object
-            macro_object = Macro(macro_tag, *macro_values, macro_sequence)
+        # get space separated integers
+        macro_fields = ['type', 'index', 'loop', 'release', 'setting']
+        macro_values = list(map(int, x.group(*macro_fields)))
+        
+        # get space separeted integer list after :
+        macro_sequence = list(map(
+            int, 
+            re.findall(r'(\-?\d+)', x.group('sequence'))
+        ))
 
-            # create macro key for lookup later
-            # format: 'tag.type.index' (e.g. 'MACRO2A03.1.1')
-            macro_key = "{}.{}.{}".format(macro_tag, macro_values[0], macro_values[1])
+        # create macro object
+        macro_object = Macro(macro_tag, *macro_values, macro_sequence)
 
-            # add it to project 
-            self.project.macros[macro_key] = macro_object
-            return True
+        # create macro key for lookup later
+        # format: 'tag.type.index' (e.g. 'MACRO2A03.1.1')
+        macro_key = "{}.{}.{}".format(macro_tag, macro_values[0], macro_values[1])
 
-        else:
-            return False
+        # add it to project 
+        self.project.macros[macro_key] = macro_object
+        return 0
+
 

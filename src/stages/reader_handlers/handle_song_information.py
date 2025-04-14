@@ -15,14 +15,15 @@ class HandleSongInformation(BaseHandler):
         )
     
     def handle(self, line: str) -> bool:
-        if x := self.pattern.match(line):
-            # get key and value
-            k = x.group('field')
-            v = x.group('value')
+        x = self.pattern.match(line)
+        if not x:
+            print("Regex does not match.")
+            return 1
 
-            # update Project.song_information dictionary
-            self.project.song_information[k] = v
-            return True
+        # get key and value
+        k = x.group('field')
+        v = x.group('value')
 
-        else:
-            return False
+        # update Project.song_information dictionary
+        self.project.song_information[k] = v
+        return 0

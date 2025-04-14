@@ -17,10 +17,23 @@ class HandleDpcmData(BaseHandler):
             ''', re.VERBOSE)
 
     def handle(self, line: str) -> bool:
-        if x := self.pattern.match(line):
-            data = list(map(lambda x: int(x, 16), re.findall(r'[0-9a-fA-F]{2}', x.group('data'))))
-            self.project.dpcm[self.project.target_dpcm_index].data.extend(data)
-            return True
+        x = self.pattern.match(line)
+        if not x:
+            print("Regex does not match")
+            return 1
+        
+        # parse the data by converting space-separated hex_list to int_list
+        data = list(map(
+            lambda x: int(x, 16), 
+            re.findall(r'[0-9a-fA-F]{2}', x.group('data'))
+        ))
+        
+        # add it to existing dpcm object
+        dpcm_object = self.project.dpcm.get(self.project.target_dpcm_index, None)
+        if not dpcm_object:
+            print("Dpcm KeyError.")
+            return 1
 
-        else:
-            return False
+        dpcm_object.data.extend(data)
+        return 0
+
