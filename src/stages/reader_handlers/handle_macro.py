@@ -49,7 +49,7 @@ class HandleMacro(BaseHandler):
 
         # create macro key for lookup later
         # format: 'tag.type.index' (e.g. 'MACRO2A03.1.1')
-        macro_key = "{}.{}.{}".format(macro_tag, macro_values[0], macro_values[1])
+        macro_key = "CHIP={}:TYPE={}:INDEX={}".format(macro_tag, macro_values[0], macro_values[1])
 
         # add it to project 
         self.project.macros[macro_key] = macro_object

@@ -36,7 +36,7 @@ class HandleTrackRow(BaseHandler):
         tokens: List[str] = [token.strip() for token in line.split(":")[1:]]
 
         for col_int, token in enumerate(tokens):
-            token_key = "PAT{}:ROW{}:COL{}".format(
+            token_key = "PAT={}:ROW={}:COL={}".format(
                 target_pattern,
                 col_int,
                 row_int

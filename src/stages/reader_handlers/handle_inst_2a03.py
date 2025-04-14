@@ -42,7 +42,7 @@ class HandleInst2A03(BaseHandler):
         # assign macros to instrument
         for i, macro_type in enumerate(macro_types):
             macro_value = getattr(inst_object, macro_type)
-            key = "{}.{}.{}".format(inst_tag.replace("INST", "MACRO"), i, macro_value)
+            key = "CHIP={}:TYPE={}:INDEX={}".format(inst_tag.replace("INST", "MACRO"), i, macro_value)
             macro_object = self.project.macros.get(key, None)
             if macro_object:
                 inst_object.macros[macro_type] = macro_object

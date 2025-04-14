@@ -1,6 +1,7 @@
 # stages/reader_handlers/handle_inst_vrc7.py
 
 import re
+from typing import List
 
 from stages.reader_handlers.base_handler import BaseHandler
 from containers.inst_vrc7 import InstVRC7
@@ -37,11 +38,12 @@ class HandleInstVRC7(BaseHandler):
         name = x.group('name')
 
         # special info
+        patch = int(x.group('patch'))
         register_fields = ['r0','r1','r2','r3','r4','r5','r6','r7']
-        register_values = list(map(lambda x: int(x, 16), x.group(*register)))
+        register_values: List[int] = list(map(lambda x: int(x, 16), x.group(*register_fields)))
 
         # create instrument object
-        inst_object = InstVRC7(index, name, patch, *register_values)
+        inst_object = InstVRC7(index, name, patch, register_values)
 
         # add it to project
         self.project.instruments[index] = inst_object
