@@ -25,7 +25,7 @@ class HandleMacro(BaseHandler):
         x = self.pattern.match(line)
         if not x:
             print("Regex does not match.")
-            reutrn 1
+            return 1
 
         # get macro tag (first word)
         macro_tag = x.group('tag')

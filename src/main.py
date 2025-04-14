@@ -7,7 +7,10 @@ sys.dont_write_bytecode = True
 from containers.project import Project
 from stages.reader import Reader
 
-# TODO argparse
+# TODO for debug
+from containers.inst_fds import InstFDS
+
+# TODO
 def get_input_file() -> str:
     try:
         return sys.argv[1]
@@ -34,11 +37,16 @@ def main():
     #            for note_key, note_obj in inst_obj.key_dpcm.items():
     #                print("{} -> {}".format(note_key, note_obj))
 
-    for ik,iv in project.instruments.items():
-        if hasattr(iv, "n163_waves"):
-            print("Instrument {} \'{}\'".format(ik, iv.name))
-            for wi, wv in iv.n163_waves.items():
-               print("{} -> {}".format(wi, wv))
+    # N163 Data:
+    #for ik,iv in project.instruments.items():
+    #    if hasattr(iv, "n163_waves"):
+    #        print("Instrument {} \'{}\'".format(ik, iv.name))
+    #        for wi, wv in iv.n163_waves.items():
+    #           print("{} -> {}".format(wi, wv))
+    
+    for ik, iv in project.instruments.items():
+        if isinstance(iv, InstFDS):
+            print(iv.macros)
 
 
 if __name__ == "__main__":

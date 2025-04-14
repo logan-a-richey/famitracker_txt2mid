@@ -1,7 +1,9 @@
 # TODO
-## Reader
+# Done
 - debug macros and instruments with good testing
 - handle the rest of the input file tags
+
+## Reader
 - handle track parsing
 
 ## Parser

@@ -1,5 +1,7 @@
 # stages/reader.py
 
+import sys
+
 from stages.reader_handlers.handle_song_information import HandleSongInformation
 from stages.reader_handlers.handle_global_settings import HandleGlobalSettings
 
@@ -84,9 +86,12 @@ class Reader:
         handler = self.dispatch.get(first_word, None)
         if handler:
             res = handler.handle(line) 
-            res != 0:
-                print("[CRITICAL EPIC FAILURE] Regex failed. Line: \'{}\'".format(line))
-                exit(1)
+            if res != 0:
+                print("[ERROR] Error inside of {}. Scanning Line: \'{}\'".format(
+                    handler.__name__,
+                    line)
+                )
+                sys.exit(1)
 
     def read(self, input_file: str) -> None:
         with open(input_file, 'r') as file:
