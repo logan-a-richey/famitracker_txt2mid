@@ -1,8 +1,9 @@
 # stages/reader_handlers/BaseHandler.py
 
 from abc import ABC, abstractmethod
+from utils.singleton import SingletonMeta
 
-class BaseHandler(ABC):
+class BaseHandler(ABC, metaclass=SingletonMeta):
     '''Abstract base class'''
 
     def __init__(self, project):

@@ -2,14 +2,14 @@
 
 from typing import List, Dict
 
+from utils.singleton import SingletonMeta
 from containers.macro import Macro
 from containers.base_inst import BaseInst
 from containers.dpcm import Dpcm
 from containers.groove import Groove
 from containers.track import Track
 
-# TODO singleton
-class Project:
+class Project(metaclass=SingletonMeta):
     def __init__(self):
         self.song_information: Dict[str, str] = {}
         self.global_settings: Dict[str, int] = {}
