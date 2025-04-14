@@ -13,6 +13,6 @@ class HandleTrackColumns(BaseHandler):
             ''', re.VERBOSE
         )
 
-    def handle(self, line: str) -> bool:
+    def handle(self, line: str) -> int:
         return 1
 

@@ -10,7 +10,7 @@ class BaseHandler(ABC):
         self.project = project
         
     @abstractmethod
-    def handle(self, line: str) -> bool:
+    def handle(self, line: str) -> int:
         ''' 
         Abstract method to be overridden by child class
         Contains logic to add data to `self.project`

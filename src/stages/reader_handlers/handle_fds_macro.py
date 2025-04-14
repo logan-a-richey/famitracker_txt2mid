@@ -27,7 +27,7 @@ class HandleFdsMacro(BaseHandler):
             (?P<data>.*)$       # data
         ''', re.VERBOSE)
 
-    def handle(self, line: str) -> bool:
+    def handle(self, line: str) -> int:
         x = self.pattern.match(line)
         if not x:
             print("Regex does not match")
