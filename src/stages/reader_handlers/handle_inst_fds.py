@@ -21,23 +21,25 @@ class HandleInstFDS(BaseHandler):
         )
 
     def handle(self, line: str) -> bool:
-        if x := self.pattern.match(line):
-            # base info
-            inst_tag = x.group('tag')
-            inst_index = x.group('index')
-            inst_name = x.group('name')
-
-            # special info
-            fds_fields = ['mod_enable', 'mod_speed', 'mod_depth', 'mod_delay']
-            fds_values = list(map(int, x.group(*fds_fields)))
-
-            # create inst object
-            inst_object = InstFDS(inst_index, inst_name, *fds_values)
-           
-            # add it to project
-            self.project.instruments[inst_index] = inst_object
-            return True
-
-        else:
+        x = self.pattern.match(line)
+        if not x:
+            print("Regex does not match")
             return False
+
+        # base info
+        inst_tag = x.group('tag')
+        inst_index = int(x.group('index'))
+        inst_name = x.group('name')
+
+        # special info
+        fds_fields = ['mod_enable', 'mod_speed', 'mod_depth', 'mod_delay']
+        fds_values = list(map(int, x.group(*fds_fields)))
+
+        # create inst object
+        inst_object = InstFDS(inst_index, inst_name, *fds_values)
+       
+        # add it to project
+        self.project.instruments[inst_index] = inst_object
+        return True
+
 

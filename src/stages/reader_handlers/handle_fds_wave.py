@@ -19,23 +19,26 @@ class HandleFdsWave(BaseHandler):
         )
 
     def handle(self, line: str) -> bool:
-        if x := self.pattern.match(line):
-            inst_index = int(x.group('inst_index'))
-            data = list(map(int, re.findall(r'\d+', x.group('data'))))
-
-            inst_object = self.project.instruments.get(inst_index, None)
-            if inst_object:
-                if hasattr(inst_object, "fds_wave"):
-                    inst_object.fds_wave = data
-                    return True
-                else:
-                    print("[WARN] Could not add FDS_WAVE. Attribute error: \'fds_wave\'")
-                    return False
-            else:
-                print("[WARN] Could not add FDS_WAVE. Instrument index KeyError.")
-        
-        else:
+        x = self.pattern.match(line)
+        if not x:
+            print("Regex does not match.")
             return False
-                
+
+        inst_index = int(x.group('inst_index'))
+        data = list(map(int, re.findall(r'\d+', x.group('data'))))
+
+        inst_object = self.project.instruments.get(inst_index, None)
+        if not inst_object:
+            print("Instrument object key error.")
+            return False
+
+        if not hasattr(inst_object, "fds_wave"):
+            print("Instrument Attr error.")
+            return False
+
+        inst_object.fds_wave = data
+        print("FDS WAVE PASSED!")
+        exit(0)
+        return True         
 
 

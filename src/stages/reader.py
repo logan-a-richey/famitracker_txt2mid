@@ -85,7 +85,8 @@ class Reader:
         if handler:
             res = handler.handle(line) 
             if not res:
-                print("[WARN] Regex failed. Line: \'{}\'".format(line))
+                print("[CRITICAL EPIC FAILURE] Regex failed. Line: \'{}\'".format(line))
+                exit(1)
 
     def read(self, input_file: str) -> None:
         with open(input_file, 'r') as file:
