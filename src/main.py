@@ -44,10 +44,12 @@ def main():
     #        for wi, wv in iv.n163_waves.items():
     #           print("{} -> {}".format(wi, wv))
     
-    for ik, iv in project.instruments.items():
-        if isinstance(iv, InstFDS):
-            print(iv.macros)
-
+    # FDS Data:
+    #for ik, iv in project.instruments.items():
+    #    if isinstance(iv, InstFDS):
+    #        print(iv.macros)
+    
+    print(project)
 
 if __name__ == "__main__":
     main()

@@ -1,33 +1,69 @@
 # containers/project.py
 
+from typing import List, Dict
+
+from containers.macro import Macro
+from containers.base_inst import BaseInst
+from containers.dpcm import Dpcm
+from containers.groove import Groove
+from containers.track import Track
+
 # TODO singleton
 class Project:
     def __init__(self):
-        self.song_information = {}
-        self.global_settings = {}
-        self.macros = {}
-        self.instruments = {}
+        self.song_information: Dict[str, str] = {}
+        self.global_settings: Dict[str, int] = {}
+        self.macros: Dict[str, Macro] = {}
+        self.instruments: Dict[int, BaseInst] = {}
         
-        self.dpcm = {}
-        self.target_dpcm_index = 0 
+        self.dpcm: Dict[int, Dpcm] = {}
+        self.target_dpcm_index: int = 0 
 
-        self.grooves = {}
-        self.usegroove = []
+        self.grooves: Dict[int, Groove] = {}
+        self.usegroove: List[int] = []
 
-        self.tracks = []
+        self.tracks: Dict[int, Track] = {}
 
     def __str__(self):
         text = ""
-        text += "--- Song Information ---\n{}\n\n".format(self.song_information)
-        text += "--- Global Settings ---\n{}\n\n".format(self.global_settings)
+        
+        text += "--- Song Information ---\n"
+        for k, v in self.song_information.items():
+            text += "\'{}\': \'{}\'\n".format(k, v)
+        text += "\n"
+
+        text += "--- Global Settings ---\n"
+        for k, v in self.global_settings.items():
+            text += "\'{}\': {}\n".format(k, v)
+        text += "\n"
+        
         text += "--- Macros ---\n"
-        for macro_key, macro_object in self.macros.items():
-            text += "\'{}\' => {}\n".format(macro_key, macro_object)
+        for k, v in self.macros.items():
+            text += "\'{}\': {}\n".format(k, v.macro_sequence)
         text += "\n"
         
         text += "--- Instruments ---\n"
-        for inst_index, inst_object in self.instruments.items():
-            text += "{} => {}\n".format(inst_index, inst_object)
+        for k, v in self.instruments.items():
+            text += "{}: <class {}> \'{}\'\n".format(k, type(v).__name__, v.name)
+        text += "\n"
+        
+        text += "--- DPCM ---\n"
+        for k, v in self.dpcm.items():
+            text += "{}: <class {}>\n".format(k, type(v).__name__)
+        text += "\n"
+
+        text += "--- Grooves ---\n"
+        for k, v in self.grooves.items():
+            text += "{}: <class {}>\n".format(k, type(v).__name__)
+        text += "\n"
+
+        text += "--- Use Groove (List of Track indexes) ---\n"
+        text += "{}\n".format(self.usegroove)
+        text += "\n"
+
+        text += "--- Tracks ---\n"
+        for k, v in self.tracks.items():
+            text += "{}: <class {}> {}".format(k, type(v).__name__, v.name)
         text += "\n"
         
         return text

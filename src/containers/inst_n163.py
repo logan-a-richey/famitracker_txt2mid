@@ -1,6 +1,9 @@
 # conainters/inst_n163.py
 
+from typing import List, Dict
+
 from containers.base_inst import BaseInst
+from containers.macro import Macro
 
 class InstN163(BaseInst):
     def __init__(self,
@@ -20,5 +23,5 @@ class InstN163(BaseInst):
         self.w_pos = w_pos
         self.w_count = w_count
 
-        self.macros = {}
-        self.n163_waves = {} 
+        self.macros: Dict[str, Macro] = {}
+        self.n163_waves: Dict[int, List[int]] = {} 
