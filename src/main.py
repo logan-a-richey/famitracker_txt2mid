@@ -6,11 +6,9 @@ sys.dont_write_bytecode = True
 
 from containers.project import Project
 from stages.reader import Reader
+from stages.parser import Parser
 
-# TODO for debug
-from containers.inst_fds import InstFDS
-
-# TODO
+# TODO - use argparse instead?
 def get_input_file() -> str:
     try:
         return sys.argv[1]
@@ -19,14 +17,18 @@ def get_input_file() -> str:
         print("[USAGE] ./main file.txt")
     exit(1)
 
-def main():
+def main() -> int:
     input_file = get_input_file()
     project = Project()
     
     reader = Reader(project)
-    reader.read(input_file)
+    parser = Parser(project)
     
-    #parser = Parser(project)
+    reader.read(input_file)
+    parser.parse()
+    
+    exit(0)
+    
     #exporter = Exporter(project)
     
     # KeyDpcm
@@ -50,6 +52,7 @@ def main():
     #        print(iv.macros)
     
     print(project)
+    return 0
 
 if __name__ == "__main__":
     main()

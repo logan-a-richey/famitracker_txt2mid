@@ -2,7 +2,7 @@
 
 import sys
 
-from utils.singleton import Singleton
+from utils.singleton import SingletonMeta
 
 from stages.reader_handlers.handle_song_information import HandleSongInformation
 from stages.reader_handlers.handle_global_settings import HandleGlobalSettings
@@ -33,7 +33,7 @@ from stages.reader_handlers.handle_track_order import HandleTrackOrder
 from stages.reader_handlers.handle_track_pattern import HandleTrackPattern
 from stages.reader_handlers.handle_track_row import HandleTrackRow
 
-class Reader(Singleton):
+class Reader(metaclass=SingletonMeta):
     def __init__(self, project):
         self.project = project
 
