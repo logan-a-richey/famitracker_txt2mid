@@ -34,6 +34,8 @@ class Track:
         # used for loading pattern rows / tokens
         self._target_pattern: str = "00"
 
+        self.data_lines: List[str] = []
+
     def __str__(self):
         return "<class {}>, index: {}, name: {}".format(
             self.__class__.__name__, 

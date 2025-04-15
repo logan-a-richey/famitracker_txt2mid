@@ -1,31 +1,32 @@
 # parser.py
 
 import re
-from typing import List, Dict, Set, Tuple, Union
+from typing import List, Dict, Set, Tuple, Union, Any
 #from utils.singleton import SingletonMeta
 
 from containers.track import Track
 
+# TODO mutliprocessing to handle multiple tracks at once?
 class Parser:
     ''' Contains methods for parsing tracks in a famitracker Project '''
 
     # static dictionary for compiled regex lookups
-    regex_patterns = {
+    regex_patterns: Dict[str, Any] = {
         # global effects
-        "bxx" : re.compile(r'[B][0-9A-F]{2}'), # order skip to xx
-        "cxx" : re.compile(r'[B][0-9A-F]{2}'), # order skip stop song
-        "dxx" : re.compile(r'[B][0-9A-F]{2}'), # order skip next order at row xx
+        "bxx" : re.compile(r'B[0-9A-F]{2}'), # order skip to xx
+        "cxx" : re.compile(r'C[0-9A-F]{2}'), # order skip stop song
+        "dxx" : re.compile(r'D[0-9A-F]{2}'), # order skip next order at row xx
         "bcd_xx": re.compile(r'[BCD][0-9A-F]{2}'), # detect any order skip effect
-        "fxx" : re.compile(r'[F][0-9A-F]{2}'), # speed xx, if xx < SPLIT speed change, else tempo change
-        "oxx" : re.compile(r'[O][0-9A-F]{2}'), # groove xx
+        "fxx" : re.compile(r'F[0-9A-F]{2}'), # speed xx, if xx < SPLIT speed change, else tempo change
+        "oxx" : re.compile(r'O[0-9A-F]{2}'), # groove xx
         # column effects
-        "qxx" : re.compile(r'[Q][0-9A-F]{2}'), # pitch bend up
-        "rxx" : re.compile(r'[R][0-9A-F]{2}'), # pitch bend down
-        "gxx" : re.compile(r'[G][0-9A-F]{2}'), # note delay start, xx fami ticks
-        "sxx" : re.compile(r'[S][0-9A-F]{2}'), # note delay stop, xx fami ticks
-        "0xx" : re.compile(r'[0][0-9A-F]{2}')  # arpeggio effect
+        "qxx" : re.compile(r'Q[0-9A-F]{2}'), # pitch bend up
+        "rxx" : re.compile(r'R[0-9A-F]{2}'), # pitch bend down
+        "gxx" : re.compile(r'G[0-9A-F]{2}'), # note delay start, xx fami ticks
+        "sxx" : re.compile(r'S[0-9A-F]{2}'), # note delay stop, xx fami ticks
+        "0xx" : re.compile(r'0[0-9A-F]{2}')  # arpeggio effect
     }
-    
+     
     def __init__(self, project):
         ''' Class constructor. Set a reference back to parent Project class '''
         self.project = project
@@ -47,9 +48,10 @@ class Parser:
         ''' Handle order skipping effects Bxx Cxx Dxx '''
         list_orders = list(track.orders.keys())
 
-        any_match = Parser.regex_patterns['bcd_xx'].findall(data_line)
-        if any_match:
-            print("Found order skip matches! {}".format(any_match))
+#        any_match = Parser.regex_patterns['bcd_xx'].findall(data_line)
+#        if any_match:
+#            print("Found order skip matches! {}".format(any_match))
+#            pass
 
         cxx_matches = Parser.regex_patterns['cxx'].findall(data_line)
         if cxx_matches:
@@ -112,11 +114,11 @@ class Parser:
                 #    pass
                 pass
             
-            data_row = " | ".join(list_tokens)
-            print(data_row)
+            data_line = " | ".join(list_tokens)
+            track.data_lines.append(data_line)
             
             # handle order skipping effects
-            res: Union[Set[str, int], None] = self.handle_control_flow(track, target_order, data_row)
+            res: Union[Set[str, int], None] = self.handle_control_flow(track, target_order, data_line)
             if res:
                 return res
             continue
@@ -128,6 +130,7 @@ class Parser:
     def parse_track(self, track: Track) -> int:
         ''' Recursively parse the orders until we have read the entire Track '''
         # target_order = list(track.orders.keys())[0]
+        track.data_lines.clear()
         target_order =  "00"
         target_row = 0
 
@@ -135,6 +138,10 @@ class Parser:
         while (target_order not in seen_it):
             seen_it.add(target_order)
             target_order, target_row = self.parse_order(track, target_order, target_row)
+        
+        #for line in track.data_lines:
+        #    print(line)
+
         return 0
 
     def parse(self) -> int:
