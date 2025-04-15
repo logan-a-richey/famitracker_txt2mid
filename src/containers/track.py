@@ -1,6 +1,7 @@
 # containers/track.py
 
 from typing import List, Dict
+from containers.echo_buffer import EchoBuffer
 
 class Track:
     '''Store track data'''
@@ -34,7 +35,9 @@ class Track:
         # used for loading pattern rows / tokens
         self._target_pattern: str = "00"
 
+        self.echo_buffers: List[EchoBuffer] = []
         self.data_lines: List[str] = []
+        self.midi_events: List[BaseEvent] = []
 
     def __str__(self):
         return "<class {}>, index: {}, name: {}".format(

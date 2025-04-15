@@ -5,7 +5,10 @@ from typing import List, Dict, Set, Tuple, Union, Any
 #from utils.singleton import SingletonMeta
 
 from containers.track import Track
+from containers.echo_buffer import EchoBuffer
 
+# TODO echo buffer
+# TODO write midi data list
 # TODO mutliprocessing to handle multiple tracks at once?
 class Parser:
     ''' Contains methods for parsing tracks in a famitracker Project '''
@@ -101,8 +104,6 @@ class Parser:
             print("[E] Could not get track.orders[{}]".format(target_order))
             exit(1)
         
-        print("Scanning: {} -> {}".format(target_order, track.orders.get(target_order)))
-
         list_tokens: List[str] = []
         for ri in range(target_row, track.num_rows):
             list_tokens.clear()
@@ -129,16 +130,25 @@ class Parser:
 
     def parse_track(self, track: Track) -> int:
         ''' Recursively parse the orders until we have read the entire Track '''
+        
+        print("\nTrack #{}: {}".format(track.index, track.name))
+
         # target_order = list(track.orders.keys())[0]
         track.data_lines.clear()
+        track.echo_buffers.clear()
+        track.echo_buffers = [EchoBuffer() for _ in range(track.num_cols)]
         target_order =  "00"
         target_row = 0
 
         seen_it: Set[str] = set()
         while (target_order not in seen_it):
             seen_it.add(target_order)
+
+            print("Scanning: {} -> {}".format(target_order, track.orders.get(target_order)))
             target_order, target_row = self.parse_order(track, target_order, target_row)
-        
+       
+        print("# lines = {}".format(len(track.data_lines)))
+
         #for line in track.data_lines:
         #    print(line)
 
