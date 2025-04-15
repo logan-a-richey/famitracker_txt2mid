@@ -7,6 +7,9 @@ from typing import List, Dict, Set, Tuple, Union
 from containers.track import Track
 
 class Parser:
+    ''' Contains methods for parsing tracks in a famitracker Project '''
+
+    # static dictionary for compiled regex lookups
     regex_patterns = {
         # global effects
         "bxx" : re.compile(r'[B][0-9A-F]{2}'), # order skip to xx
@@ -24,21 +27,23 @@ class Parser:
     }
     
     def __init__(self, project):
+        ''' Class constructor. Set a reference back to parent Project class '''
         self.project = project
 
     def get_next_order(self, track: Track, current_order: str) -> str:
+        ''' Returns the next item of a list (with wrap around) '''
         list_orders = list(track.orders.keys())
+        if current_order not in list_orders:
+            print("[E] Index error. Tried to find {} in list {}".format(current_order, list_orders))
+            exit(1)
+
         #print("list_orders", list_orders)
         current_index = list_orders.index(current_order)
         next_index = (current_index + 1) % len(list_orders)
         next_order = list_orders[next_index]
         return next_order
 
-    def handle_control_flow(self,
-        track: Track, 
-        target_order: str, 
-        data_line: str
-    ) -> Tuple[str, int]:
+    def handle_control_flow(self, track: Track, target_order: str, data_line: str) -> Tuple[str, int]:
         ''' Handle order skipping effects Bxx Cxx Dxx '''
         list_orders = list(track.orders.keys())
 
@@ -64,16 +69,17 @@ class Parser:
         dxx_matches = Parser.regex_patterns['dxx'].findall(data_line)
         if dxx_matches:
             last_match = dxx_matches[-1]
-            
-            dxx_value = int(last_match[1:], 16)
-            dxx_value = min(dxx_value, track.num_rows - 1)
-
             next_order = self.get_next_order(track, target_order)
+            dxx_value = min(int(last_match[1:], 16), track.num_rows - 1)
             return (next_order, dxx_value)
 
-        return () # return empty set (should return false) # TODO
+        return None
+    
+    # TODO
+    #def handle_speed_and_tempo(self):
 
     def generate_token(self, track: Track, list_patterns: List[str], ci: int, ri: int) -> str:
+        ''' Generates token based on pattern/order lookup. Used in `self.parse_order()` '''
         token_key = "PAT={}:COL={}:ROW={}".format(list_patterns[ci], ci, ri)
         token: Union[str, None] = track.tokens.get(token_key, None)
         if not token:
@@ -81,6 +87,7 @@ class Parser:
         return token
 
     def parse_order(self, track: Track, target_order: str, target_row: int) -> Tuple[str, int]:
+        ''' Parses a single order from a track '''
         # check to see if key exists
         if not target_order in list(track.orders.keys()):
             print("[E] Target order {} is not in track.orders.keys()".format(target_order))
@@ -89,34 +96,29 @@ class Parser:
         # check to see if value exists
         list_patterns = track.orders.get(target_order, None)
         if not list_patterns:
-            print("Could not get track.orders[{}]".format(target_order))
+            print("[E] Could not get track.orders[{}]".format(target_order))
             exit(1)
         
         print("Scanning: {} -> {}".format(target_order, track.orders.get(target_order)))
 
-        list_tokens = []
+        list_tokens: List[str] = []
         for ri in range(target_row, track.num_rows):
             list_tokens.clear()
             for ci in range(track.num_cols):
+                token = self.generate_token(track, list_patterns, ci, ri)
+                list_tokens.append(token)
                 # TODO handle macros:w
                 #for ti in range(track.speed):
                 #    pass
-                token = self.generate_token(track, list_patterns, ci, ri)
-                
-                #print("Found! {}".format(token_key))
-                list_tokens.append(token)
-
                 pass
+            
             data_row = " | ".join(list_tokens)
             print(data_row)
             
-            # TODO handle Order Skipping effects 
-            res = self.handle_control_flow(track, target_order, data_row)
+            # handle order skipping effects
+            res: Union[Set[str, int], None] = self.handle_control_flow(track, target_order, data_row)
             if res:
-                next_order = res[0]
-                next_row = res[1]
-                return (next_order, next_row)
-            
+                return res
             continue
         
         next_order = self.get_next_order(track, target_order)
@@ -124,6 +126,7 @@ class Parser:
         return (next_order, next_row)
 
     def parse_track(self, track: Track) -> int:
+        ''' Recursively parse the orders until we have read the entire Track '''
         # target_order = list(track.orders.keys())[0]
         target_order =  "00"
         target_row = 0
@@ -135,7 +138,7 @@ class Parser:
         return 0
 
     def parse(self) -> int:
-        ''' Prepare data for MIDI reading '''
+        ''' Loop over all Tracks in Project and prepare data for MIDI reading '''
         for track in self.project.tracks.values():
             self.parse_track(track)
         return 0
