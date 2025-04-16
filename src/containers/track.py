@@ -8,16 +8,10 @@ class Track:
     # static variable to assign track indexes upon init
     count = 0 
 
-    def __init__(self,
-        num_rows: int = 64,
-        speed: int = 6,
-        tempo: int = 150,
-        name: str = "Default"
-    ):
+    def __init__(self, num_rows: int = 64, speed: int = 6, tempo: int = 150, name: str = "Default"):
         Track.count += 1
         self.index = Track.count
 
-        # "public" attributes
         self.name: str = name
         self.speed: int = speed
         self.tempo: int = tempo
@@ -28,16 +22,8 @@ class Track:
 
         self.orders: Dict[str, List[str]] = {}
         self.patterns: List[str] = []
-
         self.tokens: Dict[str, str] = {}
-
-        # "private" attributes
-        # used for loading pattern rows / tokens
         self._target_pattern: str = "00"
-
-        self.echo_buffers: List[EchoBuffer] = []
-        self.data_lines: List[str] = []
-        self.midi_events: List[BaseEvent] = []
 
     def __str__(self):
         return "<class {}>, index: {}, name: {}".format(
