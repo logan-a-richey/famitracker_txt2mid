@@ -22,8 +22,11 @@ class Parser:
         'note_on': re.compile(r'^[A-G][\-#b][0-9]'),
         'note_off': re.compile(r'^[\-]{3}'),
         'note_release': re.compile(r'^[\=]{3}'),
-        'note_noise': re.compile(r'^[0-9A-F]\-#')
+        'note_noise': re.compile(r'^[0-9A-F]\-#'),
+        'inst': re.compile(r'^.{3}\s+(?P<inst>[0-9A-Fa-f]{2})'),
+        'vol': re.compile(r'^.{3}\s+.{2}\s+(?P<vol>[0-9A-Fa-f])')
     }
+    note_mapping = {"C": 0, "D": 2, "E": 4, "F": 5, "G": 7, "A": 9, "B": 11}
 
     def __init__(self, project): 
         self.project = project
@@ -36,7 +39,7 @@ class Parser:
                 return note_event_type
         return "other"
 
-    def push_echo_note(self, context: TrackContext, col: int, token: str):
+    def check_to_add_echo_note(self, context: TrackContext, token: str, col: int):
         ''' 
         Checks to see if token is pushable, then push the echo token in the correct EchoBuffer. 
         We push only the first 3 characters. Only the note part is echoed. The rest of the token is preserved.
@@ -75,6 +78,51 @@ class Parser:
         this_index = lst.index(item)
         next_index = (this_index + 1) % len(lst)
         return lst[next_index]
+    
+    def get_midi_int(self, token: str) -> int:
+        midi_note = Parser.note_mapping.get(token[0], 0)
+        
+        if token[1] == '#':
+            midi_note += 1
+        if token[1] == 'b':
+            midi_note -= 1
+
+        octave = int(token[2])
+        midi_note = midi_note + (12*octave)
+
+        return midi_note
+
+    def get_noise_midi_int(self, token: str) -> int:
+        return 60 + int(token[0], 16)
+
+    def update_column_context(self, context: TrackContext, token: str, col: int):
+        #note_on_match = re.match(r'[A-G][', token)
+        note_on_match = Parser.regex_patterns['note_on'].match(token)
+        if note_on_match:
+            pitch = self.get_midi_int(token[0:3])
+            context.col_contexts[col].pitch = pitch
+        
+        noise_on_match = Parser.regex_patterns['note_noise'].match(token)
+        if noise_on_match:
+            pitch = self.get_noise_midi_int(token[0:3])
+            context.col_contexts[col].pitch = pitch
+
+        inst_match = Parser.regex_patterns['inst'].match(token)
+        if inst_match:
+            inst_int = int(inst_match.group('inst'), 16)
+            if inst_int in self.project.instruments.keys():
+                context.col_contexts[col].inst = inst_int
+            else:
+                first_inst = list(self.project.instruments.keys())[0]
+                context.col_contexts[col].inst = first_inst 
+                
+        vol_match = Parser.regex_patterns['vol'].match(token)
+        if vol_match:
+            vol_int = int(vol_match.group('vol'), 16)
+            context.col_contexts[col].vol = vol_int
+
+        # TODO update effects here
+        pass
 
     def handle_control_flow(self, context: TrackContext, line: str) -> Tuple[str, int]:
         ''' 
@@ -107,7 +155,7 @@ class Parser:
         return ()
     
     # TODO check to see if we needto create a new midi note event!
-    #def poll_midi_event():
+    #def poll_midi_event(self, context: TrackConext):
     #    pass
 
     def parse_order(self, context: TrackContext) -> int:
@@ -125,8 +173,15 @@ class Parser:
             for col in range(context.track.num_cols):
                 token = self.generate_token(context, row, col)
                 tokens.append(token)
-                self.push_echo_note(context, col, token)
                 
+                self.check_to_add_echo_note(context, token, col)
+                self.update_column_context(context, token, col)
+                
+                # TODO 
+                # fami ticks per row
+                for tick in range(context.speed):
+                    pass
+
                 # TODO
                 #self.poll_midi_event(context, token)
             

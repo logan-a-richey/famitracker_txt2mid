@@ -10,3 +10,5 @@ class ColumnContext:
         vol: Union[int, None] = 15
         effects: Dict[str, Any] = {}
 
+        ticks_since_note_on: int = 0
+

@@ -16,5 +16,6 @@ class TrackContext:
         self.patterns = patterns
         self.echo_buffers = [EchoBuffer() for _ in range(self.track.num_cols)]
         self.col_contexts = [ColumnContext() for _ in range(self.track.num_cols)]
+        self.speed: int = self.track.speed
 
 
