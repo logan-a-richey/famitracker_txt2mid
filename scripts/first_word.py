@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 
 import sys
-f = sys.argv[1]
 
 def m():
-    with open(f, 'r') as file:
+    count = 0
+    with open('../docs/famitracker_export_data.txt', 'r') as file:
         for l in file:
             l.strip()
             if not l:
@@ -12,7 +12,11 @@ def m():
             if l == "#":
                 continue
             if l[0].isupper():
-                print(l.split()[0])
+                print("/* {} */".format(l.split()[0]))
+                print("0x{}".format("{:02x}".format(count).upper()))
+                count += 1
+                print()
+
 
 if __name__ == "__main__":
     m()
