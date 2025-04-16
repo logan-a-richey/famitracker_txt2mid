@@ -1,20 +1,14 @@
 # parser.py
 
 import re
-from typing import Dict, List, Set, Tuple
+from typing import Dict, List, Set, Tuple, Union, Any
 
 from containers.track import Track
-from containers.echo_buffer import EchoBuffer
-
-class TrackContext:
-    ''' Contains data for intermediate track variables '''
-    def __init__(self, track: Track, target_order: str, target_row: int, orders: List[str], patterns: List[str]):
-        self.track = track
-        self.target_order = target_order
-        self.target_row = target_row
-        self.orders = orders
-        self.patterns = patterns
-        self.echo_buffers = [EchoBuffer() for _ in range(self.track.num_cols)]
+# from containers.echo_buffer import EchoBuffer
+from containers.track_context import TrackContext
+from containers.column_context import ColumnContext
+from containers.midi_data import MidiData
+from containers.note_event_structs import NoteEvent, TempoEvent, TimeSigEvent
 
 class Parser:
     ''' Contains methods for parsing tracks in a famitracker project '''
@@ -111,6 +105,10 @@ class Parser:
             return (next_order, dxx_value)
             
         return ()
+    
+    # TODO check to see if we needto create a new midi note event!
+    #def poll_midi_event():
+    #    pass
 
     def parse_order(self, context: TrackContext) -> int:
         ''' Parse context.target_order '''
@@ -128,6 +126,9 @@ class Parser:
                 token = self.generate_token(context, row, col)
                 tokens.append(token)
                 self.push_echo_note(context, col, token)
+                
+                # TODO
+                #self.poll_midi_event(context, token)
             
             # resequenced line:
             line = " | ".join(tokens)
@@ -163,9 +164,10 @@ class Parser:
         ''' Parse all tracks in project '''
 
         for track in self.project.tracks.values():
-            #print("Parsing Track {} \'{}\'".format(track.index, track.name))
+            print("Parsing Track {} \'{}\'".format(track.index, track.name))
             self.parse_track(track)
-        #print("All tracks parsed!")
+        
+        print("All tracks parsed!")
         return 0
 
 
