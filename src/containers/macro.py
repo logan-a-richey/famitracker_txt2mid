@@ -6,7 +6,7 @@ from utils.printable import Printable
 class Macro(Printable):
     def __init__(
         self, 
-        macro_tag: int, 
+        macro_tag: str, 
         macro_type: int, 
         macro_index: int, 
         macro_loop: int, 
