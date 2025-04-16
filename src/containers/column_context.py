@@ -10,5 +10,17 @@ class ColumnContext:
         vol: Union[int, None] = 15
         effects: Dict[str, Any] = {}
 
-        ticks_since_note_on: int = 0
+        pitch_ticks: int = 0
+        pitch_release_ticks: int = -1
+
+    def set_note_on(self, pitch: int):
+        self.pitch = pitch
+        self.pitch_ticks = 0
+        self.pitch_release_ticks = -1
+
+    def set_note_off(self):
+        self.pitch = None
+        self.pitch_ticks = 0
+        self.pitch_release_ticks = -1
+
 
