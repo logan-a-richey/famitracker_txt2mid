@@ -5,13 +5,13 @@ from typing import Dict, Union, Any
 class ColumnContext:
     ''' Contains data for '''
     def __init__(self):
-        pitch: Union[int, None] = None
-        inst: Union[int, None] = 0
-        vol: Union[int, None] = 15
-        effects: Dict[str, Any] = {}
+        self.pitch: Union[int, None] = None
+        self.inst: Union[int, None] = 0
+        self.vol: Union[int, None] = 15
+        self.effects: Dict[str, Any] = {}
 
-        pitch_ticks: int = 0
-        pitch_release_ticks: int = -1
+        self.pitch_ticks: int = 0
+        self.pitch_release_ticks: int = -1
 
     def set_note_on(self, pitch: int):
         self.pitch = pitch

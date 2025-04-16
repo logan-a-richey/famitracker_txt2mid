@@ -18,6 +18,14 @@ class Parser:
         'Bxx': re.compile(r'B[0-9A-F]{2}'),
         'Cxx': re.compile(r'C[0-9A-F]{2}'),
         'Dxx': re.compile(r'D[0-9A-F]{2}'),
+        'speed_effect': re.compile(r'[FO][0-9]{2}'),
+        
+        'Gxx': re.compile(r'G[0-9A-F]{2}'),
+        'Sxx': re.compile(r'S[0-9A-F]{2}'),
+        'Rxx': re.compile(r'R[0-9A-F]{2}'),
+        'Qxx': re.compile(r'Q[0-9A-F]{2}'),
+        '0xy': re.compile(r'0[0-9A-F]{2}'),
+
         'echo_note': re.compile(r'^(?P<echo>\^\-\d)'),
         'note_on': re.compile(r'^[A-G][\-#b][0-9]'),
         'note_off': re.compile(r'^[\-]{3}'),
@@ -178,12 +186,21 @@ class Parser:
                 
                 self.check_to_add_echo_note(context, token, col)
                 self.update_column_context(context, token, col)
-                 
-                # TODO 
+                
                 # fami ticks per row
                 for tick in range(context.speed):
+                    # check for existing note:
+                    if context.col_contexts[col].pitch:
+                        # get pitch and volume macros
+                        pass
+
+                    tick_offset = int((tick / context.speed) * 120)
+                    
                     pass
 
+                # NOTE : assume that each famitracker row is one 16th note.
+                context.midi_tick += 120
+                
                 # TODO
                 #self.poll_midi_event(context, token)
             
@@ -210,6 +227,7 @@ class Parser:
         patterns: List[str] = track.orders.get(target_order)
         
         context = TrackContext(track, target_order, target_row, orders, patterns)
+        
         seenit: Set[str] = set()
         
         while context.target_order not in seenit:
