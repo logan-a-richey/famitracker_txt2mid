@@ -96,17 +96,18 @@ class Parser:
         return 60 + int(token[0], 16)
 
     def update_column_context(self, context: TrackContext, token: str, col: int):
-        #note_on_match = re.match(r'[A-G][', token)
-        note_on_match = Parser.regex_patterns['note_on'].match(token)
-        if note_on_match:
+        # update pitch
+        token_type = self.classify_token(token)
+        if token_type == 'note_on':
             pitch = self.get_midi_int(token[0:3])
             context.col_contexts[col].pitch = pitch
-        
-        noise_on_match = Parser.regex_patterns['note_noise'].match(token)
-        if noise_on_match:
+        elif token_type == 'note_noise': 
             pitch = self.get_noise_midi_int(token[0:3])
             context.col_contexts[col].pitch = pitch
+        else:
+            pass
 
+        # update instrument
         inst_match = Parser.regex_patterns['inst'].match(token)
         if inst_match:
             inst_int = int(inst_match.group('inst'), 16)
@@ -115,7 +116,8 @@ class Parser:
             else:
                 first_inst = list(self.project.instruments.keys())[0]
                 context.col_contexts[col].inst = first_inst 
-                
+    
+        # update volume
         vol_match = Parser.regex_patterns['vol'].match(token)
         if vol_match:
             vol_int = int(vol_match.group('vol'), 16)
@@ -176,7 +178,7 @@ class Parser:
                 
                 self.check_to_add_echo_note(context, token, col)
                 self.update_column_context(context, token, col)
-                
+                 
                 # TODO 
                 # fami ticks per row
                 for tick in range(context.speed):
