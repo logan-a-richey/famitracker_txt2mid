@@ -1,0 +1,3 @@
+[submodule "submodules/midi_writer_py"]
+	path = submodules/midi_writer_py
+	url = https://github.com/logan-a-richey/lib_midi_writer_py
