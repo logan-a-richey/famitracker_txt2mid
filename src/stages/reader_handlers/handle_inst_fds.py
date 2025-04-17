@@ -1,4 +1,4 @@
-# stages/reader/handle_macro.py
+# stages/reader_handlers/handle_macro.py
 
 from utils.regex_patterns import RegexPatterns
 

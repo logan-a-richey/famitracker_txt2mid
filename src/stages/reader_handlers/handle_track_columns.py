@@ -1,4 +1,4 @@
-# handle_track_columns.py
+# stages/reader_handlers/handle_track_columns.py
 
 import re
 from utils.regex_patterns import RegexPatterns

@@ -1,4 +1,3 @@
-
 # stages/reader_handlers/handle_inst_vrc7.py
 
 from utils.regex_patterns import RegexPatterns

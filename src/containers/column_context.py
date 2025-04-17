@@ -5,6 +5,7 @@ from typing import Dict, Union, Any
 class ColumnContext:
     ''' Contains data for '''
     def __init__(self):
+        self.tick: int = 0
         self.pitch: Union[int, None] = None
         self.inst: Union[int, None] = 0
         self.vol: Union[int, None] = 15

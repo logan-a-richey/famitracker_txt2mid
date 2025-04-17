@@ -1,10 +1,9 @@
-# parser.py
+# stages/parser.py
 
 import re
 from typing import Dict, List, Set, Tuple, Union, Any
 
 from containers.track import Track
-# from containers.echo_buffer import EchoBuffer
 from containers.track_context import TrackContext
 from containers.column_context import ColumnContext
 from containers.midi_data import MidiData
@@ -168,6 +167,15 @@ class Parser:
     #def poll_midi_event(self, context: TrackConext):
     #    pass
 
+    def handle_fami_ticks(self, context: TrackContext, token: str, col: int):
+        # TODO
+        for tick in range(context.speed):
+            if contrext.col_contexts[col].pitch:
+                # get pitch and volume macros
+                pass
+            tick_offset = int((tick / context.speed) * 120)
+        return
+
     def parse_order(self, context: TrackContext) -> int:
         ''' Parse context.target_order '''
 
@@ -187,18 +195,9 @@ class Parser:
                 self.check_to_add_echo_note(context, token, col)
                 self.update_column_context(context, token, col)
                 
-                # fami ticks per row
-                for tick in range(context.speed):
-                    # check for existing note:
-                    if context.col_contexts[col].pitch:
-                        # get pitch and volume macros
-                        pass
-
-                    tick_offset = int((tick / context.speed) * 120)
-                    
-                    pass
-
-                # NOTE : assume that each famitracker row is one 16th note.
+                self.handle_fami_ticks(context, token, col)
+                
+                 # NOTE : assume that each famitracker row is one 16th note.
                 context.midi_tick += 120
                 
                 # TODO
