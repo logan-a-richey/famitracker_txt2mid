@@ -1,0 +1,929 @@
+{
+  "TITLE": {
+    "FIELDS": {
+      "title": {
+        "TYPE": "string",
+        "RANGE": {
+          "LOWER": "",
+          "UPPER": ""
+        }
+      }
+    }
+  },
+  "AUTHOR": {
+    "FIELDS": {
+      "author": {
+        "TYPE": "string",
+        "RANGE": {
+          "LOWER": "",
+          "UPPER": ""
+        }
+      }
+    }
+  },
+  "COPYRIGHT": {
+    "FIELDS": {
+      "copyright": {
+        "TYPE": "string",
+        "RANGE": {
+          "LOWER": "",
+          "UPPER": ""
+        }
+      }
+    }
+  },
+  "COMMENT": {
+    "FIELDS": {
+      "comment": {
+        "TYPE": "string",
+        "RANGE": {
+          "LOWER": "",
+          "UPPER": ""
+        }
+      }
+    }
+  },
+  "MACHINE": {
+    "FIELDS": {
+      "machine": {
+        "TYPE": "int",
+        "RANGE": {
+          "LOWER": "0",
+          "UPPER": "1"
+        }
+      }
+    }
+  },
+  "FRAMERATE": {
+    "FIELDS": {
+      "fps": {
+        "TYPE": "int",
+        "RANGE": {
+          "LOWER": "0",
+          "UPPER": "800"
+        }
+      }
+    }
+  },
+  "EXPANSION": {
+    "FIELDS": {
+      "chips": {
+        "TYPE": "int",
+        "RANGE": {
+          "LOWER": "0",
+          "UPPER": "255"
+        }
+      }
+    }
+  },
+  "VIBRATO": {
+    "FIELDS": {
+      "mode": {
+        "TYPE": "int",
+        "RANGE": {
+          "LOWER": "0",
+          "UPPER": "1"
+        }
+      }
+    }
+  },
+  "SPLIT": {
+    "FIELDS": {
+      "split": {
+        "TYPE": "int",
+        "RANGE": {
+          "LOWER": "0",
+          "UPPER": "255"
+        }
+      }
+    }
+  },
+  "N163CHANNELS": {
+    "FIELDS": {
+      "channels": {
+        "TYPE": "int",
+        "RANGE": {
+          "LOWER": "1",
+          "UPPER": "8"
+        }
+      }
+    }
+  },
+  "MACRO": {
+    "FIELDS": {
+      "type": {
+        "TYPE": "int",
+        "RANGE": {
+          "LOWER": "0",
+          "UPPER": "4"
+        }
+      },
+      "index": {
+        "TYPE": "int",
+        "RANGE": {
+          "LOWER": "0",
+          "UPPER": "127"
+        }
+      },
+      "loop": {
+        "TYPE": "int",
+        "RANGE": {
+          "LOWER": "-1",
+          "UPPER": "253"
+        }
+      },
+      "release": {
+        "TYPE": "int",
+        "RANGE": {
+          "LOWER": "-1",
+          "UPPER": "253"
+        }
+      },
+      "setting": {
+        "TYPE": "int",
+        "RANGE": {
+          "LOWER": "0",
+          "UPPER": "255"
+        }
+      },
+      "macro": {
+        "TYPE": "int_list",
+        "RANGE": {
+          "LOWER": "-128",
+          "UPPER": "127"
+        }
+      }
+    }
+  },
+  "MACROVRC6": {
+    "FIELDS": {
+      "type": {
+        "TYPE": "int",
+        "RANGE": {
+          "LOWER": "0",
+          "UPPER": "4"
+        }
+      },
+      "index": {
+        "TYPE": "int",
+        "RANGE": {
+          "LOWER": "0",
+          "UPPER": "127"
+        }
+      },
+      "loop": {
+        "TYPE": "int",
+        "RANGE": {
+          "LOWER": "-1",
+          "UPPER": "253"
+        }
+      },
+      "release": {
+        "TYPE": "int",
+        "RANGE": {
+          "LOWER": "-1",
+          "UPPER": "253"
+        }
+      },
+      "setting": {
+        "TYPE": "int",
+        "RANGE": {
+          "LOWER": "0",
+          "UPPER": "255"
+        }
+      },
+      "macro": {
+        "TYPE": "int_list",
+        "RANGE": {
+          "LOWER": "-128",
+          "UPPER": "127"
+        }
+      }
+    }
+  },
+  "MACRON163": {
+    "FIELDS": {
+      "type": {
+        "TYPE": "int",
+        "RANGE": {
+          "LOWER": "0",
+          "UPPER": "4"
+        }
+      },
+      "index": {
+        "TYPE": "int",
+        "RANGE": {
+          "LOWER": "0",
+          "UPPER": "127"
+        }
+      },
+      "loop": {
+        "TYPE": "int",
+        "RANGE": {
+          "LOWER": "-1",
+          "UPPER": "253"
+        }
+      },
+      "release": {
+        "TYPE": "int",
+        "RANGE": {
+          "LOWER": "-1",
+          "UPPER": "253"
+        }
+      },
+      "setting": {
+        "TYPE": "int",
+        "RANGE": {
+          "LOWER": "0",
+          "UPPER": "255"
+        }
+      },
+      "macro": {
+        "TYPE": "int_list",
+        "RANGE": {
+          "LOWER": "-128",
+          "UPPER": "127"
+        }
+      }
+    }
+  },
+  "MACROS5B": {
+    "FIELDS": {
+      "type": {
+        "TYPE": "int",
+        "RANGE": {
+          "LOWER": "0",
+          "UPPER": "4"
+        }
+      },
+      "index": {
+        "TYPE": "int",
+        "RANGE": {
+          "LOWER": "0",
+          "UPPER": "127"
+        }
+      },
+      "loop": {
+        "TYPE": "int",
+        "RANGE": {
+          "LOWER": "-1",
+          "UPPER": "253"
+        }
+      },
+      "release": {
+        "TYPE": "int",
+        "RANGE": {
+          "LOWER": "-1",
+          "UPPER": "253"
+        }
+      },
+      "setting": {
+        "TYPE": "int",
+        "RANGE": {
+          "LOWER": "0",
+          "UPPER": "255"
+        }
+      },
+      "macro": {
+        "TYPE": "int_list",
+        "RANGE": {
+          "LOWER": "-128",
+          "UPPER": "127"
+        }
+      }
+    }
+  },
+  "DPCMDEF": {
+    "FIELDS": {
+      "index": {
+        "TYPE": "int",
+        "RANGE": {
+          "LOWER": "0",
+          "UPPER": "63"
+        }
+      },
+      "size": {
+        "TYPE": "int",
+        "RANGE": {
+          "LOWER": "0",
+          "UPPER": "4081"
+        }
+      },
+      "name": {
+        "TYPE": "string",
+        "RANGE": {
+          "LOWER": "",
+          "UPPER": ""
+        }
+      }
+    }
+  },
+  "DPCM": {
+    "FIELDS": {
+      "data": {
+        "TYPE": "hex_list",
+        "RANGE": {
+          "LOWER": "00",
+          "UPPER": "FF"
+        }
+      }
+    }
+  },
+  "GROOVE": {
+    "FIELDS": {
+      "index": {
+        "TYPE": "int",
+        "RANGE": {
+          "LOWER": "0",
+          "UPPER": "63"
+        }
+      },
+      "sizeof": {
+        "TYPE": "int",
+        "RANGE": {
+          "LOWER": "0",
+          "UPPER": "63"
+        }
+      },
+      "groove_sequence": {
+        "TYPE": "int_list",
+        "RANGE": {
+          "LOWER": "0",
+          "UPPER": "255"
+        }
+      }
+    }
+  },
+  "USEGROOVE": {
+    "FIELDS": {
+      "tracks": {
+        "TYPE": "int_list",
+        "RANGE": {
+          "LOWER": "0",
+          "UPPER": "63"
+        }
+      }
+    }
+  },
+  "INST2A03": {
+    "FIELDS": {
+      "index": {
+        "TYPE": "int",
+        "RANGE": {
+          "LOWER": "0",
+          "UPPER": "63"
+        }
+      },
+      "seq_vol": {
+        "TYPE": "int",
+        "RANGE": {
+          "LOWER": "-1",
+          "UPPER": "127"
+        }
+      },
+      "seq_arp": {
+        "TYPE": "int",
+        "RANGE": {
+          "LOWER": "-1",
+          "UPPER": "127"
+        }
+      },
+      "seq_pit": {
+        "TYPE": "int",
+        "RANGE": {
+          "LOWER": "-1",
+          "UPPER": "127"
+        }
+      },
+      "seq_hpi": {
+        "TYPE": "int",
+        "RANGE": {
+          "LOWER": "-1",
+          "UPPER": "127"
+        }
+      },
+      "seq_dut": {
+        "TYPE": "int",
+        "RANGE": {
+          "LOWER": "-1",
+          "UPPER": "127"
+        }
+      },
+      "name": {
+        "TYPE": "string",
+        "RANGE": {
+          "LOWER": "",
+          "UPPER": ""
+        }
+      }
+    }
+  },
+  "INSTVRC6": {
+    "FIELDS": {
+      "index": {
+        "TYPE": "int",
+        "RANGE": {
+          "LOWER": "0",
+          "UPPER": "63"
+        }
+      },
+      "seq_vol": {
+        "TYPE": "int",
+        "RANGE": {
+          "LOWER": "-1",
+          "UPPER": "127"
+        }
+      },
+      "seq_arp": {
+        "TYPE": "int",
+        "RANGE": {
+          "LOWER": "-1",
+          "UPPER": "127"
+        }
+      },
+      "seq_pit": {
+        "TYPE": "int",
+        "RANGE": {
+          "LOWER": "-1",
+          "UPPER": "127"
+        }
+      },
+      "seq_hpi": {
+        "TYPE": "int",
+        "RANGE": {
+          "LOWER": "-1",
+          "UPPER": "127"
+        }
+      },
+      "seq_wid": {
+        "TYPE": "int",
+        "RANGE": {
+          "LOWER": "-1",
+          "UPPER": "127"
+        }
+      },
+      "name": {
+        "TYPE": "string",
+        "RANGE": {
+          "LOWER": "",
+          "UPPER": ""
+        }
+      }
+    }
+  },
+  "INSTVRC7": {
+    "FIELDS": {
+      "index": {
+        "TYPE": "int",
+        "RANGE": {
+          "LOWER": "0",
+          "UPPER": "63"
+        }
+      },
+      "patch": {
+        "TYPE": "int",
+        "RANGE": {
+          "LOWER": "0",
+          "UPPER": "15"
+        }
+      },
+      "register": {
+        "TYPE": "hex_list",
+        "RANGE": {
+          "LOWER": "00",
+          "UPPER": "FF"
+        }
+      },
+      "name": {
+        "TYPE": "string",
+        "RANGE": {
+          "LOWER": "",
+          "UPPER": ""
+        }
+      }
+    }
+  },
+  "INSTFDS": {
+    "FIELDS": {
+      "index": {
+        "TYPE": "int",
+        "RANGE": {
+          "LOWER": "0",
+          "UPPER": "63"
+        }
+      },
+      "mod_enable": {
+        "TYPE": "int",
+        "RANGE": {
+          "LOWER": "0",
+          "UPPER": "1"
+        }
+      },
+      "mod_speed": {
+        "TYPE": "int",
+        "RANGE": {
+          "LOWER": "0",
+          "UPPER": "4905"
+        }
+      },
+      "mod_depth": {
+        "TYPE": "int",
+        "RANGE": {
+          "LOWER": "0",
+          "UPPER": "63"
+        }
+      },
+      "mod_delay": {
+        "TYPE": "int",
+        "RANGE": {
+          "LOWER": "0",
+          "UPPER": "255"
+        }
+      },
+      "name": {
+        "TYPE": "string",
+        "RANGE": {
+          "LOWER": "",
+          "UPPER": ""
+        }
+      }
+    }
+  },
+  "INSTN163": {
+    "FIELDS": {
+      "index": {
+        "TYPE": "int",
+        "RANGE": {
+          "LOWER": "0",
+          "UPPER": "63"
+        }
+      },
+      "seq_vol": {
+        "TYPE": "int",
+        "RANGE": {
+          "LOWER": "-1",
+          "UPPER": "127"
+        }
+      },
+      "seq_arp": {
+        "TYPE": "int",
+        "RANGE": {
+          "LOWER": "-1",
+          "UPPER": "127"
+        }
+      },
+      "seq_pit": {
+        "TYPE": "int",
+        "RANGE": {
+          "LOWER": "-1",
+          "UPPER": "127"
+        }
+      },
+      "seq_hpi": {
+        "TYPE": "int",
+        "RANGE": {
+          "LOWER": "-1",
+          "UPPER": "127"
+        }
+      },
+      "seq_wav": {
+        "TYPE": "int",
+        "RANGE": {
+          "LOWER": "-1",
+          "UPPER": "127"
+        }
+      },
+      "w_size": {
+        "TYPE": "int",
+        "RANGE": {
+          "LOWER": "0",
+          "UPPER": "32"
+        }
+      },
+      "w_pos": {
+        "TYPE": "int",
+        "RANGE": {
+          "LOWER": "0",
+          "UPPER": "127"
+        }
+      },
+      "w_count": {
+        "TYPE": "int",
+        "RANGE": {
+          "LOWER": "0",
+          "UPPER": "16"
+        }
+      },
+      "name": {
+        "TYPE": "string",
+        "RANGE": {
+          "LOWER": "",
+          "UPPER": ""
+        }
+      }
+    }
+  },
+  "INSTS5B": {
+    "FIELDS": {
+      "index": {
+        "TYPE": "int",
+        "RANGE": {
+          "LOWER": "0",
+          "UPPER": "63"
+        }
+      },
+      "seq_vol": {
+        "TYPE": "int",
+        "RANGE": {
+          "LOWER": "-1",
+          "UPPER": "127"
+        }
+      },
+      "seq_arp": {
+        "TYPE": "int",
+        "RANGE": {
+          "LOWER": "-1",
+          "UPPER": "127"
+        }
+      },
+      "seq_pit": {
+        "TYPE": "int",
+        "RANGE": {
+          "LOWER": "-1",
+          "UPPER": "127"
+        }
+      },
+      "seq_hpi": {
+        "TYPE": "int",
+        "RANGE": {
+          "LOWER": "-1",
+          "UPPER": "127"
+        }
+      },
+      "seq_ton": {
+        "TYPE": "int",
+        "RANGE": {
+          "LOWER": "-1",
+          "UPPER": "127"
+        }
+      },
+      "name": {
+        "TYPE": "string",
+        "RANGE": {
+          "LOWER": "",
+          "UPPER": ""
+        }
+      }
+    }
+  },
+  "KEYDPCM": {
+    "FIELDS": {
+      "inst": {
+        "TYPE": "int",
+        "RANGE": {
+          "LOWER": "0",
+          "UPPER": "63"
+        }
+      },
+      "octave": {
+        "TYPE": "int",
+        "RANGE": {
+          "LOWER": "0",
+          "UPPER": "7"
+        }
+      },
+      "note": {
+        "TYPE": "int",
+        "RANGE": {
+          "LOWER": "0",
+          "UPPER": "11"
+        }
+      },
+      "sample": {
+        "TYPE": "int",
+        "RANGE": {
+          "LOWER": "0",
+          "UPPER": "63"
+        }
+      },
+      "pitch": {
+        "TYPE": "int",
+        "RANGE": {
+          "LOWER": "0",
+          "UPPER": "15"
+        }
+      },
+      "loop": {
+        "TYPE": "int",
+        "RANGE": {
+          "LOWER": "0",
+          "UPPER": "1"
+        }
+      },
+      "loop_point": {
+        "TYPE": "int",
+        "RANGE": {
+          "LOWER": "0",
+          "UPPER": "255"
+        }
+      },
+      "delta": {
+        "TYPE": "int",
+        "RANGE": {
+          "LOWER": "-1",
+          "UPPER": "127"
+        }
+      }
+    }
+  },
+  "FDSWAVE": {
+    "FIELDS": {
+      "inst": {
+        "TYPE": "int",
+        "RANGE": {
+          "LOWER": "0",
+          "UPPER": "63"
+        }
+      },
+      "data": {
+        "TYPE": "int_list",
+        "RANGE": {
+          "LOWER": "0",
+          "UPPER": "63"
+        }
+      }
+    }
+  },
+  "FDSMOD": {
+    "FIELDS": {
+      "inst": {
+        "TYPE": "int",
+        "RANGE": {
+          "LOWER": "0",
+          "UPPER": "63"
+        }
+      },
+      "data": {
+        "TYPE": "int_list",
+        "RANGE": {
+          "LOWER": "0",
+          "UPPER": "7"
+        }
+      }
+    }
+  },
+  "FDSMACRO": {
+    "FIELDS": {
+      "inst": {
+        "TYPE": "int",
+        "RANGE": {
+          "LOWER": "0",
+          "UPPER": "63"
+        }
+      },
+      "type": {
+        "TYPE": "int",
+        "RANGE": {
+          "LOWER": "0",
+          "UPPER": "2"
+        }
+      },
+      "loop": {
+        "TYPE": "int",
+        "RANGE": {
+          "LOWER": "-1",
+          "UPPER": "253"
+        }
+      },
+      "release": {
+        "TYPE": "int",
+        "RANGE": {
+          "LOWER": "-1",
+          "UPPER": "253"
+        }
+      },
+      "setting": {
+        "TYPE": "int",
+        "RANGE": {
+          "LOWER": "0",
+          "UPPER": "255"
+        }
+      },
+      "macro": {
+        "TYPE": "int_list",
+        "RANGE": {
+          "LOWER": "-128",
+          "UPPER": "127"
+        }
+      }
+    }
+  },
+  "N163WAVE": {
+    "FIELDS": {
+      "inst": {
+        "TYPE": "int",
+        "RANGE": {
+          "LOWER": "0",
+          "UPPER": "63"
+        }
+      },
+      "wave": {
+        "TYPE": "int",
+        "RANGE": {
+          "LOWER": "0",
+          "UPPER": "15"
+        }
+      },
+      "data": {
+        "TYPE": "int_list",
+        "RANGE": {
+          "LOWER": "0",
+          "UPPER": "15"
+        }
+      }
+    }
+  },
+  "TRACK": {
+    "FIELDS": {
+      "pattern": {
+        "TYPE": "int",
+        "RANGE": {
+          "LOWER": "0",
+          "UPPER": "256"
+        }
+      },
+      "speed": {
+        "TYPE": "int",
+        "RANGE": {
+          "LOWER": "0",
+          "UPPER": "255"
+        }
+      },
+      "tempo": {
+        "TYPE": "int",
+        "RANGE": {
+          "LOWER": "0",
+          "UPPER": "255"
+        }
+      },
+      "name": {
+        "TYPE": "string",
+        "RANGE": {
+          "LOWER": "",
+          "UPPER": ""
+        }
+      }
+    }
+  },
+  "COLUMNS": {
+    "FIELDS": {
+      "columns": {
+        "TYPE": "int_list",
+        "RANGE": {
+          "LOWER": "1",
+          "UPPER": "64"
+        }
+      }
+    }
+  },
+  "ORDER": {
+    "FIELDS": {
+      "frame": {
+        "TYPE": "hex",
+        "RANGE": {
+          "LOWER": "00",
+          "UPPER": "7F"
+        }
+      },
+      "list": {
+        "TYPE": "hex_list",
+        "RANGE": {
+          "LOWER": "00",
+          "UPPER": "7F"
+        }
+      }
+    }
+  },
+  "PATTERN": {
+    "FIELDS": {
+      "pattern": {
+        "TYPE": "hex",
+        "RANGE": {
+          "LOWER": "00",
+          "UPPER": "7F"
+        }
+      }
+    }
+  },
+  "ROW": {
+    "FIELDS": {
+      "row": {
+        "TYPE": "string",
+        "RANGE": {
+          "LOWER": "",
+          "UPPER": ""
+        }
+      }
+    }
+  }
+}
