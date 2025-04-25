@@ -3,4 +3,6 @@ venv
 input_files
 exports
 submodules
+*.mid
+*.exe
 
