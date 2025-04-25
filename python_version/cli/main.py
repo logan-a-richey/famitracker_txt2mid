@@ -2,9 +2,14 @@
 
 import os
 import sys
+
+# Prevent Pycache
 sys.dont_write_bytecode = True
 
-from containers.project import Project
+# Add the project root to sys.path manually
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+from core.containers.project import Project
 
 def get_input_file():
     try:
@@ -15,18 +20,19 @@ def get_input_file():
 
 def main():
     input_file = get_input_file()
-    # print("[INFO] Scanning file:", input_file)
 
-    output_dir_name = "exports"
+    # set up output folder
+    output_dir_name = "output_midi"
     output_dir_path = os.path.join(os.getcwd(), output_dir_name)
     os.makedirs(output_dir_path, exist_ok=True)
 
     project = Project()
-    project.reader.read(input_file)     # NOTE read data into project
-    project.parser.parse()              # NOTE parse track data within project
-#   project.exporter.export(output_dir) # NOTE export each track within the project
+    project.reader.read(input_file)         
+    project.parser.parse(output_dir_name)   
 
-    # print(project)              # NOTE debug print the project
+    # debug print project data:
+    # print(project)
+    return
 
 if __name__ == "__main__":
     main()

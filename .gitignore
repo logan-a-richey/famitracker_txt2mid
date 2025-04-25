@@ -1,7 +1,7 @@
 __pycache__
 venv
 input_files
-exports
+midi_output
 *.mid
 *.exe
 

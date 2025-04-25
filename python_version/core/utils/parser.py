@@ -16,8 +16,8 @@ import logging
 # Log to terminal
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 
-from utils.helper_functions import generate_token_key
-from submodules.midi_writer_py.midi_writer_optimized import MidiWriter
+from core.utils.helper_functions import generate_token_key
+from submodules.midi_writer_py.midi_writer import MidiWriter
 
 class Parser:
     def __init__(self, project):
@@ -140,7 +140,7 @@ class Parser:
         ofn = "_".join(word.capitalize() for word in words) + ".mid"
         return ofn
 
-    def parse_track(self, track):
+    def parse_track(self, track, output_dir):
         # init MidiWriter
         self.midi = MidiWriter()
         self.midi.add_bpm(track=0, start=0, bpm=140)
@@ -160,11 +160,11 @@ class Parser:
        
         # Write the Midi file!
         output_filename = self.get_output_filename()
-        output_path = os.path.join("exports", output_filename)
+        output_path = os.path.join(output_dir, output_filename)
         self.midi.save(output_path)
         print("[INFO] The file \'{}\' has been created!".format(output_path))
 
-    def parse(self):
+    def parse(self, output_dir):
         for track in self.project.tracks:
-            self.parse_track(track)
+            self.parse_track(track, output_dir)
 

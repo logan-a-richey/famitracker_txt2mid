@@ -6,8 +6,8 @@ logging.basicConfig(level=logging.ERROR)
 
 from typing import Dict, Callable
 
-from containers.track import Track
-from utils.helper_functions import generate_token_key
+from core.containers.track import Track
+from core.utils.helper_functions import generate_token_key
 
 class Reader:
     def __init__(self, project):

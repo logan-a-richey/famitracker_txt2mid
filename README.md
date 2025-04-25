@@ -68,7 +68,12 @@
    pip install -r requirements.txt
    ```
 
-4. Run the tool  
+4. Set PYTHONPATH:
+- `cd` to famitracker_ftm2mid/python_version
+- get path using `pwd`, copy this path
+- set environment variable `PYTHONPATH=<path>` (paste the python_version path)
+
+5. Run the tool  
    ```bash
    cd src
    ./main.py path/to/input.txt

@@ -1,3 +1,5 @@
+# echo_buffer.py
+
 class EchoBuffer:
     ''' Famitracker stack-like buffer for echo notes '''
     __slots__ = ('size', 'lst')

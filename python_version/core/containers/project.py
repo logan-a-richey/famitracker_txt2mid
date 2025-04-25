@@ -1,9 +1,10 @@
 # project.py
 
 from typing import Dict, List
-from containers.track import Track
-from utils.reader import Reader
-from utils.parser import Parser
+
+from core.containers.track import Track
+from core.utils.reader import Reader
+from core.utils.parser import Parser
 
 class Project:
     def __init__(self):
