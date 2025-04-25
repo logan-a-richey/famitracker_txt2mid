@@ -93,31 +93,20 @@
 ## Usage
 
 ```bash
-./main.py <input.txt> [--output out.mid]
+./main.py <input.txt>
 ```
 
-The tool will parse the `.txt` export from FamiTracker and generate a `.mid` file. For example:
-
-```bash
-./main.py song.txt --output song.mid
-```
+An output midi file is automatically created in an `exports/` directory at the same level the script is run.
 
 ---
 
 ## Contributing
 
-We welcome contributions! See `CONTRIBUTING.md` for guidelines. Bug reports, feature requests, and pull requests are all appreciated.
+Bug reports, feature requests, and pull requests are all appreciated.
 
 ---
 
 ## License
 
 MIT License — see `LICENSE.md` for details.
-
----
-
-## Questions?
-
-For support, open an issue on the GitHub repository or reach out via Discussions.
-```
 
