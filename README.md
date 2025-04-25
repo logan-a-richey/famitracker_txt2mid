@@ -2,7 +2,7 @@
 - Famitracker is a popular tool for creating authentic NES-style music. Famitracker contains an option for text export.
 - This is a tool for converting FamiTracker text exports into MIDI files, enabling integration with modern music production workflows and tools.
 - Significantly reduces music production and transcription time while using Famitracker.
-- I created this project to improve my understanding Python. This project went through several iterations. A previous version used a design pattern approach. This version is a scaled-back version that does not use inherited classes as extensively. I found that this version produced more meaninful results while also being simpler. Sometimes, simpler is better!
+- I created this project as a way to deepen my understanding of Python. Over the course of several iterations, I explored different architectural approaches — including a version that relied heavily on design patterns and inheritance. Ultimately, I found that a simpler, more pragmatic approach yielded better results and was easier to work with. Sometimes, simpler is better.
 
 ---
 
