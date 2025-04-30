@@ -1,5 +1,8 @@
 // macro.h
 
+#ifndef MACRO_H
+#define MACRO_H
+
 #include <string>
 #include <vector>
 
@@ -13,5 +16,5 @@ public:
     std::vector<int> sequence;
 };
 
-
+#endif // MACRO_H
 

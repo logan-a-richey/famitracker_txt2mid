@@ -1,5 +1,8 @@
 // track.h
 
+#ifndef TRACK_H
+#define TRACK_H
+
 #include <string>
 #include <vector>
 #include <unordered_map>
@@ -15,3 +18,6 @@ public:
     std::unordered_map<std::string, std::vector<std::string>> orders;
     std::unordered_map<std::string, std::string> tokens;
 };
+
+#endif // TRACK_H
+

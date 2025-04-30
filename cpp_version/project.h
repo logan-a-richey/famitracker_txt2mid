@@ -1,5 +1,8 @@
 // project.h
 
+#ifndef PROJECT_H
+#define PROJECT_H
+
 #include <string>
 #include <map>
 #include <vector>
@@ -16,3 +19,6 @@ public:
     // std::map<std::string, BaseInstrument> instruments;
     // std::vector<Track> tracks;
 };
+
+#endif // PROJECT_H
+
