@@ -3,14 +3,22 @@
 #pragma once
 
 #include <string>
+#include <unordered_map>
+#include <regex>
 
 #include "project.h"
 
 class Reader {
 public:
+    // constructor
+    Reader();
     int read(Project* project, std::string input_file);
 
 private:
+    std::unordered_map<std::string, std::regex> regex_patterns;
+
+    int process_line(Project* project, std::string line);
+
     int default_line_handler(Project* project, std::string line);
     int handle_song_information(Project* project, std::string line);
     int handle_global_settings(Project* project, std::string line);
