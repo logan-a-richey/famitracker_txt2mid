@@ -139,12 +139,12 @@ class TextExportReader:
         macro_id = "{}.{}.{}".format(macro_chip, macro_type, macro_index)
         self.project.macros[macro_id] = macro_object
 
-#   def _handle_dpcmdef(self, line: str):
-#       regex_match: self.regex_patterns("DPCMDEF").match(line) 
-#       if not regex_match:
-#           print("[W] Regex does not match! Line: \'{}\'".format(line))
-#           return
-#       
+#    def _handle_dpcmdef(self, line: str):
+#        regex_match: self.regex_patterns("DPCMDEF").match(line) 
+#        if not regex_match:
+#            print("[W] Regex does not match! Line: \'{}\'".format(line))
+#            return
+       
 
 #   def _handle_dpcm(self, line: str):
 #       regex_match: self.regex_patterns("DPCM").match(line) 

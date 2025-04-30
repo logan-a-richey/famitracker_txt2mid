@@ -3,18 +3,19 @@
 #ifndef MACRO_H
 #define MACRO_H
 
-#include <string>
 #include <vector>
 
 class Macro {
 public:
-    int type;
-    int index;
-    int loop;
-    int release;
-    int setting;
-    std::vector<int> sequence;
+    int macro_type;
+    int macro_index;
+    int macro_loop; 
+    int macro_release;
+    int macro_setting;
+    std::vector<int> macro_sequence;
+
+    // constructor
+    // Macro();
 };
 
 #endif // MACRO_H
-

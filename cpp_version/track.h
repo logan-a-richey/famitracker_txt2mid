@@ -1,23 +1,26 @@
-// track.h
+//  track.h
 
 #ifndef TRACK_H
 #define TRACK_H
 
-#include <string>
 #include <vector>
-#include <unordered_map>
+#include <map>
+#include <string>
 
 class Track {
 public:
-    std::string name;
-    int speed;
     int num_rows;
     int num_cols;
     std::vector<int> eff_cols;
+    int tempo;
+    int speed;
+    std::string track_name;
 
-    std::unordered_map<std::string, std::vector<std::string>> orders;
-    std::unordered_map<std::string, std::string> tokens;
+    std::map<std::string, std::vector<std::string>> orders;
+    std::map<std::string, std::string> tokens;
+
+    // Track();
+
 };
 
 #endif // TRACK_H
-
