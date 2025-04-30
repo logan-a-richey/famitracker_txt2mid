@@ -21,9 +21,21 @@ int Reader::read(Project* project, std::string input_file){
     std::string line;
     std::ifstream file(input_file);
 
+    std::regex first_word_pattern("^\\s*(\\w+)");
+    std::smatch match;
+    std::string first_word;
+
     if (file.is_open()){
         while (std::getline(file, line)){
-           std::cout << line << std::endl; 
+            // std::cout << line << std::endl; 
+            if (std::regex_search(line, match, first_word_pattern)) {
+                first_word = match[1];
+                // std::cout << "First word: " << first_word << std::endl;
+                std::cout << first_word << " | " << line << std::endl;
+            } else {
+                // std::cout << "First word: No match found." << std::endl;
+                continue;
+            }
         }
     } else {
         std::cout << "[E] Could not open file." << std::endl;
