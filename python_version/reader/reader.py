@@ -1,217 +1,101 @@
+#!/usr/bin/env python3
+
 # basic implementation of famitracker text export reader 
 
 import re
+from typing import List, Dict
+
+class Macro:
+    def __init__(self, 
+        macro_type: int, 
+        macro_index: int, 
+        macro_loop: int, 
+        macro_release: int, 
+        macro_setting: int,
+        macro_sequence: List[int]
+    ):
+        self.macro_type = macro_type
+        self.macro_index = macro_index
+        self.macro_loop = macro_loop
+        self.macro_release = macro_release
+        self.macro_setting = macro_setting
+        self.macro_sequence = macro_sequence
+
+class Instrument:
+    pass
+
+class Track:
+    pass
+
+class Project:
+    def __init__(self):
+        self.song_information: Dict[str, str] = {}
+        self.global_settings: Dict[str, int] = {}
+        self.macros: Dict[str, Macro] = {}
+        self.instruments: Dict[str, Instrument] = {}
+        self.tracks: List[Track] = []
 
 class TextExportReader:
     def __init__(self, project):
         self.project = project
         self.regex_patterns = {
-            "SONG_INFORMATION": re.compile(r'''
-                ^\s*        # start
-                (\w+)\s*    # (1) tag
-                \"(.*)\"    # (2) name
-                ''', re.VERBOSE),
-            "GLOBAL_SETTINGS": re.compile(r'''
-                ^\s*(\w+)\s*    # (1) tag
-                (\d+)           # (2) value
-                ''', re.VERBOSE),
-            "MACRO": re.compile(r'''
-                ^\s*            # start
-                (\w+)\s+        # (1) tag
-                (\-?\d+)\s+     # (2) type
-                (\-?\d+)\s+     # (3) index
-                (\-?\d+)\s+     # (4) loop
-                (\-?\d+)\s+     # (5) release
-                (\-?\d+)        # (6) setting
-                \s*\:\s*        # div
-                (.*)            # (7) sequence (need regex findall digit)
-                ''', re.VERBOSE),
-            "DPCMDEF": re.compile(r'''
-                ^\s*        # start
-                (\w+)\s+    # (1) tag
-                (\d+)\s+    # (2) index
-                (\d+)\s*    # (3) size
-                \" (.*)\"   # (4) name
-                ''', re.VERBOSE),
-            "DPCM": re.compile(r'''
-                ^\s*        # start
-                (\w+)       # (1) tag
-                \s*\:\s*    # div
-                (.*)        # (2) data
-                ''', re.VERBOSE),
-            "GROOVE": re.compile(r'''
-                ^\s*            # start
-                (\w+)\s+        # (1) tag
-                (\d+)\s+        # (2) index
-                (\d+)           # (3) sizeof
-                \s*\:\s*        # div
-                (.*)            # (4) sequence
-                ''', re.VERBOSE),
-            "USEGROOVE": re.compile(r'''
-                ^\s*        # start
-                (\w+)       # (1) tag
-                \s*\:\s*    # div
-                (.*)        # (2) data
-                ''', re.VERBOSE),
-            "INST2A03"      : re.compile(r'''
-                ^\s*        # start
-                (\w+)       # (1) tag
-                (\d+)\s+    # (2) index
-                (\-?\d+)\s+ # (3) vol
-                (\-?\d+)\s+ # (4) arp
-                (\-?\d+)\s+ # (5) pit
-                (\-?\d+)\s+ # (6) hpi
-                (\-?\d+)\s* # (7) dut
-                \"(.*)\"    # (8) name
-                ''', re.VERBOSE),
-            "INSTVRC6"      : re.compile(r'''
-                ^\s*        # start
-                (\w+)       # (1) tag
-                (\d+)\s+    # (2) index
-                (\-?\d+)\s+ # (3) vol
-                (\-?\d+)\s+ # (4) arp
-                (\-?\d+)\s+ # (5) pit
-                (\-?\d+)\s+ # (6) hpi
-                (\-?\d+)\s* # (7) dut
-                \"(.*)\"    # (8) name
-                ''', re.VERBOSE),
-            "INSTVRC7"      : re.compile(r'''
-                ^\s*                # start
-                (\w+)\s+            # (1) tag
-                (\d+)\s+            # (2) index
-                (\d+)\s+            # (3) patch
-                ([0-9A-F]{2})\s+    # (4) r0
-                ([0-9A-F]{2})\s+    # (5) r1
-                ([0-9A-F]{2})\s+    # (6) r2
-                ([0-9A-F]{2})\s+    # (7) r3
-                ([0-9A-F]{2})\s+    # (8) r4
-                ([0-9A-F]{2})\s+    # (9) r5
-                ([0-9A-F]{2})\s+    # (10) r6
-                ([0-9A-F]{2})\s*    # (11) r7
-                \"(.*)\"            # (12) name
-                ''', re.VERBOSE),
-            "INSTFDS": re.compile(r''' 
-                ^\s*        # start
-                (\w+)\s+    # (1) tag
-                (\d+)\s+    # (2) index
-                (\d+)\s+    # (3) mod_enable 
-                (\d+)\s+    # (4) mod_speed
-                (\d+)\s+    # (5) mod_depth
-                (\d+)\s*    # (6) mod_delay
-                \"(.*)\"    # (7) name
-                ''', re.VERBOSE),
-            "INSTN163": re.compile(r''' 
-                ^\s*        # start
-                (\w+)\s+    # (1) tag
-                (\d+)\s+    # (2) index
-                (\-?\d+)\s+ # (3) seq_vol
-                (\-?\d+)\s+ # (4) seq_arp
-                (\-?\d+)\s+ # (5) seq_pit
-                (\-?\d+)\s+ # (6) seq_hpi
-                (\-?\d+)\s+ # (7) seq_dut
-                (\d+)\s+    # (8) w_size
-                (\d+)\s+    # (9) w_pos
-                (\d+)\s*    # (10) w_count
-                \"(.*)\"    # (11) name
-                ''', re.VERBOSE),
-            "INSTS5B": re.compile(r'''
-                ^\s*        # start
-                (\w+)       # (1) tag
-                (\d+)\s+    # (2) index
-                (\-?\d+)\s+ # (3) vol
-                (\-?\d+)\s+ # (4) arp
-                (\-?\d+)\s+ # (5) pit
-                (\-?\d+)\s+ # (6) hpi
-                (\-?\d+)\s* # (7) dut
-                \"(.*)\"    # (8) name
-                ''', re.VERBOSE),
-            "KEYDPCM": re.compile(r''' 
-                ^\s*        # start
-                (\w+)\s+    # (1) tag
-                (\d+)\s+    # (2) inst 
-                (\d+)\s+    # (3) octave 
-                (\d+)\s+    # (4) note 
-                (\d+)\s+    # (5) sample 
-                (\d+)\s+    # (6) pitch 
-                (\d+)\s+    # (7) loop 
-                (\d+)\s+    # (8) loop_point 
-                (\-?\d+)\s+ # (9) delta
-                ''', re.VERBOSE),
-            "FDSWAVE": re.compile(r'''
-                ^\s*        # start
-                (\w+)\s+    # (1) tag
-                (\d+)       # (2) inst
-                \s*\:\s*    # div
-                (.*)        # (3) data
-                ''', re.VERBOSE),
-            "FDSMOD": re.compile(r'''
-                ^\s*        # start
-                (\w+)\s+    # (1) tag
-                (\d+)       # (2) inst
-                \s*\:\s*    # div
-                (.*)        # (3) data
-                ''', re.VERBOSE),
-            "FDSMACRO": re.compile(r''' 
-                ^\s*        # start
-                (\w+)\s+    # (1) tag
-                (\d+)\s+    # (2) inst
-                ([012])\s+  # (3) type
-                (\-?\d+)\s+ # (4) loop
-                (\-?\d+)\s+ # (5) release
-                (\d+)       # (6) setting
-                \s*\:\s*    # div
-                (.*)        # (7) data
-                ''', re.VERBOSE),
-            "N163WAVE": re.compile(r'''
-                ^\s*        # start
-                (\w+)\s+    # (1) tag
-                (\d+)\s+    # (2) inst
-                (\d+)       # (3) wave
-                \s*\:\s*    # div
-                (.*)        # data
-                ''', re.VERBOSE),
-            "TRACK": re.compile(r'''
-                ^\s*        # start
-                (\w+)\s+    # (1) tag
-                (\d+)\s+    # (2) num_rows
-                (\d+)\s+    # (3) speed
-                (\d+)\s*    # (4) tempo
-                \"(.*)\"    # (5) name
-                ''', re.VERBOSE),
-            "COLUMNS": re.compile(r'''
-                ^\s*        # start
-                (\w+)       # (1) tag
-                \s*\:\s*    # div
-                (.*)        # (2) data
-                ''', re.VERBOSE),
-            "ORDER": re.compile(r''' 
-                ^\s*            # start
-                (\w+)\s+        # (1) tag
-                ([0-9A-F]{2})   # (2) frame
-                \s*\:\s*        # div
-                (.*)            # (3) data
-                ''', re.VERBOSE),
-            "PATTERN": re.compile(r'''
-                ^\s*            # start
-                (\w+)\s+        # (1) tag
-                ([0-9A-F]{2})   # (2) pattern
-                ''', re.VERBOSE),
-            "ROW": re.compile(r''' 
-                ^\s*            # start
-                (\w+)\s+        # (1) tag
-                ([0-9A-F]{2})   # (2) row hex
-                \s*\:\s*        # div
-                (.*)            # (3) data
-                ''', re.VERBOSE),
-            "hex2d": re.compile(r'(0-9A-F]{2}'),
+            "SONG_INFORMATION": re.compile(r'^\s*(\w+)\s*\"(.*)\"'),
+            "GLOBAL_SETTINGS": re.compile(r'^\s*(\w+)\s*(\d+)'),
+            "MACRO": re.compile(r'^\s*(\w+)\s+(\-?\d+)\s+(\-?\d+)\s+(\-?\d+)\s+(\-?\d+)\s+(\-?\d+)\s*\:\s*(.*)'),
+            "DPCMDEF": re.compile(r'^\s*(\w+)\s+(\d+)\s+(\d+)\s*\"(.*)\"'),
+            "DPCM": re.compile(r'^\s*(\w+)\s*\:\s*(.*)'),
+            "GROOVE": re.compile(r'^\s*(\w+)\s+(\d+)\s+(\d+)\s*\:\s*(.*)'),
+            "USEGROOVE": re.compile(r'^\s*(\w+)\s*\:\s*(.*)'),
+            "INST2A03": re.compile(r'^\s*(\w+)(\d+)\s+(\-?\d+)\s+(\-?\d+)\s+(\-?\d+)\s+(\-?\d+)\s+(\-?\d+)\s*\"(.*)\"'),
+            "INSTVRC6": re.compile(r'^\s*(\w+)(\d+)\s+(\-?\d+)\s+(\-?\d+)\s+(\-?\d+)\s+(\-?\d+)\s+(\-?\d+)\s*\"(.*)\"'),
+            "INSTVRC7": re.compile(r'^\s*(\w+)\s+(\d+)\s+(\d+)\s+([0-9A-F]{2})\s+([0-9A-F]{2})\s+([0-9A-F]{2})\s+([0-9A-F]{2})\s+([0-9A-F]{2})\s+([0-9A-F]{2})\s+([0-9A-F]{2})\s+([0-9A-F]{2})\s*\"(.*)\"'),
+            "INSTFDS": re.compile(r'^\s*(\w+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s*\"(.*)\"'),
+            "INSTN163": re.compile(r'^\s*(\w+)\s+(\d+)\s+(\-?\d+)\s+(\-?\d+)\s+(\-?\d+)\s+(\-?\d+)\s+(\-?\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s*\"(.*)\"'),
+            "INSTS5B": re.compile(r'^\s*(\w+)(\d+)\s+(\-?\d+)\s+(\-?\d+)\s+(\-?\d+)\s+(\-?\d+)\s+(\-?\d+)\s*\"(.*)\"'),
+            "KEYDPCM": re.compile(r'^\s*(\w+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\-?\d+)\s+'),
+            "FDSWAVE": re.compile(r'^\s*(\w+)\s+(\d+)\s*\:\s*(.*)'),
+            "FDSMOD": re.compile(r'^\s*(\w+)\s+(\d+)\s*\:\s*(.*)'),
+            "FDSMACRO": re.compile(r'^\s*(\w+)\s+(\d+)\s+([012])\s+(\-?\d+)\s+(\-?\d+)\s+(\d+)\s*\:\s*(.*)'),
+            "N163WAVE": re.compile(r'^\s*(\w+)\s+(\d+)\s+(\d+)\s*\:\s*(.*)'),
+            "TRACK": re.compile(r'^\s*(\w+)\s+(\d+)\s+(\d+)\s+(\d+)\s*\"(.*)\"'),
+            "COLUMNS": re.compile(r'^\s*(\w+)\s*\:\s*(.*)'),
+            "ORDER": re.compile(r'^\s*(\w+)\s+([0-9A-F]{2})\s*\:\s*(.*)'),
+            "PATTERN": re.compile(r'^\s*(\w+)\s+([0-9A-F]{2})'),
+            "ROW": re.compile(r'^\s*(\w+)\s+([0-9A-F]{2})\s*\:\s*(.*)'),
+            "hex2d": re.compile(r'[0-9A-F]{2}'),
             "integer": re.compile(r'\-?\d+')
         }
-    self.dispatch = {
-        "TITLE": self._handle_song_information,
-        "MACHINE": self._handle_global_settings
-    }
+        self.dispatch = {
+            "TITLE": self._handle_song_information,
+            "MACHINE": self._handle_global_settings,
+            "MACRO": self._handle_macro,
+            #"DPCMDEF": self._handle_dpcmdef,
+            #"DPCM": self._handle_dpcm,
+            #"GROOVE": self._handle_groove,
+            #"USEGROOVE": self._handle_usegroove,
+            #"INST2A03": self._handle_inst2a03,
+            #"INSTVRC6": self._handle_instvrc6,
+            #"INSTVRC7": self._handle_instvrc7,
+            #"INSTFDS": self._handle_instfds,
+            #"INSTN163": self._handle_instn163,
+            #"INSTS5B": self._handle_insts5b,
+            #"KEYDPCM": self._handle_keydpcm,
+            #"FDSWAVE": self._handle_fdswave,
+            #"FDSMOD": self._handle_fdsmod,
+            #"FDSMACRO": self._handle_fdsmacro,
+            #"N163WAVE": self._handle_n163wave,
+            #"TRACK": self._handle_track,
+            #"COLUMNS": self._handle_columns,
+            #"ORDER": self._handle_order,
+            #"PATTERN": self._handle_pattern,
+            #"ROW": self._handle_row,
+        }
 
-    def _handle_song_information(self, line: str)
+    def _default_handler(self, line: str):
+        print("Default handler: Line {}".format(line))
+        return
+
+    def _handle_song_information(self, line: str):
         regex_match = self.regex_patterns["SONG_INFORMATION"].match(line)
         if not regex_match:
             print("[W] Regex does not match! Line: ", line)
@@ -221,20 +105,164 @@ class TextExportReader:
 
     def _handle_global_settings(self, line: str):
         regex_match = self.regex_patterns["GLOBAL_SETTINGS"].match(line)
-         if not regex_match:
+        if not regex_match:
             print("[W] Regex does not match! Line: ", line)
             return
         tag = regex_match.group(1)
         val = int(regex_match.group(2))
         self.project.global_settings[tag] = val
-
-    # TODO continue conditional processing for each type of regex
-
-    def _process_line(self, line: str) -> None
-        tag = line.split()[0]
-        func = self.dispatch.get(tag, None(
-        if not func:
+    
+    def _handle_macro(self, line: str):
+        regex_match: self.regex_patterns("MACRO").match(line) 
+        if not regex_match:
+            print("[W] Regex does not match! Line: \'{}\'".format(line))
             return
+       
+        macro_chip = regex_match.group(1)
+        macro_type, macro_index, macro_loop, macro_release, macro_setting = list(map(
+            int, 
+            regex_match.group(2, 3, 4, 5, 6)
+        ))
+        macro_sequence = list(map(
+            int,
+            self.regex_patterns["integer"].findall(regex_match.group(7))
+        ))
+        macro_object = Macro(
+            macro_type, 
+            macro_index, 
+            macro_loop, 
+            macro_release, 
+            macro_setting,
+            macro_sequence
+        )
+        # TODO make function to generate macro_id. Perhaps hashing tuples is better
+        macro_id = "{}.{}.{}".format(macro_chip, macro_type, macro_index)
+        self.project.macros[macro_id] = macro_object
+
+#   def _handle_dpcmdef(self, line: str):
+#       regex_match: self.regex_patterns("DPCMDEF").match(line) 
+#       if not regex_match:
+#           print("[W] Regex does not match! Line: \'{}\'".format(line))
+#           return
+#       
+
+#   def _handle_dpcm(self, line: str):
+#       regex_match: self.regex_patterns("DPCM").match(line) 
+#       if not regex_match:
+#           print("[W] Regex does not match! Line: \'{}\'".format(line))
+#           return
+
+#   def _handle_groove(self, line: str):
+#       regex_match: self.regex_patterns("GROOVE").match(line) 
+#       if not regex_match:
+#           print("[W] Regex does not match! Line: \'{}\'".format(line))
+#           return
+
+#   def _handle_usegroove(self, line: str):
+#       regex_match: self.regex_patterns("USEGROOVE").match(line) 
+#       if not regex_match:
+#           print("[W] Regex does not match! Line: \'{}\'".format(line))
+#           return
+
+#   def _handle_inst2a03(self, line: str):
+#       regex_match: self.regex_patterns("INST2A03").match(line) 
+#       if not regex_match:
+#           print("[W] Regex does not match! Line: \'{}\'".format(line))
+#           return
+
+#   def _handle_instvrc6(self, line: str):
+#       regex_match: self.regex_patterns("INSTVRC6").match(line) 
+#       if not regex_match:
+#           print("[W] Regex does not match! Line: \'{}\'".format(line))
+#           return
+
+#   def _handle_instvrc7(self, line: str):
+#       regex_match: self.regex_patterns("INSTVRC7").match(line) 
+#       if not regex_match:
+#           print("[W] Regex does not match! Line: \'{}\'".format(line))
+#           return
+
+#   def _handle_instfds(self, line: str):
+#       regex_match: self.regex_patterns("INSTFDS").match(line) 
+#       if not regex_match:
+#           print("[W] Regex does not match! Line: \'{}\'".format(line))
+#           return
+
+#   def _handle_instn163(self, line: str):
+#       regex_match: self.regex_patterns("INSTN163").match(line) 
+#       if not regex_match:
+#           print("[W] Regex does not match! Line: \'{}\'".format(line))
+#           return
+
+#   def _handle_insts5b(self, line: str):
+#       regex_match: self.regex_patterns("INSTS5B").match(line) 
+#       if not regex_match:
+#           print("[W] Regex does not match! Line: \'{}\'".format(line))
+#           return
+
+#   def _handle_keydpcm(self, line: str):
+#       regex_match: self.regex_patterns("KEYDPCM").match(line) 
+#       if not regex_match:
+#           print("[W] Regex does not match! Line: \'{}\'".format(line))
+#           return
+
+#   def _handle_fdswave(self, line: str):
+#       regex_match: self.regex_patterns("FDSWAVE").match(line) 
+#       if not regex_match:
+#           print("[W] Regex does not match! Line: \'{}\'".format(line))
+#           return
+
+#   def _handle_fdsmod(self, line: str):
+#       regex_match: self.regex_patterns("FDSMOD").match(line) 
+#       if not regex_match:
+#           print("[W] Regex does not match! Line: \'{}\'".format(line))
+#           return
+
+#   def _handle_fdsmacro(self, line: str):
+#       regex_match: self.regex_patterns("FDSMACRO").match(line) 
+#       if not regex_match:
+#           print("[W] Regex does not match! Line: \'{}\'".format(line))
+#           return
+
+#   def _handle_n163wave(self, line: str):
+#       regex_match: self.regex_patterns("N163WAVE").match(line) 
+#       if not regex_match:
+#           print("[W] Regex does not match! Line: \'{}\'".format(line))
+#           return
+
+#   def _handle_track(self, line: str):
+#       regex_match: self.regex_patterns("TRACK").match(line) 
+#       if not regex_match:
+#           print("[W] Regex does not match! Line: \'{}\'".format(line))
+#           return
+
+#   def _handle_columns(self, line: str):
+#       regex_match: self.regex_patterns("COLUMNS").match(line) 
+#       if not regex_match:
+#           print("[W] Regex does not match! Line: \'{}\'".format(line))
+#           return
+
+#   def _handle_order(self, line: str):
+#       regex_match: self.regex_patterns("ORDER").match(line) 
+#       if not regex_match:
+#           print("[W] Regex does not match! Line: \'{}\'".format(line))
+#           return
+
+#   def _handle_pattern(self, line: str):
+#       regex_match: self.regex_patterns("PATTERN").match(line) 
+#       if not regex_match:
+#           print("[W] Regex does not match! Line: \'{}\'".format(line))
+#           return
+
+#   def _handle_row(self, line: str):
+#       regex_match: self.regex_patterns("ROW").match(line) 
+#       if not regex_match:
+#           print("[W] Regex does not match! Line: \'{}\'".format(line))
+#           return
+
+    def _process_line(self, line: str) -> None:
+        tag = line.split()[0]
+        func = self.dispatch.get(tag, self._default_handler)
         func(line)
 
     def read(self, input_file):
@@ -246,3 +274,10 @@ class TextExportReader:
                 if line[0] == '#':
                     continue
                 self._process_line(line)
+
+if __name__ == "__main__":
+    p = Project()
+    r = TextExportReader(p)
+    for k in r.regex_patterns.keys():
+        print(k)
+
