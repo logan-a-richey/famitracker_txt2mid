@@ -1,0 +1,248 @@
+# basic implementation of famitracker text export reader 
+
+import re
+
+class TextExportReader:
+    def __init__(self, project):
+        self.project = project
+        self.regex_patterns = {
+            "SONG_INFORMATION": re.compile(r'''
+                ^\s*        # start
+                (\w+)\s*    # (1) tag
+                \"(.*)\"    # (2) name
+                ''', re.VERBOSE),
+            "GLOBAL_SETTINGS": re.compile(r'''
+                ^\s*(\w+)\s*    # (1) tag
+                (\d+)           # (2) value
+                ''', re.VERBOSE),
+            "MACRO": re.compile(r'''
+                ^\s*            # start
+                (\w+)\s+        # (1) tag
+                (\-?\d+)\s+     # (2) type
+                (\-?\d+)\s+     # (3) index
+                (\-?\d+)\s+     # (4) loop
+                (\-?\d+)\s+     # (5) release
+                (\-?\d+)        # (6) setting
+                \s*\:\s*        # div
+                (.*)            # (7) sequence (need regex findall digit)
+                ''', re.VERBOSE),
+            "DPCMDEF": re.compile(r'''
+                ^\s*        # start
+                (\w+)\s+    # (1) tag
+                (\d+)\s+    # (2) index
+                (\d+)\s*    # (3) size
+                \" (.*)\"   # (4) name
+                ''', re.VERBOSE),
+            "DPCM": re.compile(r'''
+                ^\s*        # start
+                (\w+)       # (1) tag
+                \s*\:\s*    # div
+                (.*)        # (2) data
+                ''', re.VERBOSE),
+            "GROOVE": re.compile(r'''
+                ^\s*            # start
+                (\w+)\s+        # (1) tag
+                (\d+)\s+        # (2) index
+                (\d+)           # (3) sizeof
+                \s*\:\s*        # div
+                (.*)            # (4) sequence
+                ''', re.VERBOSE),
+            "USEGROOVE": re.compile(r'''
+                ^\s*        # start
+                (\w+)       # (1) tag
+                \s*\:\s*    # div
+                (.*)        # (2) data
+                ''', re.VERBOSE),
+            "INST2A03"      : re.compile(r'''
+                ^\s*        # start
+                (\w+)       # (1) tag
+                (\d+)\s+    # (2) index
+                (\-?\d+)\s+ # (3) vol
+                (\-?\d+)\s+ # (4) arp
+                (\-?\d+)\s+ # (5) pit
+                (\-?\d+)\s+ # (6) hpi
+                (\-?\d+)\s* # (7) dut
+                \"(.*)\"    # (8) name
+                ''', re.VERBOSE),
+            "INSTVRC6"      : re.compile(r'''
+                ^\s*        # start
+                (\w+)       # (1) tag
+                (\d+)\s+    # (2) index
+                (\-?\d+)\s+ # (3) vol
+                (\-?\d+)\s+ # (4) arp
+                (\-?\d+)\s+ # (5) pit
+                (\-?\d+)\s+ # (6) hpi
+                (\-?\d+)\s* # (7) dut
+                \"(.*)\"    # (8) name
+                ''', re.VERBOSE),
+            "INSTVRC7"      : re.compile(r'''
+                ^\s*                # start
+                (\w+)\s+            # (1) tag
+                (\d+)\s+            # (2) index
+                (\d+)\s+            # (3) patch
+                ([0-9A-F]{2})\s+    # (4) r0
+                ([0-9A-F]{2})\s+    # (5) r1
+                ([0-9A-F]{2})\s+    # (6) r2
+                ([0-9A-F]{2})\s+    # (7) r3
+                ([0-9A-F]{2})\s+    # (8) r4
+                ([0-9A-F]{2})\s+    # (9) r5
+                ([0-9A-F]{2})\s+    # (10) r6
+                ([0-9A-F]{2})\s*    # (11) r7
+                \"(.*)\"            # (12) name
+                ''', re.VERBOSE),
+            "INSTFDS": re.compile(r''' 
+                ^\s*        # start
+                (\w+)\s+    # (1) tag
+                (\d+)\s+    # (2) index
+                (\d+)\s+    # (3) mod_enable 
+                (\d+)\s+    # (4) mod_speed
+                (\d+)\s+    # (5) mod_depth
+                (\d+)\s*    # (6) mod_delay
+                \"(.*)\"    # (7) name
+                ''', re.VERBOSE),
+            "INSTN163": re.compile(r''' 
+                ^\s*        # start
+                (\w+)\s+    # (1) tag
+                (\d+)\s+    # (2) index
+                (\-?\d+)\s+ # (3) seq_vol
+                (\-?\d+)\s+ # (4) seq_arp
+                (\-?\d+)\s+ # (5) seq_pit
+                (\-?\d+)\s+ # (6) seq_hpi
+                (\-?\d+)\s+ # (7) seq_dut
+                (\d+)\s+    # (8) w_size
+                (\d+)\s+    # (9) w_pos
+                (\d+)\s*    # (10) w_count
+                \"(.*)\"    # (11) name
+                ''', re.VERBOSE),
+            "INSTS5B": re.compile(r'''
+                ^\s*        # start
+                (\w+)       # (1) tag
+                (\d+)\s+    # (2) index
+                (\-?\d+)\s+ # (3) vol
+                (\-?\d+)\s+ # (4) arp
+                (\-?\d+)\s+ # (5) pit
+                (\-?\d+)\s+ # (6) hpi
+                (\-?\d+)\s* # (7) dut
+                \"(.*)\"    # (8) name
+                ''', re.VERBOSE),
+            "KEYDPCM": re.compile(r''' 
+                ^\s*        # start
+                (\w+)\s+    # (1) tag
+                (\d+)\s+    # (2) inst 
+                (\d+)\s+    # (3) octave 
+                (\d+)\s+    # (4) note 
+                (\d+)\s+    # (5) sample 
+                (\d+)\s+    # (6) pitch 
+                (\d+)\s+    # (7) loop 
+                (\d+)\s+    # (8) loop_point 
+                (\-?\d+)\s+ # (9) delta
+                ''', re.VERBOSE),
+            "FDSWAVE": re.compile(r'''
+                ^\s*        # start
+                (\w+)\s+    # (1) tag
+                (\d+)       # (2) inst
+                \s*\:\s*    # div
+                (.*)        # (3) data
+                ''', re.VERBOSE),
+            "FDSMOD": re.compile(r'''
+                ^\s*        # start
+                (\w+)\s+    # (1) tag
+                (\d+)       # (2) inst
+                \s*\:\s*    # div
+                (.*)        # (3) data
+                ''', re.VERBOSE),
+            "FDSMACRO": re.compile(r''' 
+                ^\s*        # start
+                (\w+)\s+    # (1) tag
+                (\d+)\s+    # (2) inst
+                ([012])\s+  # (3) type
+                (\-?\d+)\s+ # (4) loop
+                (\-?\d+)\s+ # (5) release
+                (\d+)       # (6) setting
+                \s*\:\s*    # div
+                (.*)        # (7) data
+                ''', re.VERBOSE),
+            "N163WAVE": re.compile(r'''
+                ^\s*        # start
+                (\w+)\s+    # (1) tag
+                (\d+)\s+    # (2) inst
+                (\d+)       # (3) wave
+                \s*\:\s*    # div
+                (.*)        # data
+                ''', re.VERBOSE),
+            "TRACK": re.compile(r'''
+                ^\s*        # start
+                (\w+)\s+    # (1) tag
+                (\d+)\s+    # (2) num_rows
+                (\d+)\s+    # (3) speed
+                (\d+)\s*    # (4) tempo
+                \"(.*)\"    # (5) name
+                ''', re.VERBOSE),
+            "COLUMNS": re.compile(r'''
+                ^\s*        # start
+                (\w+)       # (1) tag
+                \s*\:\s*    # div
+                (.*)        # (2) data
+                ''', re.VERBOSE),
+            "ORDER": re.compile(r''' 
+                ^\s*            # start
+                (\w+)\s+        # (1) tag
+                ([0-9A-F]{2})   # (2) frame
+                \s*\:\s*        # div
+                (.*)            # (3) data
+                ''', re.VERBOSE),
+            "PATTERN": re.compile(r'''
+                ^\s*            # start
+                (\w+)\s+        # (1) tag
+                ([0-9A-F]{2})   # (2) pattern
+                ''', re.VERBOSE),
+            "ROW": re.compile(r''' 
+                ^\s*            # start
+                (\w+)\s+        # (1) tag
+                ([0-9A-F]{2})   # (2) row hex
+                \s*\:\s*        # div
+                (.*)            # (3) data
+                ''', re.VERBOSE),
+            "hex2d": re.compile(r'(0-9A-F]{2}'),
+            "integer": re.compile(r'\-?\d+')
+        }
+    self.dispatch = {
+        "TITLE": self._handle_song_information,
+        "MACHINE": self._handle_global_settings
+    }
+
+    def _handle_song_information(self, line: str)
+        regex_match = self.regex_patterns["SONG_INFORMATION"].match(line)
+        if not regex_match:
+            print("[W] Regex does not match! Line: ", line)
+            return
+        tag, name = regex_match.group(1, 2)
+        self.project.song_information[tag] = name
+
+    def _handle_global_settings(self, line: str):
+        regex_match = self.regex_patterns["GLOBAL_SETTINGS"].match(line)
+         if not regex_match:
+            print("[W] Regex does not match! Line: ", line)
+            return
+        tag = regex_match.group(1)
+        val = int(regex_match.group(2))
+        self.project.global_settings[tag] = val
+
+    # TODO continue conditional processing for each type of regex
+
+    def _process_line(self, line: str) -> None
+        tag = line.split()[0]
+        func = self.dispatch.get(tag, None(
+        if not func:
+            return
+        func(line)
+
+    def read(self, input_file):
+        with open(input_file, 'r') as file:
+            for line in file:
+                line = line.strip()
+                if not line:
+                    continue
+                if line[0] == '#':
+                    continue
+                self._process_line(line)
