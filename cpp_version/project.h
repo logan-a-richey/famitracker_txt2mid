@@ -1,23 +1,30 @@
 // project.h
 
-#ifndef PROJECT_H
-#define PROJECT_H
+#pragma once
 
-#include <map>
+#include <unordered_map>
 #include <vector>
 #include <string>
 
+/*
 #include "macro.h"
 #include "instrument.h"
 #include "track.h"
+*/
 
 class Project {
 public:
-    std::map<std::string, std::string> song_information;
-    std::map<std::string, int> global_settings;
-    std::map<std::string, Macro> macros;
-    std::map<std::string, Instrument> instruments;
-    std::vector<Track> tracks;
-};
+    std::unordered_map<std::string, std::string> song_information;
+    std::unordered_map<std::string, int> global_settings;
 
-#endif // PROJECT_H
+    // TODO continue the other attributes
+    /*
+    std::unordered_map<std::string, Macro> macros; 
+    std::unordered_map<std::string, 
+    std::unordered_map<std::string, 
+    std::unordered_map<std::string, 
+    */
+
+private:
+
+};
