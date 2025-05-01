@@ -4,6 +4,8 @@
 #include <fstream>
 #include <string>
 #include <memory>
+#include <algorithm>
+#include <cctype>
 
 #include "reader.h"
 #include "reader_handle_abstract.h"
@@ -66,6 +68,35 @@ Reader::Reader() {
     init_dispatch();
 }
 
+std::string clean_line(std::string input) {
+    std::string output;
+    std::copy_if(input.begin(), input.end(), std::back_inserter(output),
+        [](unsigned char c) {
+            return c == '\n' || (c >= 32 && c <= 126);
+        });
+    return output;
+}
+    /*
+    // Convert all tabs to spaces
+    std::replace(line.begin(), line.end(), '\t', ' ');
+
+    // Remove all '\r' and '\n' characters
+    line.erase(std::remove(line.begin(), line.end(), '\r'), line.end());
+    line.erase(std::remove(line.begin(), line.end(), '\n'), line.end());
+
+    // Trim leading and trailing whitespace
+    auto start = line.begin();
+    while (start != line.end() && std::isspace(*start)) ++start;
+
+    auto end = line.end();
+    do {
+        --end;
+    } while (end != start && std::isspace(*end));
+
+    return std::string(start, end + 1);
+}
+*/
+
 int Reader::read(Project* project, const std::string input_file) {
     // Read file line by line, extract useful information
     std::string line;
@@ -74,27 +105,21 @@ int Reader::read(Project* project, const std::string input_file) {
     std::regex first_word_pattern("^\\s*(\\w+)");
     std::smatch match;
     std::string first_word;
+    
+    while (std::getline(file, line)) {
+        // trim leading space, trailing spcae, \n, \r
+        line = clean_line(line);
 
-    if (file.is_open()){
-        while (std::getline(file, line)){
-            // std::cout << line << std::endl; 
-            if (std::regex_search(line, match, first_word_pattern)) {
-                first_word = match[1];
-                
-                if (dispatch.find(first_word) != dispatch.end()) {
-                    dispatch[first_word]->handle(*project, *this, first_word, line);
-                } else {
-                    std::cout << "[W] Key \'" << first_word << "\' not found" << line << std::endl;
-                }
+        if (std::regex_search(line, match, first_word_pattern)) {
+            first_word = match[1];
+
+            if (dispatch.find(first_word) != dispatch.end()) {
+                dispatch[first_word]->handle(*project, *this, first_word, line);
             } else {
-                // std::cout << "First word: No match found:" << line << std::endl;
-                continue;
+                std::cout << "[W] Key \'" << first_word << "\' not found: " << line << std::endl;
             }
-            if (first_word == "SPLIT") break;
         }
-    } else {
-        std::cout << "[E] Could not open file." << std::endl;
     }
-
     return 0;
 }
+

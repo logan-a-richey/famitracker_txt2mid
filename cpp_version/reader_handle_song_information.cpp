@@ -11,10 +11,14 @@
 
 void ReaderHandleSongInformation::handle(Project& project, Reader& reader, const std::string tag, const std::string line) {
     std::smatch match;
+    // std::string line;
+    // std::string test_line = "TITLE \"SOME NAME\"";
+    
     auto it = reader.regex_patterns.find("SONG_INFORMATION");
     if (it != reader.regex_patterns.end()) {
         const std::regex& pattern = it->second;
         if (std::regex_match(line, match, pattern)) {
+        // if (std::regex_match(test_line, match, pattern)) {
             std::string key = match[1];
             std::string val = match[2];
             project.song_information[key] = val;
