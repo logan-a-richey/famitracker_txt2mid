@@ -22,5 +22,7 @@ int main(int argc, char** argv){
     // read data from input.txt using Reader into Project
     reader.read(&project, input_file);
 
+    std::cout << project << std::endl;
+
     return 0;
 }

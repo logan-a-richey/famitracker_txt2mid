@@ -24,7 +24,8 @@ public:
     std::unordered_map<std::string, 
     std::unordered_map<std::string, 
     */
-
-private:
+    
+    // print self method
+    friend std::ostream& operator<<(std::ostream& os, const Project& project);
 
 };
