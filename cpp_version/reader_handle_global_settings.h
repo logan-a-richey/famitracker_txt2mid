@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include <string>
 #include "reader_handle_abstract.h"
 
 class Project;

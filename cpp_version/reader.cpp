@@ -11,58 +11,32 @@
 #include "reader_handle_global_settings.h"
 
 void Reader::init_regex(){
-    // load regex patterns 
-    std::regex song_information_pattern("^\\s*(\\w+)\\s+\"(.*)\"");
-    std::regex global_settings_pattern("^\\s*(\\w+)\\s+(\\d+)");
-    std::regex macro_pattern("^\\s*(\\w+)\\s+(\\-?\\d+)\\s+(\\-?\\d+)\\s+(\\-?\\d+)\\s+(\\-?\\d+)\\s+(\\-?\\d+)\\s*\\:\\s*(.*)");
-    std::regex dpcmdef_pattern("^\\s*(\\w+)\\s+(\\d+)\\s+(\\d+)\\s*\"(.*)\"");
-    std::regex dpcm_pattern("^\\s*(\\w+)\\s*\\:\\s*(.*)");
-    std::regex groove_pattern("^\\s*(\\w+)\\s+(\\d+)\\s+(\\d+)\\s*\\:\\s*(.*)");
-    std::regex usegroove_pattern("^\\s*(\\w+)\\s*\\:\\s*(.*)");
-    std::regex inst2a03_pattern("^\\s*(\\w+)(\\d+)\\s+(\\-?\\d+)\\s+(\\-?\\d+)\\s+(\\-?\\d+)\\s+(\\-?\\d+)\\s+(\\-?\\d+)\\s*\"(.*)\"");
-    std::regex instvrc6_pattern("^\\s*(\\w+)(\\d+)\\s+(\\-?\\d+)\\s+(\\-?\\d+)\\s+(\\-?\\d+)\\s+(\\-?\\d+)\\s+(\\-?\\d+)\\s*\"(.*)\"");
-    std::regex instvrc7_pattern("^\\s*(\\w+)\\s+(\\d+)\\s+(\\d+)\\s+([0-9A-F]{2})\\s+([0-9A-F]{2})\\s+([0-9A-F]{2})\\s+([0-9A-F]{2})\\s+([0-9A-F]{2})\\s+([0-9A-F]{2})\\s+([0-9A-F]{2})\\s+([0-9A-F]{2})\\s*\"(.*)\"");
-    std::regex instfds_pattern("^\\s*(\\w+)\\s+(\\d+)\\s+(\\d+)\\s+(\\d+)\\s+(\\d+)\\s+(\\d+)\\s*\"(.*)\"");
-    std::regex instn163_pattern("^\\s*(\\w+)\\s+(\\d+)\\s+(\\-?\\d+)\\s+(\\-?\\d+)\\s+(\\-?\\d+)\\s+(\\-?\\d+)\\s+(\\-?\\d+)\\s+(\\d+)\\s+(\\d+)\\s+(\\d+)\\s*\"(.*)\"");
-    std::regex insts5b_pattern("^\\s*(\\w+)(\\d+)\\s+(\\-?\\d+)\\s+(\\-?\\d+)\\s+(\\-?\\d+)\\s+(\\-?\\d+)\\s+(\\-?\\d+)\\s*\"(.*)\"");
-    std::regex keydpcm_pattern("^\\s*(\\w+)\\s+(\\d+)\\s+(\\d+)\\s+(\\d+)\\s+(\\d+)\\s+(\\d+)\\s+(\\d+)\\s+(\\d+)\\s+(\\-?\\d+)\\s+");
-    std::regex fdswave_pattern("^\\s*(\\w+)\\s+(\\d+)\\s*\\:\\s*(.*)");
-    std::regex fdsmod_pattern("^\\s*(\\w+)\\s+(\\d+)\\s*\\:\\s*(.*)");
-    std::regex fdsmacro_pattern("^\\s*(\\w+)\\s+(\\d+)\\s+([012])\\s+(\\-?\\d+)\\s+(\\-?\\d+)\\s+(\\d+)\\s*\\:\\s*(.*)");
-    std::regex n163wave_pattern("^\\s*(\\w+)\\s+(\\d+)\\s+(\\d+)\\s*\\:\\s*(.*)");
-    std::regex track_pattern("^\\s*(\\w+)\\s+(\\d+)\\s+(\\d+)\\s+(\\d+)\\s*\"(.*)\"");
-    std::regex columns_pattern("^\\s*(\\w+)\\s*\\:\\s*(.*)");
-    std::regex order_pattern("^\\s*(\\w+)\\s+([0-9A-F]{2})\\s*\\:\\s*(.*)");
-    std::regex pattern_pattern("^\\s*(\\w+)\\s+([0-9A-F]{2})");
-    std::regex row_pattern("^\\s*(\\w+)\\s+([0-9A-F]{2})\\s*\\:\\s*(.*)");
-    std::regex hex2d_pattern("[0-9A-F]{2}");
-    std::regex integer_pattern("\\-?\\d+");
-
-    regex_patterns["SONG_INFORMATION"] = song_information_pattern;
-    regex_patterns["GLOBAL_SETTINGS"] = global_settings_pattern;
-    regex_patterns["MACRO"] = macro_pattern;
-    regex_patterns["DPCMDEF"] = dpcmdef_pattern;
-    regex_patterns["DPCM"] = dpcm_pattern;
-    regex_patterns["GROOVE"] = groove_pattern;
-    regex_patterns["USEGROOVE"] = usegroove_pattern;
-    regex_patterns["INST2A03"] = inst2a03_pattern;
-    regex_patterns["INSTVRC6"] = instvrc6_pattern;
-    regex_patterns["INSTVRC7"] = instvrc7_pattern;
-    regex_patterns["INSTFDS"] = instfds_pattern;
-    regex_patterns["INSTN163"] = instn163_pattern;
-    regex_patterns["INSTS5B"] = insts5b_pattern;
-    regex_patterns["KEYDPCM"] = keydpcm_pattern;
-    regex_patterns["FDSWAVE"] = fdswave_pattern;
-    regex_patterns["FDSMOD"] = fdsmod_pattern;
-    regex_patterns["FDSMACRO"] = fdsmacro_pattern;
-    regex_patterns["N163WAVE"] = n163wave_pattern;
-    regex_patterns["TRACK"] = track_pattern;
-    regex_patterns["COLUMNS"] = columns_pattern;
-    regex_patterns["ORDER"] = order_pattern;
-    regex_patterns["PATTERN"] = pattern_pattern;
-    regex_patterns["ROW"] = row_pattern;
-    regex_patterns["hex2d"] = hex2d_pattern;
-    regex_patterns["integer"] = integer_pattern;
+   // load regex patterns 
+   regex_patterns["SONG_INFORMATION"] = std::regex("^\\s*(\\w+)\\s+\"(.*)\"$"); 
+   regex_patterns["GLOBAL_SETTINGS"] = std::regex("^\\s*(\\w+)\\s+(\\d+)$"); 
+   regex_patterns["MACRO"] = std::regex("^\\s*(\\w+)\\s+(\\-?\\d+)\\s+(\\-?\\d+)\\s+(\\-?\\d+)\\s+(\\-?\\d+)\\s+(\\-?\\d+)\\s*\\:\\s*(.*)$"); 
+   regex_patterns["DPCMDEF"] = std::regex("^\\s*(\\w+)\\s+(\\d+)\\s+(\\d+)\\s*\"(.*)\"$"); 
+   regex_patterns["DPCM"] = std::regex("^\\s*(\\w+)\\s*\\:\\s*(.*)$"); 
+   regex_patterns["GROOVE"] = std::regex("^\\s*(\\w+)\\s+(\\d+)\\s+(\\d+)\\s*\\:\\s*(.*)$"); 
+   regex_patterns["USEGROOVE"] = std::regex("^\\s*(\\w+)\\s*\\:\\s*(.*)$"); 
+   regex_patterns["INST2A03"] = std::regex("^\\s*(\\w+)(\\d+)\\s+(\\-?\\d+)\\s+(\\-?\\d+)\\s+(\\-?\\d+)\\s+(\\-?\\d+)\\s+(\\-?\\d+)\\s*\"(.*)\"$"); 
+   regex_patterns["INSTVRC6"] = std::regex("^\\s*(\\w+)(\\d+)\\s+(\\-?\\d+)\\s+(\\-?\\d+)\\s+(\\-?\\d+)\\s+(\\-?\\d+)\\s+(\\-?\\d+)\\s*\"(.*)\"$"); 
+   regex_patterns["INSTVRC7"] = std::regex("^\\s*(\\w+)\\s+(\\d+)\\s+(\\d+)\\s+([0-9A-F]{2})\\s+([0-9A-F]{2})\\s+([0-9A-F]{2})\\s+([0-9A-F]{2})\\s+([0-9A-F]{2})\\s+([0-9A-F]{2})\\s+([0-9A-F]{2})\\s+([0-9A-F]{2})\\s*\"(.*)\"$"); 
+   regex_patterns["INSTFDS"] = std::regex("^\\s*(\\w+)\\s+(\\d+)\\s+(\\d+)\\s+(\\d+)\\s+(\\d+)\\s+(\\d+)\\s*\"(.*)\"$"); 
+   regex_patterns["INSTN163"] = std::regex("^\\s*(\\w+)\\s+(\\d+)\\s+(\\-?\\d+)\\s+(\\-?\\d+)\\s+(\\-?\\d+)\\s+(\\-?\\d+)\\s+(\\-?\\d+)\\s+(\\d+)\\s+(\\d+)\\s+(\\d+)\\s*\"(.*)\"$"); 
+   regex_patterns["INSTS5B"] = std::regex("^\\s*(\\w+)(\\d+)\\s+(\\-?\\d+)\\s+(\\-?\\d+)\\s+(\\-?\\d+)\\s+(\\-?\\d+)\\s+(\\-?\\d+)\\s*\"(.*)\"$"); 
+   regex_patterns["KEYDPCM"] = std::regex("^\\s*(\\w+)\\s+(\\d+)\\s+(\\d+)\\s+(\\d+)\\s+(\\d+)\\s+(\\d+)\\s+(\\d+)\\s+(\\d+)\\s+(\\-?\\d+)\\s+$"); 
+   regex_patterns["FDSWAVE"] = std::regex("^\\s*(\\w+)\\s+(\\d+)\\s*\\:\\s*(.*)$"); 
+   regex_patterns["FDSMOD"] = std::regex("^\\s*(\\w+)\\s+(\\d+)\\s*\\:\\s*(.*)$"); 
+   regex_patterns["FDSMACRO"] = std::regex("^\\s*(\\w+)\\s+(\\d+)\\s+([012])\\s+(\\-?\\d+)\\s+(\\-?\\d+)\\s+(\\d+)\\s*\\:\\s*(.*)$"); 
+   regex_patterns["N163WAVE"] = std::regex("^\\s*(\\w+)\\s+(\\d+)\\s+(\\d+)\\s*\\:\\s*(.*)$"); 
+   regex_patterns["TRACK"] = std::regex("^\\s*(\\w+)\\s+(\\d+)\\s+(\\d+)\\s+(\\d+)\\s*\"(.*)\"$"); 
+   regex_patterns["COLUMNS"] = std::regex("^\\s*(\\w+)\\s*\\:\\s*(.*)$"); 
+   regex_patterns["ORDER"] = std::regex("^\\s*(\\w+)\\s+([0-9A-F]{2})\\s*\\:\\s*(.*)$"); 
+   regex_patterns["PATTERN"] = std::regex("^\\s*(\\w+)\\s+([0-9A-F]{2})$"); 
+   regex_patterns["ROW"] = std::regex("^\\s*(\\w+)\\s+([0-9A-F]{2})\\s*\\:\\s*(.*)$"); 
+   regex_patterns["hex2d"] = std::regex("[0-9A-F]{2}"); 
+   regex_patterns["integer"] = std::regex("\\-?\\d+"); 
 }
 
 void Reader::init_dispatch(){
