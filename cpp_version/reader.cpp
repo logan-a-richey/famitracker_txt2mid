@@ -1,14 +1,17 @@
 // reader.cpp
 
-#include "reader.h"
-
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <memory>
 
-Reader::Reader() {
-    // load regex patterns
-    
+#include "reader.h"
+#include "reader_handle_abstract.h"
+#include "reader_handle_song_information.h"
+#include "reader_handle_global_settings.h"
+
+void Reader::init_regex(){
+    // load regex patterns 
     std::regex song_information_pattern("^\\s*(\\w+)\\s+\"(.*)\"");
     std::regex global_settings_pattern("^\\s*(\\w+)\\s+(\\d+)");
     std::regex macro_pattern("^\\s*(\\w+)\\s+(\\-?\\d+)\\s+(\\-?\\d+)\\s+(\\-?\\d+)\\s+(\\-?\\d+)\\s+(\\-?\\d+)\\s*\\:\\s*(.*)");
@@ -62,7 +65,34 @@ Reader::Reader() {
     regex_patterns["integer"] = integer_pattern;
 }
 
-int Reader::read(Project* project, std::string input_file){
+void Reader::init_dispatch(){
+    // TODO
+    // statically allocate
+    static ReaderHandleSongInformation handle_song_information;
+    static ReaderHandleGlobalSettings handle_global_settings;
+
+    // load dispatch table
+    // song information block
+    dispatch["TITLE"] = &handle_song_information;
+    dispatch["AUTHOR"] = &handle_song_information;
+    dispatch["COPYRIGHT"] = &handle_song_information;
+    dispatch["COMMENT"] = &handle_song_information;
+
+    // global setting block
+    dispatch["MACHINE"] = &handle_global_settings;
+    dispatch["FRAMERATE"] = &handle_global_settings;
+    dispatch["EXPANSION"] = &handle_global_settings;
+    dispatch["VIBRATO"] = &handle_global_settings;
+    dispatch["SPLIT"] = &handle_global_settings;
+    dispatch["N163CHANNELS"] = &handle_global_settings;
+}
+
+Reader::Reader() {
+    init_regex();
+    init_dispatch();
+}
+
+int Reader::read(Project* project, const std::string input_file) {
     // Read file line by line, extract useful information
     std::string line;
     std::ifstream file(input_file);
@@ -76,12 +106,17 @@ int Reader::read(Project* project, std::string input_file){
             // std::cout << line << std::endl; 
             if (std::regex_search(line, match, first_word_pattern)) {
                 first_word = match[1];
-                // std::cout << "First word: " << first_word << std::endl;
-                std::cout << first_word << " | " << line << std::endl;
+                
+                if (dispatch.find(first_word) != dispatch.end()) {
+                    dispatch[first_word]->handle(*project, *this, first_word, line);
+                } else {
+                    std::cout << "[W] Key \'" << first_word << "\' not found" << line << std::endl;
+                }
             } else {
-                // std::cout << "First word: No match found." << std::endl;
+                // std::cout << "First word: No match found:" << line << std::endl;
                 continue;
             }
+            if (first_word == "SPLIT") break;
         }
     } else {
         std::cout << "[E] Could not open file." << std::endl;
@@ -89,18 +124,3 @@ int Reader::read(Project* project, std::string input_file){
 
     return 0;
 }
-
-int default_line_handler(Project* project, std::string line){
-    std::cout << "[W] DefaultHandler: " << line << std::endl;
-    return 0;
-}
-
-int handle_song_information(Project* project, std::string line){
-    
-    return 0;
-}
-
-int handle_global_settings(Project* project, std::string line){
-    return 0;
-}
-    

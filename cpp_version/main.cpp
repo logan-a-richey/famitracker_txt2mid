@@ -6,17 +6,20 @@
 #include "reader.h"
 
 int main(int argc, char** argv){
-    std::cout << "Famitracker C++" << std::endl;
-
+    // simple check usage
     if (argc <= 1){
         std::cout << "usage: ./main input.txt" << std::endl;
         return 1;
     }
-    std::string input_file = argv[1];
 
-    Reader reader;
+    // get the input file
+    const std::string input_file = argv[1];
+
+    // create an instance of project and reader
     Project project;
+    Reader reader;
 
+    // read data from input.txt using Reader into Project
     reader.read(&project, input_file);
 
     return 0;
