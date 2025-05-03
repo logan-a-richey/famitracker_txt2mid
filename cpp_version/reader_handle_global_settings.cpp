@@ -9,7 +9,9 @@
 #include "project.h"
 #include "reader.h"
 
-void ReaderHandleGlobalSettings::handle( Project& project, Reader& reader, const std::string tag, const std::string line) {
+void ReaderHandleGlobalSettings::handle(
+    Project& project, Reader& reader, const std::string tag, const std::string line
+) {
     std::smatch match;
     // std::string line;
     // std::string test_line = "MACHINE 456";

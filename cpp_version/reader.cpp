@@ -11,6 +11,7 @@
 #include "reader_handle_abstract.h"
 #include "reader_handle_song_information.h"
 #include "reader_handle_global_settings.h"
+#include "reader_handle_macro.h"
 
 void Reader::init_regex(){
    // load regex patterns 
@@ -46,6 +47,7 @@ void Reader::init_dispatch(){
     // statically allocate
     static ReaderHandleSongInformation handle_song_information;
     static ReaderHandleGlobalSettings handle_global_settings;
+    static ReaderHandleMacro handle_macro;
 
     // load dispatch table
     // song information block
@@ -61,6 +63,19 @@ void Reader::init_dispatch(){
     dispatch["VIBRATO"] = &handle_global_settings;
     dispatch["SPLIT"] = &handle_global_settings;
     dispatch["N163CHANNELS"] = &handle_global_settings;
+    
+    // macro block:
+    dispatch["MACRO"] = &handle_macro;
+    dispatch["MACROVRC6"] = &handle_macro;
+    dispatch["MACRON163"] = &handle_macro;
+    dispatch["MACROS5B"] = &handle_macro;
+
+    // TODO - groove block
+    // TODO - dpcm block
+    // TODO - instrument block
+    // TODO - special block
+    // TODO - track block
+
 }
 
 Reader::Reader() {
