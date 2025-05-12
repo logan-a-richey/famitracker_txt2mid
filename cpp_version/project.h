@@ -13,6 +13,8 @@
 */
 
 // class Macro;
+#include "macro.h"
+
 // class BaseInstrument;
 // class Track;
 
@@ -22,7 +24,7 @@ public:
     std::unordered_map<std::string, int> global_settings;
 
     // TODO continue the other attributes
-    // std::unordered_map<std::string, Macro> macros; 
+    std::unordered_map<std::string, Macro> macros; 
     // std::unordered_map<std::string, BaseInstrument> instruments;
     // std::vector<Track> tracks;
 

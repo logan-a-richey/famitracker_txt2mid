@@ -22,12 +22,20 @@ void ReaderHandleMacro::handle(
         const std::regex& pattern = it->second;
         if (std::regex_search(line, match, pattern)){
         // NOTE : [MACRO] [type] [index] [loop] [release] [setting] : [macro]
-        std::string key;
-        int macro_type;
-        int macro_index;
-        int macro_loop;
-        int macro_release;
-        int macro_setting;
+        std::string match_key = match[1];
+        std::string match_type = match[2];
+        std::string match_index = match[3];
+        std::string match_loop = match[4];
+        std::string match_release = match[5];
+        std::string match_setting = match[6];
+        std::string match_sequence = match[7];
+
+        int macro_type = std::atoi(match_type.c_str());
+        int macro_index = std::atoi(match_index.c_str());
+        int macro_loop = std::atoi(match_loop.c_str());
+        int macro_release = std::atoi(match_release.c_str());
+        int macro_setting = std::atoi(match_setting.c_str());
+        
         std::vector<int> macro_sequence;
        
         // TODO : 
